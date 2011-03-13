@@ -584,15 +584,15 @@ program (like the <tt>./configure</tt> found in autotools projects) can
 analyze system dependencies and make as many decisions as possible up
 front so that incremental builds stay fast.  Going beyond autotools,
 even build-time decisions like "which compiler flags should I use?"
-or "should a build a debug or release-mode binary?"  belong in the
-ninjafile generator.</p></div>
+or "should I build a debug or release-mode binary?"  belong in the
+<tt>.ninja</tt> file generator.</p></div>
 <h3 id="_conceptual_overview">Conceptual overview</h3><div style="clear:left"></div>
 <div class="paragraph"><p>Ninja evaluates a graph of dependencies between files, and runs
 whichever commands are necessary to make your build target up to date.
 If you are familiar with Make, Ninja is very similar.</p></div>
 <div class="paragraph"><p>A build file (default name: <tt>build.ninja</tt>) provides a list of <em>rules</em>&#8201;&#8212;&#8201;short names for longer commands, like how to run the compiler&#8201;&#8212;&#8201;along with a list of <em>build</em> statements saying how to build files
 using the rules&#8201;&#8212;&#8201;which rule to apply to which inputs to produce
-which ouputs.</p></div>
+which outputs.</p></div>
 <div class="paragraph"><p>Conceptually, <tt>build</tt> statements describe the dependency graph of your
 project, while <tt>rule</tt> statements describe how to generate the files
 along a given edge of the graph.</p></div>
@@ -655,7 +655,7 @@ build-time decision-making ability such as conditionals or search
 </li>
 </ul></div>
 <div class="paragraph"><p>To restate, Ninja is faster than other build systems because it is
-painfully simple.  You must tell Ninja exctly what to do when you
+painfully simple.  You must tell Ninja exactly what to do when you
 create your project&#8217;s <tt>.ninja</tt> files.</p></div>
 <h3 id="_comparison_to_gnu_make">Comparison to GNU make</h3><div style="clear:left"></div>
 <div class="paragraph"><p>Ninja is closest in spirit and functionality to make.  But
@@ -730,7 +730,7 @@ are the resulting binary and this manual.</p></div>
 <h2 id="_creating_ninja_files">Creating .ninja files</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>Here&#8217;s a basic <tt>.ninja</tt> file that demonstrates most of the syntax.
-It wil be used as an example for for the following sections.</p></div>
+It will be used as an example for the following sections.</p></div>
 <div class="listingblock">
 <div class="content">
 <pre><tt>cflags = -Wall
@@ -748,7 +748,7 @@ reusable names for strings.  A declaration like the following</p></div>
 <div class="content">
 <pre><tt>cflags = -g</tt></pre>
 </div></div>
-<div class="paragraph"><p>can be used on the right side of an equals sign, deferencing it with
+<div class="paragraph"><p>can be used on the right side of an equals sign, dereferencing it with
 a dollar sign, like this:</p></div>
 <div class="listingblock">
 <div class="content">
@@ -757,7 +757,7 @@ a dollar sign, like this:</p></div>
 </div></div>
 <div class="paragraph"><p>Variables can also be referenced using curly braces like <tt>${in}</tt>.</p></div>
 <div class="paragraph"><p>Variables might better be called "bindings", in that a given variable
-cannot be changed, only shadowed.  There is ore on how shadowing works
+cannot be changed, only shadowed.  There is more on how shadowing works
 later in this document.</p></div>
 <h3 id="_rules">Rules</h3><div style="clear:left"></div>
 <div class="paragraph"><p>Rules declare a short name for a command line.  They begin with a line
@@ -807,6 +807,18 @@ build bar.o: cc bar.c</tt></pre>
 statement to the rule (for example, if the rule needs "the file
 extension of the first input"), pass that through as an extra
 variable, like how <tt>cflags</tt> is passed above.</p></div>
+<h3 id="_the_tt_phony_tt_rule">The <tt>phony</tt> rule</h3><div style="clear:left"></div>
+<div class="paragraph"><p>The special rule name <tt>phony</tt> can be used to create aliases for other
+targets.  For example:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>build all: phony some/file/in/a/faraway/subdir</tt></pre>
+</div></div>
+<div class="paragraph"><p>This makes <tt>ninja all</tt> build the other files.  Semantically, the
+<tt>phony</tt> rule is equivalent to a plain rule where the <tt>command</tt> does
+nothing, but phony rules are handled specially in that they aren&#8217;t
+printed when run, logged (see below), nor do they contribute to the
+command count printed as part of the build process.</p></div>
 <h3 id="_the_ninja_log">The Ninja log</h3><div style="clear:left"></div>
 <div class="paragraph"><p>For each built file, Ninja keeps a log of the command used to build
 it.  Using this log Ninja can know when an existing output was built
@@ -1046,7 +1058,7 @@ to build.</p></div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-02-06 11:05:04 PDT
+Last updated 2011-03-13 15:46:04 PDT
 </div>
 </div>
 </body>
