@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" href="$build__log_8cc.html" title="build_log.cc" alt="" coords="5,83,96,112"/>
+<area shape="rect" href="$build__test_8cc.html" title="build_test.cc" alt="" coords="120,83,216,112"/>
+<area shape="rect" href="$clean_8cc.html" title="clean.cc" alt="" coords="240,83,309,112"/>
+<area shape="rect" href="$ninja_8cc.html" title="ninja.cc" alt="" coords="357,83,424,112"/>
+<area shape="rect" href="$ninja__test_8cc.html" title="ninja_test.cc" alt="" coords="448,83,544,112"/>
+</map>

@@ -869,7 +869,54 @@ feature requires a Python installation.
 output a file in the syntax used by <tt>graphviz</tt>, a automatic
 graph layout tool.  Use it like: <tt>ninja -t graph <em>target</em> | dot -Tpng
 -ograph.png /dev/stdin</tt> .  In the Ninja source tree, <tt>ninja graph</tt>
-generates an image for Ninja itself.
+generates an image for Ninja itself.  If no target is given generate a
+graph for all root targets.
+</p>
+</dd>
+<dt class="hdlist1">
+<tt>targets</tt>
+</dt>
+<dd>
+<p>
+output a list of targets either by rule or by depth.  If used
+like this <tt>ninja -t targets rule <em>name</em></tt> it prints the list of targets
+using the given rule to be built.  If no rule is given, it prints the source
+files (the leaf of the graph).  If used like this
+<tt>ninja -t targets depth <em>digit</em></tt> it
+prints the list of targets in a depth-first manner starting by the root
+targets (the ones with no outputs). Indentation is used to mark dependencies.
+If the depth is zero it prints all targets. If no arguments are provided
+<tt>ninja -t targets depth 1</tt> is assumed. In this mode targets may be listed
+several times. If used like this <tt>ninja -t targets all</tt> it
+prints all the targets available without indentation and it is way faster
+than the <em>depth</em> mode.  It returns non-zero if an error occurs.
+</p>
+</dd>
+<dt class="hdlist1">
+<tt>rules</tt>
+</dt>
+<dd>
+<p>
+output the list of all rules with their description if they have
+one.  It can be used to know which rule name to pass to
+<tt>ninja -t targets rule <em>name</em></tt>.
+</p>
+</dd>
+<dt class="hdlist1">
+<tt>clean</tt>
+</dt>
+<dd>
+<p>
+remove built files.  If used like this <tt>ninja -t clean</tt> it
+removes all the built files.  If used like this
+<tt>ninja -t clean <em>targets&#8230;</em></tt> or like this
+<tt>ninja -t clean target <em>targets&#8230;</em></tt> it removes the given targets and
+recursively all files built for it.  If used like this
+<tt>ninja -t clean rule <em>rules</em></tt> it removes all files built using the given
+rules. The depfiles are not removed. Files created but not referenced in
+the graph are not removed. This tool takes in account the <tt>-v</tt> and the
+<tt>-n</tt> options (note that <tt>-n</tt> implies <tt>-v</tt>).  It returns non-zero if an
+error occurs.
 </p>
 </dd>
 </dl></div>
@@ -1058,7 +1105,7 @@ to build.</p></div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-03-13 15:46:04 PDT
+Last updated 2011-04-29 11:07:30 PDT
 </div>
 </div>
 </body>

@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" href="$structRealDiskInterface.html" title="Implementation of DiskInterface that actually hits the disk." alt="" coords="5,83,128,112"/>
+<area shape="rect" href="$structStatTest.html" title="StatTest" alt="" coords="152,83,221,112"/>
+<area shape="rect" href="$structVirtualFileSystem.html" title="An implementation of DiskInterface that uses an in&#45;memory representation of disk..." alt="" coords="245,83,368,112"/>
+</map>

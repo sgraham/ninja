@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" href="$ninja_8h.html" title="ninja.h" alt="" coords="484,160,543,189"/>
+<area shape="rect" href="$build_8h.html" title="build.h" alt="" coords="688,160,747,189"/>
+<area shape="rect" href="$graph_8h.html" title="graph.h" alt="" coords="223,160,287,189"/>
+<area shape="rect" href="$parsers_8h.html" title="parsers.h" alt="" coords="871,237,945,267"/>
+<area shape="rect" href="$test_8h.html" title="test.h" alt="" coords="451,83,504,112"/>
+<area shape="rect" href="$eval__env_8h.html" title="eval_env.h" alt="" coords="177,237,260,267"/>
+<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="12,237,103,267"/>
+</map>
