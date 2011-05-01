@@ -61,7 +61,7 @@
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Global state (file status, loaded rules) for a single run. </p>
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00076">76</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="ninja_8h_source.html#l00079">79</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ab91bb1dd5aa6260ab2a456581daf9ec2"></a><!-- doxytag: member="State::State" ref="ab91bb1dd5aa6260ab2a456581daf9ec2" args="()" -->
 <div class="memitem">
@@ -79,6 +79,8 @@
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00132">132</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
+
+<p>References <a class="el" href="ninja__jumble_8cc_source.html#l00143">AddRule()</a>, and <a class="el" href="ninja_8h_source.html#l00103">kPhonyRule</a>.</p>
 
 </div>
 </div>
@@ -100,6 +102,8 @@
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00148">148</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
+
+<p>References <a class="el" href="ninja_8h_source.html#l00100">bindings_</a>, <a class="el" href="ninja_8h_source.html#l00099">edges_</a>, <a class="el" href="graph_8h_source.html#l00104">Edge::env_</a>, and <a class="el" href="graph_8h_source.html#l00101">Edge::rule_</a>.</p>
 
 <p>Referenced by <a class="el" href="parsers_8cc_source.html#l00400">ManifestParser::ParseEdge()</a>, and <a class="el" href="ninja__test_8cc_source.html#l00024">TEST()</a>.</p>
 
@@ -132,6 +136,8 @@
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00170">170</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
 
+<p>References <a class="el" href="ninja__jumble_8cc_source.html#l00163">GetNode()</a>, <a class="el" href="graph_8h_source.html#l00102">Edge::inputs_</a>, and <a class="el" href="graph_8h_source.html#l00072">Node::out_edges_</a>.</p>
+
 <p>Referenced by <a class="el" href="parsers_8cc_source.html#l00400">ManifestParser::ParseEdge()</a>, and <a class="el" href="ninja__test_8cc_source.html#l00024">TEST()</a>.</p>
 
 </div>
@@ -163,6 +169,8 @@
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00176">176</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
 
+<p>References <a class="el" href="util_8cc_source.html#l00034">Error()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00163">GetNode()</a>, <a class="el" href="graph_8h_source.html#l00071">Node::in_edge_</a>, and <a class="el" href="graph_8h_source.html#l00103">Edge::outputs_</a>.</p>
+
 <p>Referenced by <a class="el" href="parsers_8cc_source.html#l00400">ManifestParser::ParseEdge()</a>, and <a class="el" href="ninja__test_8cc_source.html#l00024">TEST()</a>.</p>
 
 </div>
@@ -184,6 +192,8 @@
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00143">143</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
+
+<p>References <a class="el" href="ninja__jumble_8cc_source.html#l00136">LookupRule()</a>, <a class="el" href="graph_8h_source.html#l00082">Rule::name_</a>, and <a class="el" href="ninja_8h_source.html#l00097">rules_</a>.</p>
 
 <p>Referenced by <a class="el" href="parsers_8cc_source.html#l00317">ManifestParser::ParseRule()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00132">State()</a>, and <a class="el" href="ninja__test_8cc_source.html#l00024">TEST()</a>.</p>
 
@@ -207,6 +217,8 @@
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00163">163</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
 
+<p>References <a class="el" href="ninja__jumble_8cc_source.html#l00110">StatCache::GetFile()</a>, <a class="el" href="graph_8h_source.html#l00057">FileStat::node_</a>, and <a class="el" href="ninja_8h_source.html#l00095">stat_cache_</a>.</p>
+
 <p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00170">AddIn()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00176">AddOut()</a>, <a class="el" href="ninja_8cc_source.html#l00138">CmdQuery()</a>, <a class="el" href="test_8cc_source.html#l00025">StateTestWithBuiltinRules::GetNode()</a>, <a class="el" href="graph_8cc_source.html#l00129">Edge::LoadDepFile()</a>, and <a class="el" href="ninja__test_8cc_source.html#l00024">TEST()</a>.</p>
 
 </div>
@@ -229,6 +241,8 @@
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00156">156</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
 
+<p>References <a class="el" href="ninja__jumble_8cc_source.html#l00110">StatCache::GetFile()</a>, <a class="el" href="graph_8h_source.html#l00057">FileStat::node_</a>, and <a class="el" href="ninja_8h_source.html#l00095">stat_cache_</a>.</p>
+
 <p>Referenced by <a class="el" href="build_8cc_source.html#l00369">Builder::AddTarget()</a>, <a class="el" href="clean_8cc_source.html#l00131">Cleaner::CleanTargets()</a>, and <a class="el" href="ninja_8cc_source.html#l00107">CmdGraph()</a>.</p>
 
 </div>
@@ -250,6 +264,8 @@
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00136">136</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
+
+<p>References <a class="el" href="ninja_8h_source.html#l00097">rules_</a>.</p>
 
 <p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00143">AddRule()</a>, <a class="el" href="clean_8cc_source.html#l00171">Cleaner::CleanRules()</a>, <a class="el" href="parsers_8cc_source.html#l00400">ManifestParser::ParseEdge()</a>, and <a class="el" href="parsers_8cc_source.html#l00317">ManifestParser::ParseRule()</a>.</p>
 
@@ -280,6 +296,8 @@
 
 <p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00186">186</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
 
+<p>References <a class="el" href="ninja_8h_source.html#l00099">edges_</a>.</p>
+
 <p>Referenced by <a class="el" href="ninja_8cc_source.html#l00107">CmdGraph()</a>, and <a class="el" href="ninja_8cc_source.html#l00250">CmdTargets()</a>.</p>
 
 </div>
@@ -299,7 +317,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00079">79</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="ninja_8h_source.html#l00082">82</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+
+<p>References <a class="el" href="ninja_8h_source.html#l00095">stat_cache_</a>.</p>
 
 </div>
 </div>
@@ -315,7 +335,7 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00097">97</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="ninja_8h_source.html#l00100">100</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
 
 <p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00148">AddEdge()</a>, <a class="el" href="ninja_8cc_source.html#l00329">main()</a>, and <a class="el" href="parsers_8cc_source.html#l00259">ManifestParser::ManifestParser()</a>.</p>
 
@@ -332,7 +352,7 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00098">98</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="ninja_8h_source.html#l00101">101</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
 
 <p>Referenced by <a class="el" href="build_8cc_source.html#l00357">Builder::Builder()</a>, <a class="el" href="ninja_8cc_source.html#l00329">main()</a>, and <a class="el" href="graph_8cc_source.html#l00029">Edge::RecomputeDirty()</a>.</p>
 
@@ -351,7 +371,7 @@
 
 <p>All the edges of the graph. </p>
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00096">96</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="ninja_8h_source.html#l00099">99</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
 
 <p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00148">AddEdge()</a>, <a class="el" href="clean_8cc_source.html#l00100">Cleaner::CleanAll()</a>, <a class="el" href="ninja_8cc_source.html#l00218">CmdTargetsList()</a>, <a class="el" href="ninja_8cc_source.html#l00206">CmdTargetsSourceList()</a>, <a class="el" href="clean_8cc_source.html#l00150">Cleaner::DoCleanRule()</a>, and <a class="el" href="ninja__jumble_8cc_source.html#l00186">RootNodes()</a>.</p>
 
@@ -368,7 +388,7 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00100">100</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="ninja_8h_source.html#l00103">103</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
 
 <p>Referenced by <a class="el" href="graph_8cc_source.html#l00185">Edge::is_phony()</a>, and <a class="el" href="ninja__jumble_8cc_source.html#l00132">State()</a>.</p>
 
@@ -387,7 +407,7 @@
 
 <p>All the rules used in the graph. </p>
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00094">94</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="ninja_8h_source.html#l00097">97</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
 
 <p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00143">AddRule()</a>, <a class="el" href="ninja_8cc_source.html#l00283">CmdRules()</a>, and <a class="el" href="ninja__jumble_8cc_source.html#l00136">LookupRule()</a>.</p>
 
@@ -404,9 +424,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00092">92</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="ninja_8h_source.html#l00095">95</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00163">GetNode()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00156">LookupNode()</a>, and <a class="el" href="ninja_8h_source.html#l00079">stat_cache()</a>.</p>
+<p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00163">GetNode()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00156">LookupNode()</a>, and <a class="el" href="ninja_8h_source.html#l00082">stat_cache()</a>.</p>
 
 </div>
 </div>
@@ -415,7 +435,7 @@
 <li><a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 29 11:19:25 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:29 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

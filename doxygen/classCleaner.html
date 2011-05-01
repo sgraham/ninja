@@ -118,6 +118,8 @@
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00100">100</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
+<p>References <a class="el" href="ninja_8h_source.html#l00099">State::edges_</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>, <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>, and <a class="el" href="clean_8h_source.html#l00062">state_</a>.</p>
+
 <p>Referenced by <a class="el" href="ninja_8cc_source.html#l00297">CmdClean()</a>.</p>
 
 </div>
@@ -141,6 +143,8 @@
 <p>Clean all the file built with the given rule <em>rule</em>. </p>
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00163">163</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="clean_8cc_source.html#l00150">DoCleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, and <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>.</p>
 
 </div>
 </div>
@@ -171,6 +175,8 @@
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00171">171</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
+<p>References <a class="el" href="clean_8cc_source.html#l00150">DoCleanRule()</a>, <a class="el" href="util_8cc_source.html#l00034">Error()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00136">State::LookupRule()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>, <a class="el" href="clean_8h_source.html#l00062">state_</a>, and <a class="el" href="clean_8h_source.html#l00063">verbose_</a>.</p>
+
 <p>Referenced by <a class="el" href="ninja_8cc_source.html#l00297">CmdClean()</a>.</p>
 
 </div>
@@ -194,6 +200,8 @@
 <p>Clean the given <em>target</em> and all the file built for it. </p>
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00123">123</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="clean_8cc_source.html#l00112">DoCleanTarget()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, and <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>.</p>
 
 </div>
 </div>
@@ -224,6 +232,8 @@
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00131">131</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
+<p>References <a class="el" href="clean_8cc_source.html#l00112">DoCleanTarget()</a>, <a class="el" href="util_8cc_source.html#l00034">Error()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00156">State::LookupNode()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>, <a class="el" href="clean_8h_source.html#l00062">state_</a>, and <a class="el" href="clean_8h_source.html#l00063">verbose_</a>.</p>
+
 <p>Referenced by <a class="el" href="ninja_8cc_source.html#l00297">CmdClean()</a>.</p>
 
 </div>
@@ -245,6 +255,8 @@
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00150">150</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="ninja_8h_source.html#l00099">State::edges_</a>, <a class="el" href="graph_8h_source.html#l00082">Rule::name_</a>, <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>, and <a class="el" href="clean_8h_source.html#l00062">state_</a>.</p>
 
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00163">CleanRule()</a>, and <a class="el" href="clean_8cc_source.html#l00171">CleanRules()</a>.</p>
 
@@ -270,6 +282,8 @@
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00112">112</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
+<p>References <a class="el" href="graph_8h_source.html#l00069">Node::file_</a>, <a class="el" href="graph_8h_source.html#l00071">Node::in_edge_</a>, <a class="el" href="graph_8h_source.html#l00102">Edge::inputs_</a>, <a class="el" href="graph_8h_source.html#l00051">FileStat::path_</a>, and <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
+
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00123">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00131">CleanTargets()</a>.</p>
 
 </div>
@@ -292,6 +306,8 @@
 <dl class="return"><dt><b>Returns:</b></dt><dd>whether the file <em>path</em> exists. </dd></dl>
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00050">50</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="util_8cc_source.html#l00034">Error()</a>.</p>
 
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
 
@@ -316,6 +332,8 @@
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00083">83</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
+<p>References <a class="el" href="clean_8h_source.html#l00065">removed_</a>.</p>
+
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
 
 </div>
@@ -337,6 +355,8 @@
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00096">96</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
+<p>References <a class="el" href="clean_8h_source.html#l00065">removed_</a>.</p>
+
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00100">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00163">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00171">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00123">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00131">CleanTargets()</a>.</p>
 
 </div>
@@ -357,6 +377,8 @@
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00088">88</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="clean_8h_source.html#l00063">verbose_</a>.</p>
 
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00100">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00163">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00171">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00123">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00131">CleanTargets()</a>.</p>
 
@@ -381,6 +403,8 @@
 <p>Remove the given <em>path</em> file only if it has not been already removed. </p>
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00070">70</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="clean_8h_source.html#l00064">dry_run_</a>, <a class="el" href="clean_8cc_source.html#l00050">FileExists()</a>, <a class="el" href="clean_8cc_source.html#l00083">IsAlreadyRemoved()</a>, <a class="el" href="clean_8h_source.html#l00065">removed_</a>, <a class="el" href="clean_8cc_source.html#l00036">RemoveFile()</a>, and <a class="el" href="clean_8cc_source.html#l00065">Report()</a>.</p>
 
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00100">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00150">DoCleanRule()</a>, and <a class="el" href="clean_8cc_source.html#l00112">DoCleanTarget()</a>.</p>
 
@@ -407,6 +431,8 @@
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00036">36</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
+<p>References <a class="el" href="util_8cc_source.html#l00034">Error()</a>.</p>
+
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
 
 </div>
@@ -428,6 +454,8 @@
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00065">65</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="clean_8h_source.html#l00063">verbose_</a>.</p>
 
 <p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
 
@@ -507,7 +535,7 @@
 <li><a class="el" href="clean_8cc_source.html">clean.cc</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 29 11:19:24 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:29 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

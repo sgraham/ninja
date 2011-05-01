@@ -55,7 +55,7 @@
 <p>A tokenized string that contains variable references. </p>
 <p>Can be evaluated relative to an <a class="el" href="structEnv.html" title="An interface for a scope for variable (e.g. &quot;$foo&quot;) lookups.">Env</a>. </p>
 
-<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00041">41</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00043">43</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
 <hr/><h2>Member Typedef Documentation</h2>
 <a class="anchor" id="a624839e4086e9fd2867357ee439c0310"></a><!-- doxytag: member="EvalString::TokenList" ref="a624839e4086e9fd2867357ee439c0310" args="" -->
 <div class="memitem">
@@ -68,7 +68,7 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00050">50</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00052">52</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
 
 </div>
 </div>
@@ -92,7 +92,7 @@
 </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00049">49</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00051">51</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
 
 </div>
 </div>
@@ -112,7 +112,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00046">46</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00048">48</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+
+<p>References <a class="el" href="eval__env_8h_source.html#l00050">unparsed_</a>.</p>
 
 <p>Referenced by <a class="el" href="parsers_8cc_source.html#l00400">ManifestParser::ParseEdge()</a>, and <a class="el" href="graph_8cc_source.html#l00029">Edge::RecomputeDirty()</a>.</p>
 
@@ -135,6 +137,8 @@
 <div class="memdoc">
 
 <p>Definition at line <a class="el" href="eval__env_8cc_source.html#l00082">82</a> of file <a class="el" href="eval__env_8cc_source.html">eval_env.cc</a>.</p>
+
+<p>References <a class="el" href="structEnv.html#a985781a5c04cc4a34ac6e07c57e44768">Env::LookupVariable()</a>, <a class="el" href="eval__env_8h_source.html#l00053">parsed_</a>, and <a class="el" href="eval__env_8h_source.html#l00051">RAW</a>.</p>
 
 <p>Referenced by <a class="el" href="graph_8cc_source.html#l00119">Edge::EvaluateCommand()</a>, <a class="el" href="graph_8cc_source.html#l00124">Edge::GetDescription()</a>, <a class="el" href="graph_8cc_source.html#l00129">Edge::LoadDepFile()</a>, <a class="el" href="parsers_8cc_source.html#l00400">ManifestParser::ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00367">ManifestParser::ParseLet()</a>, and <a class="el" href="ninja__test_8cc_source.html#l00049">TEST()</a>.</p>
 
@@ -173,6 +177,8 @@
 
 <p>Definition at line <a class="el" href="eval__env_8cc_source.html#l00030">30</a> of file <a class="el" href="eval__env_8cc_source.html">eval_env.cc</a>.</p>
 
+<p>References <a class="el" href="eval__env_8h_source.html#l00053">parsed_</a>, <a class="el" href="eval__env_8h_source.html#l00051">RAW</a>, <a class="el" href="eval__env_8h_source.html#l00051">SPECIAL</a>, and <a class="el" href="eval__env_8h_source.html#l00050">unparsed_</a>.</p>
+
 <p>Referenced by <a class="el" href="graph_8h_source.html#l00079">Rule::ParseCommand()</a>, <a class="el" href="parsers_8cc_source.html#l00400">ManifestParser::ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00367">ManifestParser::ParseLet()</a>, <a class="el" href="parsers_8cc_source.html#l00317">ManifestParser::ParseRule()</a>, and <a class="el" href="ninja__test_8cc_source.html#l00049">TEST()</a>.</p>
 
 </div>
@@ -192,7 +198,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00045">45</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00047">47</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+
+<p>References <a class="el" href="eval__env_8h_source.html#l00050">unparsed_</a>.</p>
 
 <p>Referenced by <a class="el" href="parsers_8cc_source.html#l00317">ManifestParser::ParseRule()</a>, and <a class="el" href="ninja__test_8cc_source.html#l00056">TEST()</a>.</p>
 
@@ -210,7 +218,7 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00051">51</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00053">53</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
 
 <p>Referenced by <a class="el" href="eval__env_8cc_source.html#l00082">Evaluate()</a>, and <a class="el" href="eval__env_8cc_source.html#l00030">Parse()</a>.</p>
 
@@ -227,9 +235,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00048">48</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
+<p>Definition at line <a class="el" href="eval__env_8h_source.html#l00050">50</a> of file <a class="el" href="eval__env_8h_source.html">eval_env.h</a>.</p>
 
-<p>Referenced by <a class="el" href="eval__env_8h_source.html#l00046">empty()</a>, <a class="el" href="eval__env_8cc_source.html#l00030">Parse()</a>, and <a class="el" href="eval__env_8h_source.html#l00045">unparsed()</a>.</p>
+<p>Referenced by <a class="el" href="eval__env_8h_source.html#l00048">empty()</a>, <a class="el" href="eval__env_8cc_source.html#l00030">Parse()</a>, and <a class="el" href="eval__env_8h_source.html#l00047">unparsed()</a>.</p>
 
 </div>
 </div>
@@ -238,7 +246,7 @@
 <li><a class="el" href="eval__env_8cc_source.html">eval_env.cc</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 29 11:19:24 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:29 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

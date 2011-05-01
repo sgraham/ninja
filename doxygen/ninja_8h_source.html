@@ -65,70 +65,73 @@
 <a name="l00039"></a>00039 <span class="comment">///</span>
 <a name="l00040"></a>00040 <span class="comment">/// Abstract so it can be mocked out for tests.  The real implementation</span>
 <a name="l00041"></a>00041 <span class="comment">/// is RealDiskInterface.</span>
-<a name="l00042"></a><a class="code" href="structDiskInterface.html">00042</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structDiskInterface.html" title="Interface for accessing the disk.">DiskInterface</a> {<span class="comment"></span>
-<a name="l00043"></a>00043 <span class="comment">  /// stat() a file, returning the mtime, or 0 if missing and -1 on</span>
-<a name="l00044"></a>00044 <span class="comment">  /// other errors.</span>
-<a name="l00045"></a>00045 <span class="comment"></span>  <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structDiskInterface.html#a244784b189c39f4b91898878c3d1db65" title="stat() a file, returning the mtime, or 0 if missing and -1 on other errors.">Stat</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path) = 0;<span class="comment"></span>
-<a name="l00046"></a>00046 <span class="comment">  /// Create a directory, returning false on failure.</span>
-<a name="l00047"></a>00047 <span class="comment"></span>  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structDiskInterface.html#abf89f5cfce3c775997e7b40607107779" title="Create a directory, returning false on failure.">MakeDir</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path) = 0;<span class="comment"></span>
-<a name="l00048"></a>00048 <span class="comment">  /// Read a file to a string.  Fill in |err| on error.</span>
-<a name="l00049"></a>00049 <span class="comment"></span>  <span class="keyword">virtual</span> <span class="keywordtype">string</span> <a class="code" href="structDiskInterface.html#aed889f19b478039bd8d315fe965440ea" title="Read a file to a string. Fill in |err| on error.">ReadFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* err) = 0;
-<a name="l00050"></a>00050 <span class="comment"></span>
-<a name="l00051"></a>00051 <span class="comment">  /// Create all the parent directories for path; like mkdir -p</span>
-<a name="l00052"></a>00052 <span class="comment">  /// `basename path`.</span>
-<a name="l00053"></a>00053 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="structDiskInterface.html#a7fae01dae68b95facad54b0bc233d279" title="Create all the parent directories for path; like mkdir -p `basename path`.">MakeDirs</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00054"></a>00054 };
-<a name="l00055"></a>00055 <span class="comment"></span>
-<a name="l00056"></a>00056 <span class="comment">/// Implementation of DiskInterface that actually hits the disk.</span>
-<a name="l00057"></a><a class="code" href="structRealDiskInterface.html">00057</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structRealDiskInterface.html" title="Implementation of DiskInterface that actually hits the disk.">RealDiskInterface</a> : <span class="keyword">public</span> <a class="code" href="structDiskInterface.html" title="Interface for accessing the disk.">DiskInterface</a> {
-<a name="l00058"></a>00058   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structRealDiskInterface.html#abf665666c60b4603f2560801091f4931" title="stat() a file, returning the mtime, or 0 if missing and -1 on other errors.">Stat</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00059"></a>00059   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structRealDiskInterface.html#acf868fd64fcb5dff9cc9741bd2e5575e" title="Create a directory, returning false on failure.">MakeDir</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00060"></a>00060   <span class="keyword">virtual</span> <span class="keywordtype">string</span> <a class="code" href="structRealDiskInterface.html#aca5e97e18e89f64a56fc2388d3aad69b" title="Read a file to a string. Fill in |err| on error.">ReadFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* err);
-<a name="l00061"></a>00061 };
-<a name="l00062"></a>00062 <span class="comment"></span>
-<a name="l00063"></a>00063 <span class="comment">/// Mapping of path -&gt; FileStat.</span>
-<a name="l00064"></a><a class="code" href="structStatCache.html">00064</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structStatCache.html" title="Mapping of path -&amp;gt; FileStat.">StatCache</a> {
-<a name="l00065"></a><a class="code" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">00065</a>   <span class="keyword">typedef</span> hash_map&lt;string, FileStat*&gt; <a class="code" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">Paths</a>;
-<a name="l00066"></a><a class="code" href="structStatCache.html#acf57c421f427191a0d2d620275dade8b">00066</a>   <a class="code" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">Paths</a> <a class="code" href="structStatCache.html#acf57c421f427191a0d2d620275dade8b">paths_</a>;
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068   <a class="code" href="structFileStat.html" title="Information about a single on-disk file: path, mtime.">FileStat</a>* <a class="code" href="structStatCache.html#ac3cfeaeef57869fe44a4e93ded962de7">GetFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00069"></a>00069 <span class="comment"></span>
-<a name="l00070"></a>00070 <span class="comment">  /// Dump the mapping to stdout (useful for debugging).</span>
-<a name="l00071"></a>00071 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="structStatCache.html#a50a77119d07713e049c2ab5e6e8c782e" title="Dump the mapping to stdout (useful for debugging).">Dump</a>();
-<a name="l00072"></a>00072   <span class="keywordtype">void</span> <a class="code" href="structStatCache.html#a32465b9fc9424bd5891b537c5d405f13">Reload</a>();
-<a name="l00073"></a>00073 };
-<a name="l00074"></a>00074 <span class="comment"></span>
-<a name="l00075"></a>00075 <span class="comment">/// Global state (file status, loaded rules) for a single run.</span>
-<a name="l00076"></a><a class="code" href="structState.html">00076</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a> {
-<a name="l00077"></a>00077   <a class="code" href="structState.html#ab91bb1dd5aa6260ab2a456581daf9ec2">State</a>();
-<a name="l00078"></a>00078 
-<a name="l00079"></a><a class="code" href="structState.html#a7cd274c30729d2d0e4cd5e28d5f947f3">00079</a>   <a class="code" href="structStatCache.html" title="Mapping of path -&amp;gt; FileStat.">StatCache</a>* <a class="code" href="structState.html#a7cd274c30729d2d0e4cd5e28d5f947f3">stat_cache</a>() { <span class="keywordflow">return</span> &amp;<a class="code" href="structState.html#a65c669e396eb63e38132d51f95f43b63">stat_cache_</a>; }
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081   <span class="keywordtype">void</span> <a class="code" href="structState.html#ab4bac9807e4560de48f54ef8ad229081">AddRule</a>(<span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* rule);
-<a name="l00082"></a>00082   <span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* <a class="code" href="structState.html#abe8dfcbd700a01cb0e28f730055bf14c">LookupRule</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; rule_name);
-<a name="l00083"></a>00083   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* <a class="code" href="structState.html#a3e3a4a62a0e595451f649a5bf3ae0fe7">AddEdge</a>(<span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* rule);
-<a name="l00084"></a>00084   <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* <a class="code" href="structState.html#adcbe649d24758557df143eb14d56358c">GetNode</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00085"></a>00085   <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* <a class="code" href="structState.html#ab7d3bd3103bdc09b4f42660284807225">LookupNode</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00086"></a>00086   <span class="keywordtype">void</span> <a class="code" href="structState.html#acd3d733d77d1b73d5f65efb49fd7e5d7">AddIn</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00087"></a>00087   <span class="keywordtype">void</span> <a class="code" href="structState.html#a7f2749aec774f719704ec7349b149744">AddOut</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
-<a name="l00088"></a>00088 <span class="comment">  /// @return the root node(s) of the graph. (Root nodes have no input edges).</span>
-<a name="l00089"></a>00089 <span class="comment">  /// @param error where to write the error message if somethings went wrong.</span>
-<a name="l00090"></a>00090 <span class="comment"></span>  vector&lt;Node*&gt; <a class="code" href="structState.html#a7ab43da26456a3ca765e82a01130b5ce">RootNodes</a>(<span class="keywordtype">string</span>* error);
-<a name="l00091"></a>00091 
-<a name="l00092"></a><a class="code" href="structState.html#a65c669e396eb63e38132d51f95f43b63">00092</a>   <a class="code" href="structStatCache.html" title="Mapping of path -&amp;gt; FileStat.">StatCache</a> <a class="code" href="structState.html#a65c669e396eb63e38132d51f95f43b63">stat_cache_</a>;<span class="comment"></span>
-<a name="l00093"></a>00093 <span class="comment">  /// All the rules used in the graph.</span>
-<a name="l00094"></a><a class="code" href="structState.html#a7853ca22a4a26bea1ea0e2b10a033e4a">00094</a> <span class="comment"></span>  map&lt;string, const Rule*&gt; <a class="code" href="structState.html#a7853ca22a4a26bea1ea0e2b10a033e4a" title="All the rules used in the graph.">rules_</a>;<span class="comment"></span>
-<a name="l00095"></a>00095 <span class="comment">  /// All the edges of the graph.</span>
-<a name="l00096"></a><a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97">00096</a> <span class="comment"></span>  vector&lt;Edge*&gt; <a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>;
-<a name="l00097"></a><a class="code" href="structState.html#ae09e90c5524df7fd37a96751930336c9">00097</a>   <a class="code" href="structBindingEnv.html" title="An Env which contains a mapping of variables to values as well as a pointer to a...">BindingEnv</a> <a class="code" href="structState.html#ae09e90c5524df7fd37a96751930336c9">bindings_</a>;
-<a name="l00098"></a><a class="code" href="structState.html#a463348843da891ba1f7f1df149051a54">00098</a>   <span class="keyword">struct </span><a class="code" href="structBuildLog.html" title="Store a log of every command ran for every build.">BuildLog</a>* <a class="code" href="structState.html#a463348843da891ba1f7f1df149051a54">build_log_</a>;
-<a name="l00099"></a>00099 
-<a name="l00100"></a><a class="code" href="structState.html#a9522a499bd62121a14e00a3016fa0599">00100</a>   <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a> <a class="code" href="structState.html#a9522a499bd62121a14e00a3016fa0599">kPhonyRule</a>;
-<a name="l00101"></a>00101 };
+<a name="l00042"></a><a class="code" href="structDiskInterface.html">00042</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structDiskInterface.html" title="Interface for accessing the disk.">DiskInterface</a> {
+<a name="l00043"></a><a class="code" href="structDiskInterface.html#a34d62e4d1ba8b716696bcfc6f2643cd3">00043</a>   <span class="keyword">virtual</span> <a class="code" href="structDiskInterface.html#a34d62e4d1ba8b716696bcfc6f2643cd3">~DiskInterface</a>() {}
+<a name="l00044"></a>00044 <span class="comment"></span>
+<a name="l00045"></a>00045 <span class="comment">  /// stat() a file, returning the mtime, or 0 if missing and -1 on</span>
+<a name="l00046"></a>00046 <span class="comment">  /// other errors.</span>
+<a name="l00047"></a>00047 <span class="comment"></span>  <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structDiskInterface.html#a244784b189c39f4b91898878c3d1db65" title="stat() a file, returning the mtime, or 0 if missing and -1 on other errors.">Stat</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path) = 0;<span class="comment"></span>
+<a name="l00048"></a>00048 <span class="comment">  /// Create a directory, returning false on failure.</span>
+<a name="l00049"></a>00049 <span class="comment"></span>  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structDiskInterface.html#abf89f5cfce3c775997e7b40607107779" title="Create a directory, returning false on failure.">MakeDir</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path) = 0;<span class="comment"></span>
+<a name="l00050"></a>00050 <span class="comment">  /// Read a file to a string.  Fill in |err| on error.</span>
+<a name="l00051"></a>00051 <span class="comment"></span>  <span class="keyword">virtual</span> <span class="keywordtype">string</span> <a class="code" href="structDiskInterface.html#aed889f19b478039bd8d315fe965440ea" title="Read a file to a string. Fill in |err| on error.">ReadFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* err) = 0;
+<a name="l00052"></a>00052 <span class="comment"></span>
+<a name="l00053"></a>00053 <span class="comment">  /// Create all the parent directories for path; like mkdir -p</span>
+<a name="l00054"></a>00054 <span class="comment">  /// `basename path`.</span>
+<a name="l00055"></a>00055 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="structDiskInterface.html#a7fae01dae68b95facad54b0bc233d279" title="Create all the parent directories for path; like mkdir -p `basename path`.">MakeDirs</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00056"></a>00056 };
+<a name="l00057"></a>00057 <span class="comment"></span>
+<a name="l00058"></a>00058 <span class="comment">/// Implementation of DiskInterface that actually hits the disk.</span>
+<a name="l00059"></a><a class="code" href="structRealDiskInterface.html">00059</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structRealDiskInterface.html" title="Implementation of DiskInterface that actually hits the disk.">RealDiskInterface</a> : <span class="keyword">public</span> <a class="code" href="structDiskInterface.html" title="Interface for accessing the disk.">DiskInterface</a> {
+<a name="l00060"></a><a class="code" href="structRealDiskInterface.html#a9f702e2142f8227cc6cfdb682208bd85">00060</a>   <span class="keyword">virtual</span> <a class="code" href="structRealDiskInterface.html#a9f702e2142f8227cc6cfdb682208bd85">~RealDiskInterface</a>() {}
+<a name="l00061"></a>00061   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structRealDiskInterface.html#abf665666c60b4603f2560801091f4931" title="stat() a file, returning the mtime, or 0 if missing and -1 on other errors.">Stat</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00062"></a>00062   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structRealDiskInterface.html#acf868fd64fcb5dff9cc9741bd2e5575e" title="Create a directory, returning false on failure.">MakeDir</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00063"></a>00063   <span class="keyword">virtual</span> <span class="keywordtype">string</span> <a class="code" href="structRealDiskInterface.html#aca5e97e18e89f64a56fc2388d3aad69b" title="Read a file to a string. Fill in |err| on error.">ReadFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* err);
+<a name="l00064"></a>00064 };
+<a name="l00065"></a>00065 <span class="comment"></span>
+<a name="l00066"></a>00066 <span class="comment">/// Mapping of path -&gt; FileStat.</span>
+<a name="l00067"></a><a class="code" href="structStatCache.html">00067</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structStatCache.html" title="Mapping of path -&amp;gt; FileStat.">StatCache</a> {
+<a name="l00068"></a><a class="code" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">00068</a>   <span class="keyword">typedef</span> hash_map&lt;string, FileStat*&gt; <a class="code" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">Paths</a>;
+<a name="l00069"></a><a class="code" href="structStatCache.html#acf57c421f427191a0d2d620275dade8b">00069</a>   <a class="code" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">Paths</a> <a class="code" href="structStatCache.html#acf57c421f427191a0d2d620275dade8b">paths_</a>;
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071   <a class="code" href="structFileStat.html" title="Information about a single on-disk file: path, mtime.">FileStat</a>* <a class="code" href="structStatCache.html#ac3cfeaeef57869fe44a4e93ded962de7">GetFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00072"></a>00072 <span class="comment"></span>
+<a name="l00073"></a>00073 <span class="comment">  /// Dump the mapping to stdout (useful for debugging).</span>
+<a name="l00074"></a>00074 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="structStatCache.html#a50a77119d07713e049c2ab5e6e8c782e" title="Dump the mapping to stdout (useful for debugging).">Dump</a>();
+<a name="l00075"></a>00075   <span class="keywordtype">void</span> <a class="code" href="structStatCache.html#a32465b9fc9424bd5891b537c5d405f13">Reload</a>();
+<a name="l00076"></a>00076 };
+<a name="l00077"></a>00077 <span class="comment"></span>
+<a name="l00078"></a>00078 <span class="comment">/// Global state (file status, loaded rules) for a single run.</span>
+<a name="l00079"></a><a class="code" href="structState.html">00079</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a> {
+<a name="l00080"></a>00080   <a class="code" href="structState.html#ab91bb1dd5aa6260ab2a456581daf9ec2">State</a>();
+<a name="l00081"></a>00081 
+<a name="l00082"></a><a class="code" href="structState.html#a7cd274c30729d2d0e4cd5e28d5f947f3">00082</a>   <a class="code" href="structStatCache.html" title="Mapping of path -&amp;gt; FileStat.">StatCache</a>* <a class="code" href="structState.html#a7cd274c30729d2d0e4cd5e28d5f947f3">stat_cache</a>() { <span class="keywordflow">return</span> &amp;<a class="code" href="structState.html#a65c669e396eb63e38132d51f95f43b63">stat_cache_</a>; }
+<a name="l00083"></a>00083 
+<a name="l00084"></a>00084   <span class="keywordtype">void</span> <a class="code" href="structState.html#ab4bac9807e4560de48f54ef8ad229081">AddRule</a>(<span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* rule);
+<a name="l00085"></a>00085   <span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* <a class="code" href="structState.html#abe8dfcbd700a01cb0e28f730055bf14c">LookupRule</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; rule_name);
+<a name="l00086"></a>00086   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* <a class="code" href="structState.html#a3e3a4a62a0e595451f649a5bf3ae0fe7">AddEdge</a>(<span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* rule);
+<a name="l00087"></a>00087   <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* <a class="code" href="structState.html#adcbe649d24758557df143eb14d56358c">GetNode</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00088"></a>00088   <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* <a class="code" href="structState.html#ab7d3bd3103bdc09b4f42660284807225">LookupNode</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00089"></a>00089   <span class="keywordtype">void</span> <a class="code" href="structState.html#acd3d733d77d1b73d5f65efb49fd7e5d7">AddIn</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00090"></a>00090   <span class="keywordtype">void</span> <a class="code" href="structState.html#a7f2749aec774f719704ec7349b149744">AddOut</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
+<a name="l00091"></a>00091 <span class="comment">  /// @return the root node(s) of the graph. (Root nodes have no input edges).</span>
+<a name="l00092"></a>00092 <span class="comment">  /// @param error where to write the error message if somethings went wrong.</span>
+<a name="l00093"></a>00093 <span class="comment"></span>  vector&lt;Node*&gt; <a class="code" href="structState.html#a7ab43da26456a3ca765e82a01130b5ce">RootNodes</a>(<span class="keywordtype">string</span>* error);
+<a name="l00094"></a>00094 
+<a name="l00095"></a><a class="code" href="structState.html#a65c669e396eb63e38132d51f95f43b63">00095</a>   <a class="code" href="structStatCache.html" title="Mapping of path -&amp;gt; FileStat.">StatCache</a> <a class="code" href="structState.html#a65c669e396eb63e38132d51f95f43b63">stat_cache_</a>;<span class="comment"></span>
+<a name="l00096"></a>00096 <span class="comment">  /// All the rules used in the graph.</span>
+<a name="l00097"></a><a class="code" href="structState.html#a7853ca22a4a26bea1ea0e2b10a033e4a">00097</a> <span class="comment"></span>  map&lt;string, const Rule*&gt; <a class="code" href="structState.html#a7853ca22a4a26bea1ea0e2b10a033e4a" title="All the rules used in the graph.">rules_</a>;<span class="comment"></span>
+<a name="l00098"></a>00098 <span class="comment">  /// All the edges of the graph.</span>
+<a name="l00099"></a><a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97">00099</a> <span class="comment"></span>  vector&lt;Edge*&gt; <a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>;
+<a name="l00100"></a><a class="code" href="structState.html#ae09e90c5524df7fd37a96751930336c9">00100</a>   <a class="code" href="structBindingEnv.html" title="An Env which contains a mapping of variables to values as well as a pointer to a...">BindingEnv</a> <a class="code" href="structState.html#ae09e90c5524df7fd37a96751930336c9">bindings_</a>;
+<a name="l00101"></a><a class="code" href="structState.html#a463348843da891ba1f7f1df149051a54">00101</a>   <span class="keyword">struct </span><a class="code" href="structBuildLog.html" title="Store a log of every command ran for every build.">BuildLog</a>* <a class="code" href="structState.html#a463348843da891ba1f7f1df149051a54">build_log_</a>;
 <a name="l00102"></a>00102 
-<a name="l00103"></a>00103 <span class="preprocessor">#endif  // NINJA_NINJA_H_</span>
+<a name="l00103"></a><a class="code" href="structState.html#a9522a499bd62121a14e00a3016fa0599">00103</a>   <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a> <a class="code" href="structState.html#a9522a499bd62121a14e00a3016fa0599">kPhonyRule</a>;
+<a name="l00104"></a>00104 };
+<a name="l00105"></a>00105 
+<a name="l00106"></a>00106 <span class="preprocessor">#endif  // NINJA_NINJA_H_</span>
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 29 11:19:22 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

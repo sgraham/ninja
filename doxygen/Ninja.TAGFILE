@@ -1035,6 +1035,13 @@
       <anchor>af858f0c4dc64fee67545ffabb18ee2bb</anchor>
       <arglist>(const string &amp;var)</arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual</type>
+      <name>~BindingEnv</name>
+      <anchorfile>structBindingEnv.html</anchorfile>
+      <anchor>af54aba77bfe2d28de4fcc8eb14e05aa2</anchor>
+      <arglist>()</arglist>
+    </member>
     <member kind="variable">
       <type>map&lt; string, string &gt;</type>
       <name>bindings_</name>
@@ -1761,6 +1768,13 @@
       <anchor>a244784b189c39f4b91898878c3d1db65</anchor>
       <arglist>(const string &amp;path)=0</arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual</type>
+      <name>~DiskInterface</name>
+      <anchorfile>structDiskInterface.html</anchorfile>
+      <anchor>a34d62e4d1ba8b716696bcfc6f2643cd3</anchor>
+      <arglist>()</arglist>
+    </member>
   </compound>
   <compound kind="class">
     <name>DiskInterfaceTest</name>
@@ -1992,6 +2006,13 @@
       <anchorfile>structEnv.html</anchorfile>
       <anchor>a985781a5c04cc4a34ac6e07c57e44768</anchor>
       <arglist>(const string &amp;var)=0</arglist>
+    </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual</type>
+      <name>~Env</name>
+      <anchorfile>structEnv.html</anchorfile>
+      <anchor>ab1a26ca6473b63e1ea70237a5c91c813</anchor>
+      <arglist>()</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -2346,6 +2367,13 @@
       <anchor>a2189a2031f8731473f1c4979c5b4fda5</anchor>
       <arglist>(const string &amp;path, string *content, string *err)=0</arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual</type>
+      <name>~FileReader</name>
+      <anchorfile>structManifestParser_1_1FileReader.html</anchorfile>
+      <anchor>acfb2eeb2ec40be2ab44c0c104c0ef256</anchor>
+      <arglist>()</arglist>
+    </member>
   </compound>
   <compound kind="struct">
     <name>Node</name>
@@ -2653,6 +2681,13 @@
       <anchorfile>structRealDiskInterface.html</anchorfile>
       <anchor>abf665666c60b4603f2560801091f4931</anchor>
       <arglist>(const string &amp;path)</arglist>
+    </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual</type>
+      <name>~RealDiskInterface</name>
+      <anchorfile>structRealDiskInterface.html</anchorfile>
+      <anchor>a9f702e2142f8227cc6cfdb682208bd85</anchor>
+      <arglist>()</arglist>
     </member>
   </compound>
   <compound kind="struct">

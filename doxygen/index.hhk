@@ -36,6 +36,7 @@
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structBindingEnv.html"><param name="Name" value="bindings_"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structBindingEnv.html"><param name="Name" value="LookupVariable"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structBindingEnv.html"><param name="Name" value="parent_"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="structBindingEnv.html"><param name="Name" value="~BindingEnv"></OBJECT>
   </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structBindingEnv.html"><param name="Name" value="bindings_"></OBJECT>
   <UL>
@@ -238,6 +239,7 @@
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structDiskInterface.html"><param name="Name" value="MakeDirs"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structDiskInterface.html"><param name="Name" value="ReadFile"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structDiskInterface.html"><param name="Name" value="Stat"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="structDiskInterface.html"><param name="Name" value="~DiskInterface"></OBJECT>
   </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="classDiskInterfaceTest.html"><param name="Name" value="DiskInterfaceTest"></OBJECT>
   <UL>
@@ -304,6 +306,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structEnv.html"><param name="Name" value="Env"></OBJECT>
   <UL>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structEnv.html"><param name="Name" value="LookupVariable"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="structEnv.html"><param name="Name" value="~Env"></OBJECT>
   </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structEdge.html"><param name="Name" value="env_"></OBJECT>
   <UL>
@@ -507,6 +510,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structManifestParser_1_1FileReader.html"><param name="Name" value="ManifestParser::FileReader"></OBJECT>
   <UL>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structManifestParser_1_1FileReader.html"><param name="Name" value="ReadFile"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="structManifestParser_1_1FileReader.html"><param name="Name" value="~FileReader"></OBJECT>
   </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structManifestParser.html"><param name="Name" value="ManifestParser"></OBJECT>
   <UL>
@@ -699,6 +703,7 @@
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structRealDiskInterface.html"><param name="Name" value="MakeDirs"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structRealDiskInterface.html"><param name="Name" value="ReadFile"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="structRealDiskInterface.html"><param name="Name" value="Stat"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="structRealDiskInterface.html"><param name="Name" value="~RealDiskInterface"></OBJECT>
   </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structRealFileReader.html"><param name="Name" value="RealFileReader"></OBJECT>
   <UL>
@@ -1009,9 +1014,14 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structPlan.html"><param name="Name" value="want_"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structTokenizer.html"><param name="Name" value="whitespace_significant_"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structBuildLog.html"><param name="Name" value="WriteEntry"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="structBindingEnv.html"><param name="Name" value="~BindingEnv"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structCommandRunner.html"><param name="Name" value="~CommandRunner"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="structDiskInterface.html"><param name="Name" value="~DiskInterface"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structDryRunCommandRunner.html"><param name="Name" value="~DryRunCommandRunner"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="structEnv.html"><param name="Name" value="~Env"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="structManifestParser_1_1FileReader.html"><param name="Name" value="~FileReader"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structRealCommandRunner.html"><param name="Name" value="~RealCommandRunner"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="structRealDiskInterface.html"><param name="Name" value="~RealDiskInterface"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structSubprocess_1_1Stream.html"><param name="Name" value="~Stream"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structSubprocess.html"><param name="Name" value="~Subprocess"></OBJECT>
 </UL>

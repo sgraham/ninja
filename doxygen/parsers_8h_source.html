@@ -128,32 +128,33 @@
 <a name="l00102"></a>00102 <span class="comment">/// Parses .ninja files.</span>
 <a name="l00103"></a><a class="code" href="structManifestParser.html">00103</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structManifestParser.html" title="Parses .ninja files.">ManifestParser</a> {
 <a name="l00104"></a><a class="code" href="structManifestParser_1_1FileReader.html">00104</a>   <span class="keyword">struct </span><a class="code" href="structManifestParser_1_1FileReader.html">FileReader</a> {
-<a name="l00105"></a>00105     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structManifestParser_1_1FileReader.html#a2189a2031f8731473f1c4979c5b4fda5">ReadFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* content, <span class="keywordtype">string</span>* err) = 0;
-<a name="l00106"></a>00106   };
-<a name="l00107"></a>00107 
-<a name="l00108"></a>00108   <a class="code" href="structManifestParser.html#ac5d014b015600d5b88f0ab55b0b5c750">ManifestParser</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <a class="code" href="structManifestParser_1_1FileReader.html">FileReader</a>* file_reader);
-<a name="l00109"></a>00109 
-<a name="l00110"></a>00110   <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#afb43144d1bb419456c5d5b376f561a63">Load</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; filename, <span class="keywordtype">string</span>* err);
-<a name="l00111"></a>00111   <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#a7c813cbd0fcd3e7a7395876d266d5e02">Parse</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; input, <span class="keywordtype">string</span>* err);
-<a name="l00112"></a>00112 
-<a name="l00113"></a>00113   <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#ad8e59ed84a6c318e2169ae6c52b96379">ParseRule</a>(<span class="keywordtype">string</span>* err);<span class="comment"></span>
-<a name="l00114"></a>00114 <span class="comment">  /// Parse a key=val statement.  If expand is true, evaluate variables</span>
-<a name="l00115"></a>00115 <span class="comment">  /// within the value immediately.</span>
-<a name="l00116"></a>00116 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#a537e4f464c73ff952b3bde10fddea90c" title="Parse a key=val statement.">ParseLet</a>(<span class="keywordtype">string</span>* key, <span class="keywordtype">string</span>* val, <span class="keywordtype">bool</span> expand, <span class="keywordtype">string</span>* err);
-<a name="l00117"></a>00117   <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#a70208843bcad06d5796b98ba7d24ec35">ParseEdge</a>(<span class="keywordtype">string</span>* err);
-<a name="l00118"></a>00118 <span class="comment"></span>
-<a name="l00119"></a>00119 <span class="comment">  /// Parse either a &#39;subninja&#39; or &#39;include&#39; line.</span>
-<a name="l00120"></a>00120 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#a4492452159dbed1b530e33af6a874afc" title="Parse either a &amp;#39;subninja&amp;#39; or &amp;#39;include&amp;#39; line.">ParseFileInclude</a>(<a class="code" href="structToken.html#acf70e9411196c602738c3ed2428c7137">Token::Type</a> type, <span class="keywordtype">string</span>* err);
-<a name="l00121"></a>00121 
-<a name="l00122"></a><a class="code" href="structManifestParser.html#ad7b8cc26b5900c465a38106f8d92bbe0">00122</a>   <a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* <a class="code" href="structManifestParser.html#ad7b8cc26b5900c465a38106f8d92bbe0">state_</a>;
-<a name="l00123"></a><a class="code" href="structManifestParser.html#a0dbb40eddd53ef84a018cb2de667fcb1">00123</a>   <a class="code" href="structBindingEnv.html" title="An Env which contains a mapping of variables to values as well as a pointer to a...">BindingEnv</a>* <a class="code" href="structManifestParser.html#a0dbb40eddd53ef84a018cb2de667fcb1">env_</a>;
-<a name="l00124"></a><a class="code" href="structManifestParser.html#a2b634534e045a7e2b1576cbd70e9dc9d">00124</a>   <a class="code" href="structManifestParser_1_1FileReader.html">FileReader</a>* <a class="code" href="structManifestParser.html#a2b634534e045a7e2b1576cbd70e9dc9d">file_reader_</a>;
-<a name="l00125"></a><a class="code" href="structManifestParser.html#a584e2477dc1a297c5797db40b0ded64d">00125</a>   <a class="code" href="structTokenizer.html" title="Processes an input stream into Tokens.">Tokenizer</a> <a class="code" href="structManifestParser.html#a584e2477dc1a297c5797db40b0ded64d">tokenizer_</a>;
-<a name="l00126"></a>00126 };
-<a name="l00127"></a>00127 
-<a name="l00128"></a>00128 <span class="preprocessor">#endif  // NINJA_PARSERS_H_</span>
+<a name="l00105"></a><a class="code" href="structManifestParser_1_1FileReader.html#acfb2eeb2ec40be2ab44c0c104c0ef256">00105</a>     <span class="keyword">virtual</span> <a class="code" href="structManifestParser_1_1FileReader.html#acfb2eeb2ec40be2ab44c0c104c0ef256">~FileReader</a>() {}
+<a name="l00106"></a>00106     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structManifestParser_1_1FileReader.html#a2189a2031f8731473f1c4979c5b4fda5">ReadFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* content, <span class="keywordtype">string</span>* err) = 0;
+<a name="l00107"></a>00107   };
+<a name="l00108"></a>00108 
+<a name="l00109"></a>00109   <a class="code" href="structManifestParser.html#ac5d014b015600d5b88f0ab55b0b5c750">ManifestParser</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, FileReader* file_reader);
+<a name="l00110"></a>00110 
+<a name="l00111"></a>00111   <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#afb43144d1bb419456c5d5b376f561a63">Load</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; filename, <span class="keywordtype">string</span>* err);
+<a name="l00112"></a>00112   <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#a7c813cbd0fcd3e7a7395876d266d5e02">Parse</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; input, <span class="keywordtype">string</span>* err);
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114   <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#ad8e59ed84a6c318e2169ae6c52b96379">ParseRule</a>(<span class="keywordtype">string</span>* err);<span class="comment"></span>
+<a name="l00115"></a>00115 <span class="comment">  /// Parse a key=val statement.  If expand is true, evaluate variables</span>
+<a name="l00116"></a>00116 <span class="comment">  /// within the value immediately.</span>
+<a name="l00117"></a>00117 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#a537e4f464c73ff952b3bde10fddea90c" title="Parse a key=val statement.">ParseLet</a>(<span class="keywordtype">string</span>* key, <span class="keywordtype">string</span>* val, <span class="keywordtype">bool</span> expand, <span class="keywordtype">string</span>* err);
+<a name="l00118"></a>00118   <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#a70208843bcad06d5796b98ba7d24ec35">ParseEdge</a>(<span class="keywordtype">string</span>* err);
+<a name="l00119"></a>00119 <span class="comment"></span>
+<a name="l00120"></a>00120 <span class="comment">  /// Parse either a &#39;subninja&#39; or &#39;include&#39; line.</span>
+<a name="l00121"></a>00121 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="structManifestParser.html#a4492452159dbed1b530e33af6a874afc" title="Parse either a &amp;#39;subninja&amp;#39; or &amp;#39;include&amp;#39; line.">ParseFileInclude</a>(<a class="code" href="structToken.html#acf70e9411196c602738c3ed2428c7137">Token::Type</a> type, <span class="keywordtype">string</span>* err);
+<a name="l00122"></a>00122 
+<a name="l00123"></a><a class="code" href="structManifestParser.html#ad7b8cc26b5900c465a38106f8d92bbe0">00123</a>   <a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* <a class="code" href="structManifestParser.html#ad7b8cc26b5900c465a38106f8d92bbe0">state_</a>;
+<a name="l00124"></a><a class="code" href="structManifestParser.html#a0dbb40eddd53ef84a018cb2de667fcb1">00124</a>   <a class="code" href="structBindingEnv.html" title="An Env which contains a mapping of variables to values as well as a pointer to a...">BindingEnv</a>* <a class="code" href="structManifestParser.html#a0dbb40eddd53ef84a018cb2de667fcb1">env_</a>;
+<a name="l00125"></a><a class="code" href="structManifestParser.html#a2b634534e045a7e2b1576cbd70e9dc9d">00125</a>   <a class="code" href="structManifestParser_1_1FileReader.html">FileReader</a>* <a class="code" href="structManifestParser.html#a2b634534e045a7e2b1576cbd70e9dc9d">file_reader_</a>;
+<a name="l00126"></a><a class="code" href="structManifestParser.html#a584e2477dc1a297c5797db40b0ded64d">00126</a>   <a class="code" href="structTokenizer.html" title="Processes an input stream into Tokens.">Tokenizer</a> <a class="code" href="structManifestParser.html#a584e2477dc1a297c5797db40b0ded64d">tokenizer_</a>;
+<a name="l00127"></a>00127 };
+<a name="l00128"></a>00128 
+<a name="l00129"></a>00129 <span class="preprocessor">#endif  // NINJA_PARSERS_H_</span>
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 29 11:19:22 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

@@ -112,19 +112,19 @@
 <a name="l00086"></a>00086 <span class="stringliteral">&quot;  depfile = $out.d\n&quot;</span>
 <a name="l00087"></a>00087 <span class="stringliteral">&quot;  command = cat $in &gt; $out\n&quot;</span>
 <a name="l00088"></a>00088 <span class="stringliteral">&quot;build ./out.o: catdep ./foo.cc\n&quot;</span>));
-<a name="l00089"></a>00089   fs_.Create(<span class="stringliteral">&quot;./foo.cc&quot;</span>, 1, <span class="stringliteral">&quot;&quot;</span>);
-<a name="l00090"></a>00090   fs_.Create(<span class="stringliteral">&quot;./out.o.d&quot;</span>, 1, <span class="stringliteral">&quot;out.o: foo.cc\n&quot;</span>);
-<a name="l00091"></a>00091   fs_.Create(<span class="stringliteral">&quot;./out.o&quot;</span>, 1, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00089"></a>00089   fs_.Create(<span class="stringliteral">&quot;foo.cc&quot;</span>, 1, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00090"></a>00090   fs_.Create(<span class="stringliteral">&quot;out.o.d&quot;</span>, 1, <span class="stringliteral">&quot;out.o: foo.cc\n&quot;</span>);
+<a name="l00091"></a>00091   fs_.Create(<span class="stringliteral">&quot;out.o&quot;</span>, 1, <span class="stringliteral">&quot;&quot;</span>);
 <a name="l00092"></a>00092 
-<a name="l00093"></a>00093   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge = GetNode(<span class="stringliteral">&quot;./out.o&quot;</span>)-&gt;in_edge_;
+<a name="l00093"></a>00093   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge = GetNode(<span class="stringliteral">&quot;out.o&quot;</span>)-&gt;in_edge_;
 <a name="l00094"></a>00094   <span class="keywordtype">string</span> err;
 <a name="l00095"></a>00095   EXPECT_TRUE(edge-&gt;<a class="code" href="structEdge.html#a0d74c02ecd1cfb1514e25a4954538a9d">RecomputeDirty</a>(&amp;state_, &amp;fs_, &amp;err));
 <a name="l00096"></a>00096   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
 <a name="l00097"></a>00097 
-<a name="l00098"></a>00098   EXPECT_FALSE(GetNode(<span class="stringliteral">&quot;./out.o&quot;</span>)-&gt;dirty_);
+<a name="l00098"></a>00098   EXPECT_FALSE(GetNode(<span class="stringliteral">&quot;out.o&quot;</span>)-&gt;dirty_);
 <a name="l00099"></a>00099 }
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 29 11:19:22 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

@@ -48,38 +48,40 @@
 <a name="l00022"></a>00022 <span class="comment"></span>
 <a name="l00023"></a>00023 <span class="comment">/// An interface for a scope for variable (e.g. &quot;$foo&quot;) lookups.</span>
 <a name="l00024"></a><a class="code" href="structEnv.html">00024</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a> {
-<a name="l00025"></a>00025   <span class="keyword">virtual</span> <span class="keywordtype">string</span> <a class="code" href="structEnv.html#a985781a5c04cc4a34ac6e07c57e44768">LookupVariable</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; var) = 0;
-<a name="l00026"></a>00026 };
-<a name="l00027"></a>00027 <span class="comment"></span>
-<a name="l00028"></a>00028 <span class="comment">/// An Env which contains a mapping of variables to values</span>
-<a name="l00029"></a>00029 <span class="comment">/// as well as a pointer to a parent scope.</span>
-<a name="l00030"></a><a class="code" href="structBindingEnv.html">00030</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structBindingEnv.html" title="An Env which contains a mapping of variables to values as well as a pointer to a...">BindingEnv</a> : <span class="keyword">public</span> <a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a> {
-<a name="l00031"></a><a class="code" href="structBindingEnv.html#aa46e08738c7e15ef656683cc1ded4489">00031</a>   <a class="code" href="structBindingEnv.html#aa46e08738c7e15ef656683cc1ded4489">BindingEnv</a>() : <a class="code" href="structBindingEnv.html#a8d0a9ba09923c7160d0cbc1ff3dac6df">parent_</a>(NULL) {}
-<a name="l00032"></a>00032   <span class="keyword">virtual</span> <span class="keywordtype">string</span> <a class="code" href="structBindingEnv.html#af858f0c4dc64fee67545ffabb18ee2bb">LookupVariable</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; var);
-<a name="l00033"></a>00033   <span class="keywordtype">void</span> <a class="code" href="structBindingEnv.html#a211325035c6b322fc3df25f3b943fb66">AddBinding</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; key, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; val);
-<a name="l00034"></a>00034 
-<a name="l00035"></a><a class="code" href="structBindingEnv.html#aa809e9895e3fdb9a7a84cff11307abed">00035</a>   map&lt;string, string&gt; <a class="code" href="structBindingEnv.html#aa809e9895e3fdb9a7a84cff11307abed">bindings_</a>;
-<a name="l00036"></a><a class="code" href="structBindingEnv.html#a8d0a9ba09923c7160d0cbc1ff3dac6df">00036</a>   <a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a>* <a class="code" href="structBindingEnv.html#a8d0a9ba09923c7160d0cbc1ff3dac6df">parent_</a>;
-<a name="l00037"></a>00037 };
-<a name="l00038"></a>00038 <span class="comment"></span>
-<a name="l00039"></a>00039 <span class="comment">/// A tokenized string that contains variable references.</span>
-<a name="l00040"></a>00040 <span class="comment">/// Can be evaluated relative to an Env.</span>
-<a name="l00041"></a><a class="code" href="structEvalString.html">00041</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structEvalString.html" title="A tokenized string that contains variable references.">EvalString</a> {
-<a name="l00042"></a>00042   <span class="keywordtype">bool</span> <a class="code" href="structEvalString.html#aae803d9d90919aed8093ad1ed473dfde">Parse</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; input, <span class="keywordtype">string</span>* err, <span class="keywordtype">size_t</span>* err_index=NULL);
-<a name="l00043"></a>00043   <span class="keywordtype">string</span> <a class="code" href="structEvalString.html#a6a8e12404fd1ee3f425992edf3876118">Evaluate</a>(<a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a>* env) <span class="keyword">const</span>;
-<a name="l00044"></a>00044 
-<a name="l00045"></a><a class="code" href="structEvalString.html#a0acf34ee1ee730c4838ad756b608d50f">00045</a>   <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; <a class="code" href="structEvalString.html#a0acf34ee1ee730c4838ad756b608d50f">unparsed</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structEvalString.html#ab1075a024cc824b08cfc8cbdab545184">unparsed_</a>; }
-<a name="l00046"></a><a class="code" href="structEvalString.html#a9c3353ee14dc1643c0285f33304516b7">00046</a>   <span class="keyword">const</span> <span class="keywordtype">bool</span> <a class="code" href="structEvalString.html#a9c3353ee14dc1643c0285f33304516b7">empty</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structEvalString.html#ab1075a024cc824b08cfc8cbdab545184">unparsed_</a>.empty(); }
-<a name="l00047"></a>00047 
-<a name="l00048"></a><a class="code" href="structEvalString.html#ab1075a024cc824b08cfc8cbdab545184">00048</a>   <span class="keywordtype">string</span> <a class="code" href="structEvalString.html#ab1075a024cc824b08cfc8cbdab545184">unparsed_</a>;
-<a name="l00049"></a><a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8">00049</a>   <span class="keyword">enum</span> <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8">TokenType</a> { <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a5e036adce6899bc92dc78fa4cf7d7309">RAW</a>, <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a7605297b1cf665d19e1d9c18db23e5ee">SPECIAL</a> };
-<a name="l00050"></a><a class="code" href="structEvalString.html#a624839e4086e9fd2867357ee439c0310">00050</a>   <span class="keyword">typedef</span> vector&lt;pair&lt;string, TokenType&gt; &gt; <a class="code" href="structEvalString.html#a624839e4086e9fd2867357ee439c0310">TokenList</a>;
-<a name="l00051"></a><a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">00051</a>   <a class="code" href="structEvalString.html#a624839e4086e9fd2867357ee439c0310">TokenList</a> <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>;
-<a name="l00052"></a>00052 };
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <span class="preprocessor">#endif  // NINJA_EVAL_ENV_H_</span>
+<a name="l00025"></a><a class="code" href="structEnv.html#ab1a26ca6473b63e1ea70237a5c91c813">00025</a>   <span class="keyword">virtual</span> <a class="code" href="structEnv.html#ab1a26ca6473b63e1ea70237a5c91c813">~Env</a>() {}
+<a name="l00026"></a>00026   <span class="keyword">virtual</span> <span class="keywordtype">string</span> <a class="code" href="structEnv.html#a985781a5c04cc4a34ac6e07c57e44768">LookupVariable</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; var) = 0;
+<a name="l00027"></a>00027 };
+<a name="l00028"></a>00028 <span class="comment"></span>
+<a name="l00029"></a>00029 <span class="comment">/// An Env which contains a mapping of variables to values</span>
+<a name="l00030"></a>00030 <span class="comment">/// as well as a pointer to a parent scope.</span>
+<a name="l00031"></a><a class="code" href="structBindingEnv.html">00031</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structBindingEnv.html" title="An Env which contains a mapping of variables to values as well as a pointer to a...">BindingEnv</a> : <span class="keyword">public</span> <a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a> {
+<a name="l00032"></a><a class="code" href="structBindingEnv.html#aa46e08738c7e15ef656683cc1ded4489">00032</a>   <a class="code" href="structBindingEnv.html#aa46e08738c7e15ef656683cc1ded4489">BindingEnv</a>() : <a class="code" href="structBindingEnv.html#a8d0a9ba09923c7160d0cbc1ff3dac6df">parent_</a>(NULL) {}
+<a name="l00033"></a><a class="code" href="structBindingEnv.html#af54aba77bfe2d28de4fcc8eb14e05aa2">00033</a>   <span class="keyword">virtual</span> <a class="code" href="structBindingEnv.html#af54aba77bfe2d28de4fcc8eb14e05aa2">~BindingEnv</a>() {}
+<a name="l00034"></a>00034   <span class="keyword">virtual</span> <span class="keywordtype">string</span> <a class="code" href="structBindingEnv.html#af858f0c4dc64fee67545ffabb18ee2bb">LookupVariable</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; var);
+<a name="l00035"></a>00035   <span class="keywordtype">void</span> <a class="code" href="structBindingEnv.html#a211325035c6b322fc3df25f3b943fb66">AddBinding</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; key, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; val);
+<a name="l00036"></a>00036 
+<a name="l00037"></a><a class="code" href="structBindingEnv.html#aa809e9895e3fdb9a7a84cff11307abed">00037</a>   map&lt;string, string&gt; <a class="code" href="structBindingEnv.html#aa809e9895e3fdb9a7a84cff11307abed">bindings_</a>;
+<a name="l00038"></a><a class="code" href="structBindingEnv.html#a8d0a9ba09923c7160d0cbc1ff3dac6df">00038</a>   <a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a>* <a class="code" href="structBindingEnv.html#a8d0a9ba09923c7160d0cbc1ff3dac6df">parent_</a>;
+<a name="l00039"></a>00039 };
+<a name="l00040"></a>00040 <span class="comment"></span>
+<a name="l00041"></a>00041 <span class="comment">/// A tokenized string that contains variable references.</span>
+<a name="l00042"></a>00042 <span class="comment">/// Can be evaluated relative to an Env.</span>
+<a name="l00043"></a><a class="code" href="structEvalString.html">00043</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structEvalString.html" title="A tokenized string that contains variable references.">EvalString</a> {
+<a name="l00044"></a>00044   <span class="keywordtype">bool</span> <a class="code" href="structEvalString.html#aae803d9d90919aed8093ad1ed473dfde">Parse</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; input, <span class="keywordtype">string</span>* err, <span class="keywordtype">size_t</span>* err_index=NULL);
+<a name="l00045"></a>00045   <span class="keywordtype">string</span> <a class="code" href="structEvalString.html#a6a8e12404fd1ee3f425992edf3876118">Evaluate</a>(<a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a>* env) <span class="keyword">const</span>;
+<a name="l00046"></a>00046 
+<a name="l00047"></a><a class="code" href="structEvalString.html#a0acf34ee1ee730c4838ad756b608d50f">00047</a>   <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; <a class="code" href="structEvalString.html#a0acf34ee1ee730c4838ad756b608d50f">unparsed</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structEvalString.html#ab1075a024cc824b08cfc8cbdab545184">unparsed_</a>; }
+<a name="l00048"></a><a class="code" href="structEvalString.html#a9c3353ee14dc1643c0285f33304516b7">00048</a>   <span class="keyword">const</span> <span class="keywordtype">bool</span> <a class="code" href="structEvalString.html#a9c3353ee14dc1643c0285f33304516b7">empty</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structEvalString.html#ab1075a024cc824b08cfc8cbdab545184">unparsed_</a>.empty(); }
+<a name="l00049"></a>00049 
+<a name="l00050"></a><a class="code" href="structEvalString.html#ab1075a024cc824b08cfc8cbdab545184">00050</a>   <span class="keywordtype">string</span> <a class="code" href="structEvalString.html#ab1075a024cc824b08cfc8cbdab545184">unparsed_</a>;
+<a name="l00051"></a><a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8">00051</a>   <span class="keyword">enum</span> <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8">TokenType</a> { <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a5e036adce6899bc92dc78fa4cf7d7309">RAW</a>, <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a7605297b1cf665d19e1d9c18db23e5ee">SPECIAL</a> };
+<a name="l00052"></a><a class="code" href="structEvalString.html#a624839e4086e9fd2867357ee439c0310">00052</a>   <span class="keyword">typedef</span> vector&lt;pair&lt;string, TokenType&gt; &gt; <a class="code" href="structEvalString.html#a624839e4086e9fd2867357ee439c0310">TokenList</a>;
+<a name="l00053"></a><a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">00053</a>   <a class="code" href="structEvalString.html#a624839e4086e9fd2867357ee439c0310">TokenList</a> <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>;
+<a name="l00054"></a>00054 };
+<a name="l00055"></a>00055 
+<a name="l00056"></a>00056 <span class="preprocessor">#endif  // NINJA_EVAL_ENV_H_</span>
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri Apr 29 11:19:22 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
