@@ -47,8 +47,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structGETOPT__LONG__OPTION__T.html">GETOPT_LONG_OPTION_T</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="getopt_8h.html#ac633afeefa5faaa72842c605f00a0ca7">option</a></td></tr>
 <tr><td colspan="2"><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="getopt_8h.html#ab5a9e4ffb6632f1f214ac39a1984139b">getopt</a> (int argc, char **argv, char *optstring)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="getopt_8h.html#aab956264296d2b29c3c5f976e97c7233">getopt_long</a> (int argc, char **argv, char *shortopts, <a class="el" href="structGETOPT__LONG__OPTION__T.html">GETOPT_LONG_OPTION_T</a> *longopts, int *longind)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="getopt_8h.html#a547bbf9e0ca29930300bf3d58b231029">getopt_long_only</a> (int argc, char **argv, char *shortopts, <a class="el" href="structGETOPT__LONG__OPTION__T.html">GETOPT_LONG_OPTION_T</a> *longopts, int *longind)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="getopt_8h.html#ac43de49b0ae60f45ef43921fdc3be623">getopt_long</a> (int argc, char **argv, const char *shortopts, <a class="el" href="structGETOPT__LONG__OPTION__T.html">GETOPT_LONG_OPTION_T</a> *longopts, int *longind)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="getopt_8h.html#a0b7597b13fe16e0bf6ac184294b5b8eb">getopt_long_only</a> (int argc, char **argv, const char *shortopts, <a class="el" href="structGETOPT__LONG__OPTION__T.html">GETOPT_LONG_OPTION_T</a> *longopts, int *longind)</td></tr>
 <tr><td colspan="2"><h2>Variables</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="getopt_8h.html#ae30f05ee1e2e5652f174a35c7875d25e">opterr</a></td></tr>
@@ -164,7 +164,7 @@ This graph shows which files directly or indirectly include this file:</div>
 
 </div>
 </div>
-<a class="anchor" id="aab956264296d2b29c3c5f976e97c7233"></a><!-- doxytag: member="getopt.h::getopt_long" ref="aab956264296d2b29c3c5f976e97c7233" args="(int argc, char **argv, char *shortopts, GETOPT_LONG_OPTION_T *longopts, int *longind)" -->
+<a class="anchor" id="ac43de49b0ae60f45ef43921fdc3be623"></a><!-- doxytag: member="getopt.h::getopt_long" ref="ac43de49b0ae60f45ef43921fdc3be623" args="(int argc, char **argv, const char *shortopts, GETOPT_LONG_OPTION_T *longopts, int *longind)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -183,7 +183,7 @@ This graph shows which files directly or indirectly include this file:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramtype">const char *&nbsp;</td>
           <td class="paramname"> <em>shortopts</em>, </td>
         </tr>
         <tr>
@@ -207,11 +207,11 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 <div class="memdoc">
 
-<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00329">main()</a>.</p>
+<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00346">main()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a547bbf9e0ca29930300bf3d58b231029"></a><!-- doxytag: member="getopt.h::getopt_long_only" ref="a547bbf9e0ca29930300bf3d58b231029" args="(int argc, char **argv, char *shortopts, GETOPT_LONG_OPTION_T *longopts, int *longind)" -->
+<a class="anchor" id="a0b7597b13fe16e0bf6ac184294b5b8eb"></a><!-- doxytag: member="getopt.h::getopt_long_only" ref="a0b7597b13fe16e0bf6ac184294b5b8eb" args="(int argc, char **argv, const char *shortopts, GETOPT_LONG_OPTION_T *longopts, int *longind)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -230,7 +230,7 @@ This graph shows which files directly or indirectly include this file:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">char *&nbsp;</td>
+          <td class="paramtype">const char *&nbsp;</td>
           <td class="paramname"> <em>shortopts</em>, </td>
         </tr>
         <tr>
@@ -268,7 +268,7 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 <div class="memdoc">
 
-<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00329">main()</a>.</p>
+<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00346">main()</a>.</p>
 
 </div>
 </div>
@@ -296,7 +296,7 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 <div class="memdoc">
 
-<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00329">main()</a>.</p>
+<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00346">main()</a>.</p>
 
 </div>
 </div>
@@ -314,7 +314,7 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:27 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

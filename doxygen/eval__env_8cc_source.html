@@ -81,42 +81,45 @@
 <a name="l00055"></a>00055       }
 <a name="l00056"></a>00056       <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.push_back(make_pair(input.substr(start, end - start), <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a7605297b1cf665d19e1d9c18db23e5ee">SPECIAL</a>));
 <a name="l00057"></a>00057       ++end;
-<a name="l00058"></a>00058     } <span class="keywordflow">else</span> {
-<a name="l00059"></a>00059       <span class="keywordflow">for</span> (end = start; end &lt; input.size(); ++end) {
-<a name="l00060"></a>00060         <span class="keywordtype">char</span> c = input[end];
-<a name="l00061"></a>00061         <span class="keywordflow">if</span> (!((<span class="charliteral">&#39;a&#39;</span> &lt;= c &amp;&amp; c &lt;= <span class="charliteral">&#39;z&#39;</span>) || (<span class="charliteral">&#39;A&#39;</span> &lt;= c &amp;&amp; c &lt;= <span class="charliteral">&#39;Z&#39;</span>) ||
-<a name="l00062"></a>00062               (<span class="charliteral">&#39;0&#39;</span> &lt;= c &amp;&amp; c &lt;= <span class="charliteral">&#39;9&#39;</span>) || c == <span class="charliteral">&#39;_&#39;</span>)) {
-<a name="l00063"></a>00063           <span class="keywordflow">break</span>;
-<a name="l00064"></a>00064         }
-<a name="l00065"></a>00065       }
-<a name="l00066"></a>00066       <span class="keywordflow">if</span> (end == start) {
-<a name="l00067"></a>00067         *err = <span class="stringliteral">&quot;expected variable after $&quot;</span>;
-<a name="l00068"></a>00068         <span class="keywordflow">if</span> (err_index)
-<a name="l00069"></a>00069           *err_index = start;
-<a name="l00070"></a>00070         <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00071"></a>00071       }
-<a name="l00072"></a>00072       <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.push_back(make_pair(input.substr(start, end - start), <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a7605297b1cf665d19e1d9c18db23e5ee">SPECIAL</a>));
-<a name="l00073"></a>00073     }
-<a name="l00074"></a>00074     start = end;
-<a name="l00075"></a>00075   } <span class="keywordflow">while</span> (end &lt; input.size());
-<a name="l00076"></a>00076   <span class="keywordflow">if</span> (end &gt; start)
-<a name="l00077"></a>00077     <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.push_back(make_pair(input.substr(start, end - start), <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a5e036adce6899bc92dc78fa4cf7d7309">RAW</a>));
-<a name="l00078"></a>00078 
-<a name="l00079"></a>00079   <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00080"></a>00080 }
+<a name="l00058"></a>00058     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (start &lt; input.size() &amp;&amp; input[start] == <span class="charliteral">&#39;$&#39;</span>) {
+<a name="l00059"></a>00059       <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.push_back(make_pair(<span class="stringliteral">&quot;$&quot;</span>, <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a5e036adce6899bc92dc78fa4cf7d7309">RAW</a>));
+<a name="l00060"></a>00060       end = start + 1;
+<a name="l00061"></a>00061     } <span class="keywordflow">else</span> {
+<a name="l00062"></a>00062       <span class="keywordflow">for</span> (end = start; end &lt; input.size(); ++end) {
+<a name="l00063"></a>00063         <span class="keywordtype">char</span> c = input[end];
+<a name="l00064"></a>00064         <span class="keywordflow">if</span> (!((<span class="charliteral">&#39;a&#39;</span> &lt;= c &amp;&amp; c &lt;= <span class="charliteral">&#39;z&#39;</span>) || (<span class="charliteral">&#39;A&#39;</span> &lt;= c &amp;&amp; c &lt;= <span class="charliteral">&#39;Z&#39;</span>) ||
+<a name="l00065"></a>00065               (<span class="charliteral">&#39;0&#39;</span> &lt;= c &amp;&amp; c &lt;= <span class="charliteral">&#39;9&#39;</span>) || c == <span class="charliteral">&#39;_&#39;</span>)) {
+<a name="l00066"></a>00066           <span class="keywordflow">break</span>;
+<a name="l00067"></a>00067         }
+<a name="l00068"></a>00068       }
+<a name="l00069"></a>00069       <span class="keywordflow">if</span> (end == start) {
+<a name="l00070"></a>00070         *err = <span class="stringliteral">&quot;expected variable after $&quot;</span>;
+<a name="l00071"></a>00071         <span class="keywordflow">if</span> (err_index)
+<a name="l00072"></a>00072           *err_index = start;
+<a name="l00073"></a>00073         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00074"></a>00074       }
+<a name="l00075"></a>00075       <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.push_back(make_pair(input.substr(start, end - start), <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a7605297b1cf665d19e1d9c18db23e5ee">SPECIAL</a>));
+<a name="l00076"></a>00076     }
+<a name="l00077"></a>00077     start = end;
+<a name="l00078"></a>00078   } <span class="keywordflow">while</span> (end &lt; input.size());
+<a name="l00079"></a>00079   <span class="keywordflow">if</span> (end &gt; start)
+<a name="l00080"></a>00080     <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.push_back(make_pair(input.substr(start, end - start), <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a5e036adce6899bc92dc78fa4cf7d7309">RAW</a>));
 <a name="l00081"></a>00081 
-<a name="l00082"></a><a class="code" href="structEvalString.html#a6a8e12404fd1ee3f425992edf3876118">00082</a> <span class="keywordtype">string</span> <a class="code" href="structEvalString.html#a6a8e12404fd1ee3f425992edf3876118">EvalString::Evaluate</a>(<a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a>* env)<span class="keyword"> const </span>{
-<a name="l00083"></a>00083   <span class="keywordtype">string</span> result;
-<a name="l00084"></a>00084   <span class="keywordflow">for</span> (TokenList::const_iterator i = <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.begin(); i != <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.end(); ++i) {
-<a name="l00085"></a>00085     <span class="keywordflow">if</span> (i-&gt;second == <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a5e036adce6899bc92dc78fa4cf7d7309">RAW</a>)
-<a name="l00086"></a>00086       result.append(i-&gt;first);
-<a name="l00087"></a>00087     <span class="keywordflow">else</span>
-<a name="l00088"></a>00088       result.append(env-&gt;<a class="code" href="structEnv.html#a985781a5c04cc4a34ac6e07c57e44768">LookupVariable</a>(i-&gt;first));
-<a name="l00089"></a>00089   }
-<a name="l00090"></a>00090   <span class="keywordflow">return</span> result;
-<a name="l00091"></a>00091 }
+<a name="l00082"></a>00082   <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00083"></a>00083 }
+<a name="l00084"></a>00084 
+<a name="l00085"></a><a class="code" href="structEvalString.html#a6a8e12404fd1ee3f425992edf3876118">00085</a> <span class="keywordtype">string</span> <a class="code" href="structEvalString.html#a6a8e12404fd1ee3f425992edf3876118">EvalString::Evaluate</a>(<a class="code" href="structEnv.html" title="An interface for a scope for variable (e.g. &amp;quot;$foo&amp;quot;) lookups.">Env</a>* env)<span class="keyword"> const </span>{
+<a name="l00086"></a>00086   <span class="keywordtype">string</span> result;
+<a name="l00087"></a>00087   <span class="keywordflow">for</span> (TokenList::const_iterator i = <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.begin(); i != <a class="code" href="structEvalString.html#addb087ce871bdfd4f6a130d14ece7604">parsed_</a>.end(); ++i) {
+<a name="l00088"></a>00088     <span class="keywordflow">if</span> (i-&gt;second == <a class="code" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a5e036adce6899bc92dc78fa4cf7d7309">RAW</a>)
+<a name="l00089"></a>00089       result.append(i-&gt;first);
+<a name="l00090"></a>00090     <span class="keywordflow">else</span>
+<a name="l00091"></a>00091       result.append(env-&gt;<a class="code" href="structEnv.html#a985781a5c04cc4a34ac6e07c57e44768">LookupVariable</a>(i-&gt;first));
+<a name="l00092"></a>00092   }
+<a name="l00093"></a>00093   <span class="keywordflow">return</span> result;
+<a name="l00094"></a>00094 }
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

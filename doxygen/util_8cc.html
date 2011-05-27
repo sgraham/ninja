@@ -27,17 +27,21 @@
 </div>
 <div class="contents">
 <h1>util.cc File Reference</h1><code>#include &quot;<a class="el" href="util_8h_source.html">util.h</a>&quot;</code><br/>
+<code>#include &lt;errno.h&gt;</code><br/>
 <code>#include &lt;stdarg.h&gt;</code><br/>
 <code>#include &lt;stdio.h&gt;</code><br/>
 <code>#include &lt;stdlib.h&gt;</code><br/>
 <code>#include &lt;string.h&gt;</code><br/>
+<code>#include &lt;sys/stat.h&gt;</code><br/>
+<code>#include &lt;sys/types.h&gt;</code><br/>
+<code>#include &lt;sys/time.h&gt;</code><br/>
 <code>#include &lt;vector&gt;</code><br/>
 <div class="dynheader">
 Include dependency graph for util.cc:</div>
 <div class="dynsection">
 <div class="center"><img src="util_8cc__incl.png" border="0" usemap="#util_8cc_map" alt=""/></div>
 <map name="util_8cc_map" id="util_8cc">
-<area shape="rect" href="util_8h.html" title="util.h" alt="" coords="8,83,56,112"/></map>
+<area shape="rect" href="util_8h.html" title="util.h" alt="" coords="55,83,103,112"/></map>
 </div>
 
 <p><a href="util_8cc_source.html">Go to the source code of this file.</a></p>
@@ -49,6 +53,14 @@ Include dependency graph for util.cc:</div>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Log an error message.  <a href="#a8d48223b92317abcaf5984a00a97efb4"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8cc.html#ad98ec6fb76f27b3d5a805cdad742df92">Fatal</a> (const char *msg,...)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Log a fatal message and exit.  <a href="#ad98ec6fb76f27b3d5a805cdad742df92"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int64_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8cc.html#a139d0fe6387b9e230a9b8bb12d9b43b9">GetTimeMillis</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the current time as relative to some epoch.  <a href="#a139d0fe6387b9e230a9b8bb12d9b43b9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8cc.html#ae04109d68ece0ef0be9b662a35e09f1d">MakeDir</a> (const string &amp;path)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a directory (mode 0777 on Unix).  <a href="#ae04109d68ece0ef0be9b662a35e09f1d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8cc.html#afa2642aae4af8af879417889a5e8f4f5">ReadFile</a> (const string &amp;path, string *contents, string *err)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Read a file to a string.  <a href="#afa2642aae4af8af879417889a5e8f4f5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8cc.html#aa92567b4012d3191db5d247c8db8e9d9">Warning</a> (const char *msg,...)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Log a warning message.  <a href="#aa92567b4012d3191db5d247c8db8e9d9"></a><br/></td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
 <a class="anchor" id="abdb5937692c9c5a0fbe6cbbab7941414"></a><!-- doxytag: member="util.cc::CanonicalizePath" ref="abdb5937692c9c5a0fbe6cbbab7941414" args="(string *path, string *err)" -->
@@ -78,9 +90,9 @@ Include dependency graph for util.cc:</div>
 
 <p>Canonicalize a path like "foo/../bar.h" into just "bar.h". </p>
 
-<p>Definition at line <a class="el" href="util_8cc_source.html#l00043">43</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
+<p>Definition at line <a class="el" href="util_8cc_source.html#l00064">64</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="graph_8cc_source.html#l00129">Edge::LoadDepFile()</a>, <a class="el" href="ninja_8cc_source.html#l00329">main()</a>, <a class="el" href="parsers_8cc_source.html#l00400">ManifestParser::ParseEdge()</a>, and <a class="el" href="util__test_8cc_source.html#l00019">TEST()</a>.</p>
+<p>Referenced by <a class="el" href="graph_8cc_source.html#l00127">Edge::LoadDepFile()</a>, <a class="el" href="parsers_8cc_source.html#l00415">ManifestParser::ParseEdge()</a>, and <a class="el" href="util__test_8cc_source.html#l00019">TEST()</a>.</p>
 
 </div>
 </div>
@@ -111,9 +123,9 @@ Include dependency graph for util.cc:</div>
 
 <p>Log an error message. </p>
 
-<p>Definition at line <a class="el" href="util_8cc_source.html#l00034">34</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
+<p>Definition at line <a class="el" href="util_8cc_source.html#l00055">55</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00176">State::AddOut()</a>, <a class="el" href="clean_8cc_source.html#l00171">Cleaner::CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00131">Cleaner::CleanTargets()</a>, <a class="el" href="ninja_8cc_source.html#l00170">CmdBrowse()</a>, <a class="el" href="ninja_8cc_source.html#l00297">CmdClean()</a>, <a class="el" href="ninja_8cc_source.html#l00107">CmdGraph()</a>, <a class="el" href="ninja_8cc_source.html#l00138">CmdQuery()</a>, <a class="el" href="ninja_8cc_source.html#l00250">CmdTargets()</a>, <a class="el" href="clean_8cc_source.html#l00050">Cleaner::FileExists()</a>, <a class="el" href="ninja_8cc_source.html#l00329">main()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00102">RealDiskInterface::MakeDir()</a>, <a class="el" href="clean_8cc_source.html#l00036">Cleaner::RemoveFile()</a>, and <a class="el" href="ninja__jumble_8cc_source.html#l00051">RealDiskInterface::Stat()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00192">Cleaner::CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00206">Cleaner::CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00136">Cleaner::CleanTarget()</a>, <a class="el" href="clean_8cc_source.html#l00150">Cleaner::CleanTargets()</a>, <a class="el" href="ninja_8cc_source.html#l00346">main()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00080">RealDiskInterface::MakeDir()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00088">RealDiskInterface::RemoveFile()</a>, and <a class="el" href="ninja__jumble_8cc_source.html#l00029">RealDiskInterface::Stat()</a>.</p>
 
 </div>
 </div>
@@ -144,14 +156,136 @@ Include dependency graph for util.cc:</div>
 
 <p>Log a fatal message and exit. </p>
 
-<p>Definition at line <a class="el" href="util_8cc_source.html#l00024">24</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
+<p>Definition at line <a class="el" href="util_8cc_source.html#l00036">36</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="subprocess_8cc_source.html#l00112">Subprocess::Finish()</a>, <a class="el" href="ninja_8cc_source.html#l00329">main()</a>, <a class="el" href="subprocess_8cc_source.html#l00098">Subprocess::OnFDReady()</a>, and <a class="el" href="subprocess_8cc_source.html#l00043">Subprocess::Start()</a>.</p>
+<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00346">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a139d0fe6387b9e230a9b8bb12d9b43b9"></a><!-- doxytag: member="util.cc::GetTimeMillis" ref="a139d0fe6387b9e230a9b8bb12d9b43b9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t GetTimeMillis </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the current time as relative to some epoch. </p>
+<p>Epoch varies between platforms; only useful for measuring elapsed time. </p>
+
+<p>Definition at line <a class="el" href="util_8cc_source.html#l00182">182</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
+
+<p>Referenced by <a class="el" href="build_8cc_source.html#l00090">BuildStatus::BuildEdgeFinished()</a>, <a class="el" href="build_8cc_source.html#l00082">BuildStatus::BuildEdgeStarted()</a>, and <a class="el" href="parser__perftest_8cc_source.html#l00021">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae04109d68ece0ef0be9b662a35e09f1d"></a><!-- doxytag: member="util.cc::MakeDir" ref="ae04109d68ece0ef0be9b662a35e09f1d" args="(const string &amp;path)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MakeDir </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&nbsp;</td>
+          <td class="paramname"> <em>path</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Create a directory (mode 0777 on Unix). </p>
+<p>Portability abstraction. </p>
+
+<p>Definition at line <a class="el" href="util_8cc_source.html#l00152">152</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
+
+<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00346">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afa2642aae4af8af879417889a5e8f4f5"></a><!-- doxytag: member="util.cc::ReadFile" ref="afa2642aae4af8af879417889a5e8f4f5" args="(const string &amp;path, string *contents, string *err)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ReadFile </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&nbsp;</td>
+          <td class="paramname"> <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string *&nbsp;</td>
+          <td class="paramname"> <em>contents</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string *&nbsp;</td>
+          <td class="paramname"> <em>err</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Read a file to a string. </p>
+<p>Returns -errno and fills in <em>err</em> on error. </p>
+
+<p>Definition at line <a class="el" href="util_8cc_source.html#l00160">160</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
+
+<p>Referenced by <a class="el" href="parser__perftest_8cc_source.html#l00021">main()</a>, and <a class="el" href="subprocess-win32_8cc_source.html#l00123">Subprocess::OnPipeReady()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa92567b4012d3191db5d247c8db8e9d9"></a><!-- doxytag: member="util.cc::Warning" ref="aa92567b4012d3191db5d247c8db8e9d9" args="(const char *msg,...)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Warning </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&nbsp;</td>
+          <td class="paramname"> <em>...</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Log a warning message. </p>
+
+<p>Definition at line <a class="el" href="util_8cc_source.html#l00046">46</a> of file <a class="el" href="util_8cc_source.html">util.cc</a>.</p>
+
+<p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00168">State::AddOut()</a>.</p>
 
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:28 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

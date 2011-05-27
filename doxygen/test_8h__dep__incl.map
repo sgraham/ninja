@@ -1,8 +1,9 @@
 <map id="G" name="G">
 <area shape="rect" href="$build__test_8cc.html" title="build_test.cc" alt="" coords="5,83,101,112"/>
-<area shape="rect" href="$graph__test_8cc.html" title="graph_test.cc" alt="" coords="125,83,224,112"/>
-<area shape="rect" href="$ninja__test_8cc.html" title="ninja_test.cc" alt="" coords="248,83,344,112"/>
-<area shape="rect" href="$subprocess__test_8cc.html" title="subprocess_test.cc" alt="" coords="368,83,504,112"/>
-<area shape="rect" href="$test_8cc.html" title="test.cc" alt="" coords="528,83,589,112"/>
-<area shape="rect" href="$util__test_8cc.html" title="util_test.cc" alt="" coords="613,83,699,112"/>
+<area shape="rect" href="$clean__test_8cc.html" title="clean_test.cc" alt="" coords="125,83,224,112"/>
+<area shape="rect" href="$graph__test_8cc.html" title="graph_test.cc" alt="" coords="248,83,347,112"/>
+<area shape="rect" href="$ninja__test_8cc.html" title="ninja_test.cc" alt="" coords="371,83,467,112"/>
+<area shape="rect" href="$subprocess__test_8cc.html" title="subprocess_test.cc" alt="" coords="491,83,627,112"/>
+<area shape="rect" href="$test_8cc.html" title="test.cc" alt="" coords="651,83,712,112"/>
+<area shape="rect" href="$util__test_8cc.html" title="util_test.cc" alt="" coords="736,83,821,112"/>
 </map>

@@ -41,445 +41,469 @@
 <a name="l00015"></a>00015 <span class="preprocessor">#include &quot;<a class="code" href="ninja_8h.html">ninja.h</a>&quot;</span>
 <a name="l00016"></a>00016 
 <a name="l00017"></a>00017 <span class="preprocessor">#include &lt;errno.h&gt;</span>
-<a name="l00018"></a>00018 <span class="preprocessor">#ifdef WIN32</span>
-<a name="l00019"></a>00019 <span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="getopt_8h.html">getopt.h</a>&quot;</span>
-<a name="l00020"></a>00020 <span class="preprocessor">#else</span>
-<a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#include &lt;<a class="code" href="getopt_8h.html">getopt.h</a>&gt;</span>
-<a name="l00022"></a>00022 <span class="preprocessor">#endif</span>
-<a name="l00023"></a>00023 <span class="preprocessor"></span><span class="preprocessor">#include &lt;stdio.h&gt;</span>
-<a name="l00024"></a>00024 <span class="preprocessor">#include &lt;string.h&gt;</span>
-<a name="l00025"></a>00025 <span class="preprocessor">#include &lt;sys/stat.h&gt;</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include &lt;sys/types.h&gt;</span>
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028 <span class="preprocessor">#if defined(__APPLE__) || defined(__FreeBSD__)</span>
-<a name="l00029"></a>00029 <span class="preprocessor"></span><span class="preprocessor">#include &lt;sys/sysctl.h&gt;</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#elif defined(linux)</span>
-<a name="l00031"></a>00031 <span class="preprocessor"></span><span class="preprocessor">#include &lt;sys/sysinfo.h&gt;</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#endif</span>
-<a name="l00033"></a>00033 <span class="preprocessor"></span>
-<a name="l00034"></a>00034 <span class="preprocessor">#include &quot;<a class="code" href="browse_8h.html">browse.h</a>&quot;</span>
-<a name="l00035"></a>00035 <span class="preprocessor">#include &quot;<a class="code" href="build_8h.html">build.h</a>&quot;</span>
-<a name="l00036"></a>00036 <span class="preprocessor">#include &quot;<a class="code" href="build__log_8h.html">build_log.h</a>&quot;</span>
-<a name="l00037"></a>00037 <span class="preprocessor">#include &quot;<a class="code" href="graph_8h.html">graph.h</a>&quot;</span>
-<a name="l00038"></a>00038 <span class="preprocessor">#include &quot;<a class="code" href="graphviz_8h.html">graphviz.h</a>&quot;</span>
-<a name="l00039"></a>00039 <span class="preprocessor">#include &quot;<a class="code" href="parsers_8h.html">parsers.h</a>&quot;</span>
-<a name="l00040"></a>00040 <span class="preprocessor">#include &quot;<a class="code" href="util_8h.html">util.h</a>&quot;</span>
-<a name="l00041"></a>00041 <span class="preprocessor">#include &quot;<a class="code" href="clean_8h.html">clean.h</a>&quot;</span>
-<a name="l00042"></a>00042 
-<a name="l00043"></a><a class="code" href="ninja_8cc.html#a820803f8e092f72d09738547d1e3e740">00043</a> <a class="code" href="structGETOPT__LONG__OPTION__T.html">option</a> <a class="code" href="ninja_8cc.html#a820803f8e092f72d09738547d1e3e740">options</a>[] = {
-<a name="l00044"></a>00044   { <span class="stringliteral">&quot;help&quot;</span>, <a class="code" href="getopt_8h.html#a3bc1d5f667b5b4ca4b4abb685dc874ce">no_argument</a>, NULL, <span class="charliteral">&#39;h&#39;</span> },
-<a name="l00045"></a>00045   { }
-<a name="l00046"></a>00046 };
+<a name="l00018"></a>00018 <span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<a name="l00019"></a>00019 <span class="preprocessor">#include &lt;string.h&gt;</span>
+<a name="l00020"></a>00020 <span class="preprocessor">#include &lt;sys/stat.h&gt;</span>
+<a name="l00021"></a>00021 <span class="preprocessor">#include &lt;sys/types.h&gt;</span>
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="preprocessor">#if defined(__APPLE__) || defined(__FreeBSD__)</span>
+<a name="l00024"></a>00024 <span class="preprocessor"></span><span class="preprocessor">#include &lt;sys/sysctl.h&gt;</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#elif defined(linux)</span>
+<a name="l00026"></a>00026 <span class="preprocessor"></span><span class="preprocessor">#include &lt;sys/sysinfo.h&gt;</span>
+<a name="l00027"></a>00027 <span class="preprocessor">#endif</span>
+<a name="l00028"></a>00028 <span class="preprocessor"></span>
+<a name="l00029"></a>00029 <span class="preprocessor">#ifdef WIN32</span>
+<a name="l00030"></a>00030 <span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="getopt_8h.html">getopt.h</a>&quot;</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include &lt;direct.h&gt;</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include &lt;windows.h&gt;</span>
+<a name="l00033"></a>00033 <span class="preprocessor">#else</span>
+<a name="l00034"></a>00034 <span class="preprocessor"></span><span class="preprocessor">#include &lt;<a class="code" href="getopt_8h.html">getopt.h</a>&gt;</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#endif</span>
+<a name="l00036"></a>00036 <span class="preprocessor"></span>
+<a name="l00037"></a>00037 <span class="preprocessor">#include &quot;<a class="code" href="browse_8h.html">browse.h</a>&quot;</span>
+<a name="l00038"></a>00038 <span class="preprocessor">#include &quot;<a class="code" href="build_8h.html">build.h</a>&quot;</span>
+<a name="l00039"></a>00039 <span class="preprocessor">#include &quot;<a class="code" href="build__log_8h.html">build_log.h</a>&quot;</span>
+<a name="l00040"></a>00040 <span class="preprocessor">#include &quot;<a class="code" href="graph_8h.html">graph.h</a>&quot;</span>
+<a name="l00041"></a>00041 <span class="preprocessor">#include &quot;<a class="code" href="graphviz_8h.html">graphviz.h</a>&quot;</span>
+<a name="l00042"></a>00042 <span class="preprocessor">#include &quot;<a class="code" href="parsers_8h.html">parsers.h</a>&quot;</span>
+<a name="l00043"></a>00043 <span class="preprocessor">#include &quot;<a class="code" href="util_8h.html">util.h</a>&quot;</span>
+<a name="l00044"></a>00044 <span class="preprocessor">#include &quot;<a class="code" href="clean_8h.html">clean.h</a>&quot;</span>
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046 <span class="keyword">namespace </span>{
 <a name="l00047"></a>00047 
-<a name="l00048"></a><a class="code" href="ninja_8cc.html#ae366448be5ef061b86f1332dcdec85f5">00048</a> <span class="keywordtype">void</span> <a class="code" href="ninja_8cc.html#ae366448be5ef061b86f1332dcdec85f5">usage</a>(<span class="keyword">const</span> <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>&amp; config) {
-<a name="l00049"></a>00049   fprintf(stderr,
-<a name="l00050"></a>00050 <span class="stringliteral">&quot;usage: ninja [options] target\n&quot;</span>
-<a name="l00051"></a>00051 <span class="stringliteral">&quot;\n&quot;</span>
-<a name="l00052"></a>00052 <span class="stringliteral">&quot;options:\n&quot;</span>
-<a name="l00053"></a>00053 <span class="stringliteral">&quot;  -f FILE  specify input build file [default=build.ninja]\n&quot;</span>
-<a name="l00054"></a>00054 <span class="stringliteral">&quot;  -j N     run N jobs in parallel [default=%d]\n&quot;</span>
-<a name="l00055"></a>00055 <span class="stringliteral">&quot;  -n       dry run (don&#39;t run commands but pretend they succeeded)\n&quot;</span>
-<a name="l00056"></a>00056 <span class="stringliteral">&quot;  -v       show all command lines\n&quot;</span>
-<a name="l00057"></a>00057 <span class="stringliteral">&quot;  -C DIR   change to DIR before doing anything else\n&quot;</span>
-<a name="l00058"></a>00058 <span class="stringliteral">&quot;\n&quot;</span>
-<a name="l00059"></a>00059 <span class="stringliteral">&quot;  -t TOOL  run a subtool.  tools are:\n&quot;</span>
-<a name="l00060"></a>00060 <span class="stringliteral">&quot;             browse  browse dependency graph in a web browser\n&quot;</span>
-<a name="l00061"></a>00061 <span class="stringliteral">&quot;             graph   output graphviz dot file for targets\n&quot;</span>
-<a name="l00062"></a>00062 <span class="stringliteral">&quot;             query   show inputs/outputs for a path\n&quot;</span>
-<a name="l00063"></a>00063 <span class="stringliteral">&quot;             targets list targets by their rule or depth in the DAG\n&quot;</span>
-<a name="l00064"></a>00064 <span class="stringliteral">&quot;             rules   list all rules\n&quot;</span>
-<a name="l00065"></a>00065 <span class="stringliteral">&quot;             clean   clean built files\n&quot;</span>,
-<a name="l00066"></a>00066           config.<a class="code" href="structBuildConfig.html#aedc92d7f5d96f1c94c9cdfb2014ea2f0">parallelism</a>);
-<a name="l00067"></a>00067 }
-<a name="l00068"></a>00068 
-<a name="l00069"></a><a class="code" href="ninja_8cc.html#aa3e522217e7bea4718953fc1d21dd4bd">00069</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#aa3e522217e7bea4718953fc1d21dd4bd">GuessParallelism</a>() {
-<a name="l00070"></a>00070   <span class="keywordtype">int</span> processors = 0;
-<a name="l00071"></a>00071 
-<a name="l00072"></a>00072 <span class="preprocessor">#if defined(linux)</span>
-<a name="l00073"></a>00073 <span class="preprocessor"></span>  processors = get_nprocs();
-<a name="l00074"></a>00074 <span class="preprocessor">#elif defined(__APPLE__) || defined(__FreeBSD__)</span>
-<a name="l00075"></a>00075 <span class="preprocessor"></span>  <span class="keywordtype">size_t</span> processors_size = <span class="keyword">sizeof</span>(processors);
-<a name="l00076"></a>00076   <span class="keywordtype">int</span> name[] = {CTL_HW, HW_NCPU};
-<a name="l00077"></a>00077   <span class="keywordflow">if</span> (sysctl(name, <span class="keyword">sizeof</span>(name) / <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>),
-<a name="l00078"></a>00078              &amp;processors, &amp;processors_size,
-<a name="l00079"></a>00079              NULL, 0) &lt; 0) {
-<a name="l00080"></a>00080     processors = 1;
-<a name="l00081"></a>00081   }
-<a name="l00082"></a>00082 <span class="preprocessor">#elif defined(WIN32)</span>
-<a name="l00083"></a>00083 <span class="preprocessor"></span>  SYSTEM_INFO info;
-<a name="l00084"></a>00084   GetSystemInfo(&amp;info);
-<a name="l00085"></a>00085   processors = info.dwNumberOfProcessors;
-<a name="l00086"></a>00086 <span class="preprocessor">#endif</span>
-<a name="l00087"></a>00087 <span class="preprocessor"></span>
-<a name="l00088"></a>00088   <span class="keywordflow">switch</span> (processors) {
-<a name="l00089"></a>00089   <span class="keywordflow">case</span> 0:
-<a name="l00090"></a>00090   <span class="keywordflow">case</span> 1:
-<a name="l00091"></a>00091     <span class="keywordflow">return</span> 2;
-<a name="l00092"></a>00092   <span class="keywordflow">case</span> 2:
-<a name="l00093"></a>00093     <span class="keywordflow">return</span> 3;
-<a name="l00094"></a>00094   <span class="keywordflow">default</span>:
-<a name="l00095"></a>00095     <span class="keywordflow">return</span> processors + 2;
-<a name="l00096"></a>00096   }
-<a name="l00097"></a>00097 }
-<a name="l00098"></a>00098 <span class="comment"></span>
-<a name="l00099"></a>00099 <span class="comment">/// An implementation of ManifestParser::FileReader that actually reads</span>
-<a name="l00100"></a>00100 <span class="comment">/// the file.</span>
-<a name="l00101"></a><a class="code" href="structRealFileReader.html">00101</a> <span class="comment"></span><span class="keyword">struct </span><a class="code" href="structRealFileReader.html" title="An implementation of ManifestParser::FileReader that actually reads the file.">RealFileReader</a> : <span class="keyword">public</span> <a class="code" href="structManifestParser.html" title="Parses .ninja files.">ManifestParser</a>::FileReader {
-<a name="l00102"></a><a class="code" href="structRealFileReader.html#a039f0420d6e00bc3553f9719f60d88ca">00102</a>   <span class="keywordtype">bool</span> <a class="code" href="structRealFileReader.html#a039f0420d6e00bc3553f9719f60d88ca">ReadFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* content, <span class="keywordtype">string</span>* err) {
-<a name="l00103"></a>00103     <a class="code" href="structRealFileReader.html#a039f0420d6e00bc3553f9719f60d88ca">return ::ReadFile</a>(path, content, err) == 0;
-<a name="l00104"></a>00104   }
-<a name="l00105"></a>00105 };
-<a name="l00106"></a>00106 
-<a name="l00107"></a><a class="code" href="ninja_8cc.html#a1bb0bb60cf61bd6caf02446ac2167bd7">00107</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#a1bb0bb60cf61bd6caf02446ac2167bd7">CmdGraph</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
-<a name="l00108"></a>00108   <span class="keywordtype">int</span> status = 0;
-<a name="l00109"></a>00109   <a class="code" href="structGraphViz.html" title="Runs the process of creating GraphViz .dot file output.">GraphViz</a> graph;
-<a name="l00110"></a>00110   graph.<a class="code" href="structGraphViz.html#a84ede9951cede05d6a708e062a29d3ea">Start</a>();
-<a name="l00111"></a>00111   <span class="keywordflow">if</span> (argc == 0) {
-<a name="l00112"></a>00112     <span class="keywordtype">string</span> err;
-<a name="l00113"></a>00113     vector&lt;Node*&gt; root_nodes = state-&gt;<a class="code" href="structState.html#a7ab43da26456a3ca765e82a01130b5ce">RootNodes</a>(&amp;err);
-<a name="l00114"></a>00114     <span class="keywordflow">if</span> (err.empty()) {
-<a name="l00115"></a>00115       <span class="keywordflow">for</span> (vector&lt;Node*&gt;::const_iterator n = root_nodes.begin();
-<a name="l00116"></a>00116            n != root_nodes.end();
-<a name="l00117"></a>00117            ++n)
-<a name="l00118"></a>00118         graph.<a class="code" href="structGraphViz.html#a55ca0f366fbec5703e2e9e1609981a72">AddTarget</a>(*n);
-<a name="l00119"></a>00119     } <span class="keywordflow">else</span> {
-<a name="l00120"></a>00120       <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;%s&quot;</span>, err.c_str());
-<a name="l00121"></a>00121       status = 1;
-<a name="l00122"></a>00122     }
-<a name="l00123"></a>00123   } <span class="keywordflow">else</span> {
-<a name="l00124"></a>00124     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; argc; ++i) {
-<a name="l00125"></a>00125       <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* node = state-&gt;<a class="code" href="structState.html#ab7d3bd3103bdc09b4f42660284807225">LookupNode</a>(argv[i]);
-<a name="l00126"></a>00126       <span class="keywordflow">if</span> (node)
-<a name="l00127"></a>00127         graph.<a class="code" href="structGraphViz.html#a55ca0f366fbec5703e2e9e1609981a72">AddTarget</a>(node);
-<a name="l00128"></a>00128       <span class="keywordflow">else</span> {
-<a name="l00129"></a>00129         <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;unknown target &#39;%s&#39;&quot;</span>, argv[i]);
-<a name="l00130"></a>00130         status = 1;
-<a name="l00131"></a>00131       }
-<a name="l00132"></a>00132     }
-<a name="l00133"></a>00133   }
-<a name="l00134"></a>00134   graph.<a class="code" href="structGraphViz.html#a2d788bf557363e0476d223cefdff38ac">Finish</a>();
-<a name="l00135"></a>00135   <span class="keywordflow">return</span> status;
-<a name="l00136"></a>00136 }
-<a name="l00137"></a>00137 
-<a name="l00138"></a><a class="code" href="ninja_8cc.html#a7355870451c2174964e9bf144b7674ee">00138</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#a7355870451c2174964e9bf144b7674ee">CmdQuery</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
-<a name="l00139"></a>00139   <span class="keywordflow">if</span> (argc == 0) {
-<a name="l00140"></a>00140     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected a target to query&quot;</span>);
+<a name="l00048"></a>00048 <a class="code" href="structGETOPT__LONG__OPTION__T.html">option</a> options[] = {
+<a name="l00049"></a>00049   { <span class="stringliteral">&quot;help&quot;</span>, <a class="code" href="getopt_8h.html#a3bc1d5f667b5b4ca4b4abb685dc874ce">no_argument</a>, NULL, <span class="charliteral">&#39;h&#39;</span> },
+<a name="l00050"></a>00050   { }
+<a name="l00051"></a>00051 };
+<a name="l00052"></a>00052 
+<a name="l00053"></a>00053 <span class="keywordtype">void</span> usage(<span class="keyword">const</span> <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>&amp; config) {
+<a name="l00054"></a>00054   fprintf(stderr,
+<a name="l00055"></a>00055 <span class="stringliteral">&quot;usage: ninja [options] target\n&quot;</span>
+<a name="l00056"></a>00056 <span class="stringliteral">&quot;\n&quot;</span>
+<a name="l00057"></a>00057 <span class="stringliteral">&quot;options:\n&quot;</span>
+<a name="l00058"></a>00058 <span class="stringliteral">&quot;  -f FILE  specify input build file [default=build.ninja]\n&quot;</span>
+<a name="l00059"></a>00059 <span class="stringliteral">&quot;  -j N     run N jobs in parallel [default=%d]\n&quot;</span>
+<a name="l00060"></a>00060 <span class="stringliteral">&quot;  -k N     keep going until N jobs fail [default=1]\n&quot;</span>
+<a name="l00061"></a>00061 <span class="stringliteral">&quot;  -n       dry run (don&#39;t run commands but pretend they succeeded)\n&quot;</span>
+<a name="l00062"></a>00062 <span class="stringliteral">&quot;  -v       show all command lines\n&quot;</span>
+<a name="l00063"></a>00063 <span class="stringliteral">&quot;  -C DIR   change to DIR before doing anything else\n&quot;</span>
+<a name="l00064"></a>00064 <span class="stringliteral">&quot;\n&quot;</span>
+<a name="l00065"></a>00065 <span class="stringliteral">&quot;  -t TOOL  run a subtool.  tools are:\n&quot;</span>
+<a name="l00066"></a>00066 <span class="stringliteral">&quot;             browse  browse dependency graph in a web browser\n&quot;</span>
+<a name="l00067"></a>00067 <span class="stringliteral">&quot;             graph   output graphviz dot file for targets\n&quot;</span>
+<a name="l00068"></a>00068 <span class="stringliteral">&quot;             query   show inputs/outputs for a path\n&quot;</span>
+<a name="l00069"></a>00069 <span class="stringliteral">&quot;             targets list targets by their rule or depth in the DAG\n&quot;</span>
+<a name="l00070"></a>00070 <span class="stringliteral">&quot;             rules   list all rules\n&quot;</span>
+<a name="l00071"></a>00071 <span class="stringliteral">&quot;             clean   clean built files\n&quot;</span>,
+<a name="l00072"></a>00072           config.<a class="code" href="structBuildConfig.html#aedc92d7f5d96f1c94c9cdfb2014ea2f0">parallelism</a>);
+<a name="l00073"></a>00073 }
+<a name="l00074"></a>00074 
+<a name="l00075"></a>00075 <span class="keywordtype">int</span> GuessParallelism() {
+<a name="l00076"></a>00076   <span class="keywordtype">int</span> processors = 0;
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078 <span class="preprocessor">#if defined(linux)</span>
+<a name="l00079"></a>00079 <span class="preprocessor"></span>  processors = get_nprocs();
+<a name="l00080"></a>00080 <span class="preprocessor">#elif defined(__APPLE__) || defined(__FreeBSD__)</span>
+<a name="l00081"></a>00081 <span class="preprocessor"></span>  <span class="keywordtype">size_t</span> processors_size = <span class="keyword">sizeof</span>(processors);
+<a name="l00082"></a>00082   <span class="keywordtype">int</span> name[] = {CTL_HW, HW_NCPU};
+<a name="l00083"></a>00083   <span class="keywordflow">if</span> (sysctl(name, <span class="keyword">sizeof</span>(name) / <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>),
+<a name="l00084"></a>00084              &amp;processors, &amp;processors_size,
+<a name="l00085"></a>00085              NULL, 0) &lt; 0) {
+<a name="l00086"></a>00086     processors = 1;
+<a name="l00087"></a>00087   }
+<a name="l00088"></a>00088 <span class="preprocessor">#elif defined(WIN32)</span>
+<a name="l00089"></a>00089 <span class="preprocessor"></span>  SYSTEM_INFO info;
+<a name="l00090"></a>00090   GetSystemInfo(&amp;info);
+<a name="l00091"></a>00091   processors = info.dwNumberOfProcessors;
+<a name="l00092"></a>00092 <span class="preprocessor">#endif</span>
+<a name="l00093"></a>00093 <span class="preprocessor"></span>
+<a name="l00094"></a>00094   <span class="keywordflow">switch</span> (processors) {
+<a name="l00095"></a>00095   <span class="keywordflow">case</span> 0:
+<a name="l00096"></a>00096   <span class="keywordflow">case</span> 1:
+<a name="l00097"></a>00097     <span class="keywordflow">return</span> 2;
+<a name="l00098"></a>00098   <span class="keywordflow">case</span> 2:
+<a name="l00099"></a>00099     <span class="keywordflow">return</span> 3;
+<a name="l00100"></a>00100   <span class="keywordflow">default</span>:
+<a name="l00101"></a>00101     <span class="keywordflow">return</span> processors + 2;
+<a name="l00102"></a>00102   }
+<a name="l00103"></a>00103 }
+<a name="l00104"></a>00104 <span class="comment"></span>
+<a name="l00105"></a>00105 <span class="comment">/// An implementation of ManifestParser::FileReader that actually reads</span>
+<a name="l00106"></a>00106 <span class="comment">/// the file.</span>
+<a name="l00107"></a>00107 <span class="comment"></span><span class="keyword">struct </span>RealFileReader : <span class="keyword">public</span> <a class="code" href="structManifestParser.html" title="Parses .ninja files.">ManifestParser</a>::FileReader {
+<a name="l00108"></a>00108   <span class="keywordtype">bool</span> <a class="code" href="util_8cc.html#afa2642aae4af8af879417889a5e8f4f5" title="Read a file to a string.">ReadFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* content, <span class="keywordtype">string</span>* err) {
+<a name="l00109"></a>00109     <a class="code" href="util_8cc.html#afa2642aae4af8af879417889a5e8f4f5" title="Read a file to a string.">return ::ReadFile</a>(path, content, err) == 0;
+<a name="l00110"></a>00110   }
+<a name="l00111"></a>00111 };
+<a name="l00112"></a>00112 
+<a name="l00113"></a>00113 <span class="keywordtype">bool</span> CollectTargetsFromArgs(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[],
+<a name="l00114"></a>00114                             vector&lt;Node*&gt;* targets, <span class="keywordtype">string</span>* err) {
+<a name="l00115"></a>00115   <span class="keywordflow">if</span> (argc == 0) {
+<a name="l00116"></a>00116     *targets = state-&gt;<a class="code" href="structState.html#a7ab43da26456a3ca765e82a01130b5ce">RootNodes</a>(err);
+<a name="l00117"></a>00117     <span class="keywordflow">if</span> (!err-&gt;empty())
+<a name="l00118"></a>00118       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00119"></a>00119   } <span class="keywordflow">else</span> {
+<a name="l00120"></a>00120     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; argc; ++i) {
+<a name="l00121"></a>00121       <span class="keywordtype">string</span> path = argv[i];
+<a name="l00122"></a>00122       <span class="keywordflow">if</span> (!<a class="code" href="util_8cc.html#abdb5937692c9c5a0fbe6cbbab7941414" title="Canonicalize a path like &amp;quot;foo/../bar.h&amp;quot; into just &amp;quot;bar.h&amp;quot;.">CanonicalizePath</a>(&amp;path, err))
+<a name="l00123"></a>00123         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00124"></a>00124       <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* node = state-&gt;<a class="code" href="structState.html#ab7d3bd3103bdc09b4f42660284807225">LookupNode</a>(path);
+<a name="l00125"></a>00125       <span class="keywordflow">if</span> (node) {
+<a name="l00126"></a>00126         targets-&gt;push_back(node);
+<a name="l00127"></a>00127       } <span class="keywordflow">else</span> {
+<a name="l00128"></a>00128         *err = <span class="stringliteral">&quot;unknown target &#39;&quot;</span> + path + <span class="stringliteral">&quot;&#39;&quot;</span>;
+<a name="l00129"></a>00129         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00130"></a>00130       }
+<a name="l00131"></a>00131     }
+<a name="l00132"></a>00132   }
+<a name="l00133"></a>00133   <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00134"></a>00134 }
+<a name="l00135"></a>00135 
+<a name="l00136"></a>00136 <span class="keywordtype">int</span> CmdGraph(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
+<a name="l00137"></a>00137   vector&lt;Node*&gt; nodes;
+<a name="l00138"></a>00138   <span class="keywordtype">string</span> err;
+<a name="l00139"></a>00139   <span class="keywordflow">if</span> (!CollectTargetsFromArgs(state, argc, argv, &amp;nodes, &amp;err)) {
+<a name="l00140"></a>00140     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;%s&quot;</span>, err.c_str());
 <a name="l00141"></a>00141     <span class="keywordflow">return</span> 1;
 <a name="l00142"></a>00142   }
-<a name="l00143"></a>00143   <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; argc; ++i) {
-<a name="l00144"></a>00144     <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* node = state-&gt;<a class="code" href="structState.html#adcbe649d24758557df143eb14d56358c">GetNode</a>(argv[i]);
-<a name="l00145"></a>00145     <span class="keywordflow">if</span> (node) {
-<a name="l00146"></a>00146       printf(<span class="stringliteral">&quot;%s:\n&quot;</span>, argv[i]);
-<a name="l00147"></a>00147       <span class="keywordflow">if</span> (node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>) {
-<a name="l00148"></a>00148         printf(<span class="stringliteral">&quot;  input: %s\n&quot;</span>, node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>-&gt;<a class="code" href="structEdge.html#a6553b57e59b77a3f8a4bf9b19c25d7f8">rule_</a>-&gt;<a class="code" href="structRule.html#ab78c8a835c42cf88c8344d9134432b67">name_</a>.c_str());
-<a name="l00149"></a>00149         <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator in = node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>.begin();
-<a name="l00150"></a>00150              in != node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>.end(); ++in) {
-<a name="l00151"></a>00151           printf(<span class="stringliteral">&quot;    %s\n&quot;</span>, (*in)-&gt;file_-&gt;path_.c_str());
-<a name="l00152"></a>00152         }
-<a name="l00153"></a>00153       }
-<a name="l00154"></a>00154       <span class="keywordflow">for</span> (vector&lt;Edge*&gt;::iterator edge = node-&gt;<a class="code" href="structNode.html#ad3170a7fe2a24ccc2240d0e64cb179b0">out_edges_</a>.begin();
-<a name="l00155"></a>00155            edge != node-&gt;<a class="code" href="structNode.html#ad3170a7fe2a24ccc2240d0e64cb179b0">out_edges_</a>.end(); ++edge) {
-<a name="l00156"></a>00156         printf(<span class="stringliteral">&quot;  output: %s\n&quot;</span>, (*edge)-&gt;rule_-&gt;name_.c_str());
-<a name="l00157"></a>00157         <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator out = (*edge)-&gt;outputs_.begin();
-<a name="l00158"></a>00158              out != (*edge)-&gt;outputs_.end(); ++out) {
-<a name="l00159"></a>00159           printf(<span class="stringliteral">&quot;    %s\n&quot;</span>, (*out)-&gt;file_-&gt;path_.c_str());
-<a name="l00160"></a>00160         }
-<a name="l00161"></a>00161       }
-<a name="l00162"></a>00162     } <span class="keywordflow">else</span> {
-<a name="l00163"></a>00163       printf(<span class="stringliteral">&quot;%s unknown\n&quot;</span>, argv[i]);
-<a name="l00164"></a>00164       <span class="keywordflow">return</span> 1;
-<a name="l00165"></a>00165     }
-<a name="l00166"></a>00166   }
-<a name="l00167"></a>00167   <span class="keywordflow">return</span> 0;
-<a name="l00168"></a>00168 }
-<a name="l00169"></a>00169 
-<a name="l00170"></a><a class="code" href="ninja_8cc.html#a656cef954afc17b9ce5ba5aba58a1963">00170</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#a656cef954afc17b9ce5ba5aba58a1963">CmdBrowse</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
-<a name="l00171"></a>00171 <span class="preprocessor">#ifndef WIN32</span>
-<a name="l00172"></a>00172 <span class="preprocessor"></span>  <span class="keywordflow">if</span> (argc &lt; 1) {
-<a name="l00173"></a>00173     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected a target to browse&quot;</span>);
-<a name="l00174"></a>00174     <span class="keywordflow">return</span> 1;
-<a name="l00175"></a>00175   }
-<a name="l00176"></a>00176   <a class="code" href="browse_8cc.html#aa7dd814dc6812765a6391dde6679cdb9" title="Run in &amp;quot;browse&amp;quot; mode, which execs a Python webserver.">RunBrowsePython</a>(state, argv[0]);
-<a name="l00177"></a>00177 <span class="preprocessor">#else</span>
-<a name="l00178"></a>00178 <span class="preprocessor"></span>  <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;browse mode not yet supported on Windows&quot;</span>);
-<a name="l00179"></a>00179 <span class="preprocessor">#endif</span>
-<a name="l00180"></a>00180 <span class="preprocessor"></span>  <span class="comment">// If we get here, the browse failed.</span>
-<a name="l00181"></a>00181   <span class="keywordflow">return</span> 1;
-<a name="l00182"></a>00182 }
-<a name="l00183"></a>00183 
-<a name="l00184"></a><a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">00184</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>(<span class="keyword">const</span> vector&lt;Node*&gt;&amp; nodes, <span class="keywordtype">int</span> depth, <span class="keywordtype">int</span> indent) {
-<a name="l00185"></a>00185   <span class="keywordflow">for</span> (vector&lt;Node*&gt;::const_iterator n = nodes.begin();
-<a name="l00186"></a>00186        n != nodes.end();
-<a name="l00187"></a>00187        ++n) {
-<a name="l00188"></a>00188     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; indent; ++i)
-<a name="l00189"></a>00189       printf(<span class="stringliteral">&quot;  &quot;</span>);
-<a name="l00190"></a>00190     <span class="keyword">const</span> <span class="keywordtype">char</span>* target = (*n)-&gt;file_-&gt;path_.c_str();
-<a name="l00191"></a>00191     <span class="keywordflow">if</span> ((*n)-&gt;in_edge_) {
-<a name="l00192"></a>00192       printf(<span class="stringliteral">&quot;%s: %s\n&quot;</span>, target, (*n)-&gt;in_edge_-&gt;rule_-&gt;name_.c_str());
-<a name="l00193"></a>00193       <span class="keywordflow">if</span> (depth &gt; 1 || depth &lt;= 0)
-<a name="l00194"></a>00194         <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>((*n)-&gt;in_edge_-&gt;inputs_, depth - 1, indent + 1);
-<a name="l00195"></a>00195     } <span class="keywordflow">else</span> {
-<a name="l00196"></a>00196       printf(<span class="stringliteral">&quot;%s\n&quot;</span>, target);
-<a name="l00197"></a>00197     }
-<a name="l00198"></a>00198   }
-<a name="l00199"></a>00199   <span class="keywordflow">return</span> 0;
-<a name="l00200"></a>00200 }
-<a name="l00201"></a>00201 
-<a name="l00202"></a><a class="code" href="ninja_8cc.html#ad70d008d8455b0beae5e1e3eaa6835e8">00202</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>(<span class="keyword">const</span> vector&lt;Node*&gt;&amp; nodes, <span class="keywordtype">int</span> depth) {
-<a name="l00203"></a>00203   <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>(nodes, depth, 0);
-<a name="l00204"></a>00204 }
-<a name="l00205"></a>00205 
-<a name="l00206"></a><a class="code" href="ninja_8cc.html#a565765b011223716cb3ececf24c94a49">00206</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#a565765b011223716cb3ececf24c94a49">CmdTargetsSourceList</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state) {
-<a name="l00207"></a>00207   <span class="keywordflow">for</span> (vector&lt;Edge*&gt;::iterator e = state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.begin();
-<a name="l00208"></a>00208        e != state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.end();
-<a name="l00209"></a>00209        ++e)
-<a name="l00210"></a>00210     <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator inps = (*e)-&gt;inputs_.begin();
-<a name="l00211"></a>00211          inps != (*e)-&gt;inputs_.end();
-<a name="l00212"></a>00212          ++inps)
-<a name="l00213"></a>00213       <span class="keywordflow">if</span> (!(*inps)-&gt;in_edge_)
-<a name="l00214"></a>00214         printf(<span class="stringliteral">&quot;%s\n&quot;</span>, (*inps)-&gt;file_-&gt;path_.c_str());
+<a name="l00143"></a>00143 
+<a name="l00144"></a>00144   <a class="code" href="structGraphViz.html" title="Runs the process of creating GraphViz .dot file output.">GraphViz</a> graph;
+<a name="l00145"></a>00145   graph.<a class="code" href="structGraphViz.html#a84ede9951cede05d6a708e062a29d3ea">Start</a>();
+<a name="l00146"></a>00146   <span class="keywordflow">for</span> (vector&lt;Node*&gt;::const_iterator n = nodes.begin(); n != nodes.end(); ++n)
+<a name="l00147"></a>00147     graph.<a class="code" href="structGraphViz.html#a55ca0f366fbec5703e2e9e1609981a72">AddTarget</a>(*n);
+<a name="l00148"></a>00148   graph.<a class="code" href="structGraphViz.html#a2d788bf557363e0476d223cefdff38ac">Finish</a>();
+<a name="l00149"></a>00149 
+<a name="l00150"></a>00150   <span class="keywordflow">return</span> 0;
+<a name="l00151"></a>00151 }
+<a name="l00152"></a>00152 
+<a name="l00153"></a>00153 <span class="keywordtype">int</span> CmdQuery(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
+<a name="l00154"></a>00154   <span class="keywordflow">if</span> (argc == 0) {
+<a name="l00155"></a>00155     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected a target to query&quot;</span>);
+<a name="l00156"></a>00156     <span class="keywordflow">return</span> 1;
+<a name="l00157"></a>00157   }
+<a name="l00158"></a>00158   <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; argc; ++i) {
+<a name="l00159"></a>00159     <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* node = state-&gt;<a class="code" href="structState.html#adcbe649d24758557df143eb14d56358c">GetNode</a>(argv[i]);
+<a name="l00160"></a>00160     <span class="keywordflow">if</span> (node) {
+<a name="l00161"></a>00161       printf(<span class="stringliteral">&quot;%s:\n&quot;</span>, argv[i]);
+<a name="l00162"></a>00162       <span class="keywordflow">if</span> (node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>) {
+<a name="l00163"></a>00163         printf(<span class="stringliteral">&quot;  input: %s\n&quot;</span>, node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>-&gt;<a class="code" href="structEdge.html#a6553b57e59b77a3f8a4bf9b19c25d7f8">rule_</a>-&gt;<a class="code" href="structRule.html#ab78c8a835c42cf88c8344d9134432b67">name_</a>.c_str());
+<a name="l00164"></a>00164         <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator in = node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>.begin();
+<a name="l00165"></a>00165              in != node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>.end(); ++in) {
+<a name="l00166"></a>00166           printf(<span class="stringliteral">&quot;    %s\n&quot;</span>, (*in)-&gt;file_-&gt;path_.c_str());
+<a name="l00167"></a>00167         }
+<a name="l00168"></a>00168       }
+<a name="l00169"></a>00169       <span class="keywordflow">for</span> (vector&lt;Edge*&gt;::iterator edge = node-&gt;<a class="code" href="structNode.html#ad3170a7fe2a24ccc2240d0e64cb179b0">out_edges_</a>.begin();
+<a name="l00170"></a>00170            edge != node-&gt;<a class="code" href="structNode.html#ad3170a7fe2a24ccc2240d0e64cb179b0">out_edges_</a>.end(); ++edge) {
+<a name="l00171"></a>00171         printf(<span class="stringliteral">&quot;  output: %s\n&quot;</span>, (*edge)-&gt;rule_-&gt;name_.c_str());
+<a name="l00172"></a>00172         <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator out = (*edge)-&gt;outputs_.begin();
+<a name="l00173"></a>00173              out != (*edge)-&gt;outputs_.end(); ++out) {
+<a name="l00174"></a>00174           printf(<span class="stringliteral">&quot;    %s\n&quot;</span>, (*out)-&gt;file_-&gt;path_.c_str());
+<a name="l00175"></a>00175         }
+<a name="l00176"></a>00176       }
+<a name="l00177"></a>00177     } <span class="keywordflow">else</span> {
+<a name="l00178"></a>00178       printf(<span class="stringliteral">&quot;%s unknown\n&quot;</span>, argv[i]);
+<a name="l00179"></a>00179       <span class="keywordflow">return</span> 1;
+<a name="l00180"></a>00180     }
+<a name="l00181"></a>00181   }
+<a name="l00182"></a>00182   <span class="keywordflow">return</span> 0;
+<a name="l00183"></a>00183 }
+<a name="l00184"></a>00184 
+<a name="l00185"></a>00185 <span class="keywordtype">int</span> CmdBrowse(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <span class="keywordtype">char</span>* ninja_command,
+<a name="l00186"></a>00186               <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
+<a name="l00187"></a>00187 <span class="preprocessor">#ifndef WIN32</span>
+<a name="l00188"></a>00188 <span class="preprocessor"></span>  <span class="keywordflow">if</span> (argc &lt; 1) {
+<a name="l00189"></a>00189     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected a target to browse&quot;</span>);
+<a name="l00190"></a>00190     <span class="keywordflow">return</span> 1;
+<a name="l00191"></a>00191   }
+<a name="l00192"></a>00192   <a class="code" href="browse_8cc.html#a19bfd0ee33f15bcfce46114a0bdba59a" title="Run in &amp;quot;browse&amp;quot; mode, which execs a Python webserver.">RunBrowsePython</a>(state, ninja_command, argv[0]);
+<a name="l00193"></a>00193 <span class="preprocessor">#else</span>
+<a name="l00194"></a>00194 <span class="preprocessor"></span>  <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;browse mode not yet supported on Windows&quot;</span>);
+<a name="l00195"></a>00195 <span class="preprocessor">#endif</span>
+<a name="l00196"></a>00196 <span class="preprocessor"></span>  <span class="comment">// If we get here, the browse failed.</span>
+<a name="l00197"></a>00197   <span class="keywordflow">return</span> 1;
+<a name="l00198"></a>00198 }
+<a name="l00199"></a>00199 
+<a name="l00200"></a>00200 <span class="keywordtype">int</span> CmdTargetsList(<span class="keyword">const</span> vector&lt;Node*&gt;&amp; nodes, <span class="keywordtype">int</span> depth, <span class="keywordtype">int</span> indent) {
+<a name="l00201"></a>00201   <span class="keywordflow">for</span> (vector&lt;Node*&gt;::const_iterator n = nodes.begin();
+<a name="l00202"></a>00202        n != nodes.end();
+<a name="l00203"></a>00203        ++n) {
+<a name="l00204"></a>00204     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; indent; ++i)
+<a name="l00205"></a>00205       printf(<span class="stringliteral">&quot;  &quot;</span>);
+<a name="l00206"></a>00206     <span class="keyword">const</span> <span class="keywordtype">char</span>* target = (*n)-&gt;file_-&gt;path_.c_str();
+<a name="l00207"></a>00207     <span class="keywordflow">if</span> ((*n)-&gt;in_edge_) {
+<a name="l00208"></a>00208       printf(<span class="stringliteral">&quot;%s: %s\n&quot;</span>, target, (*n)-&gt;in_edge_-&gt;rule_-&gt;name_.c_str());
+<a name="l00209"></a>00209       <span class="keywordflow">if</span> (depth &gt; 1 || depth &lt;= 0)
+<a name="l00210"></a>00210         CmdTargetsList((*n)-&gt;in_edge_-&gt;inputs_, depth - 1, indent + 1);
+<a name="l00211"></a>00211     } <span class="keywordflow">else</span> {
+<a name="l00212"></a>00212       printf(<span class="stringliteral">&quot;%s\n&quot;</span>, target);
+<a name="l00213"></a>00213     }
+<a name="l00214"></a>00214   }
 <a name="l00215"></a>00215   <span class="keywordflow">return</span> 0;
 <a name="l00216"></a>00216 }
 <a name="l00217"></a>00217 
-<a name="l00218"></a><a class="code" href="ninja_8cc.html#af14c6790c3e3298d9e00767c96b274ab">00218</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; rule_name) {
-<a name="l00219"></a>00219   set&lt;string&gt; rules;
-<a name="l00220"></a>00220   <span class="comment">// Gather the outputs.</span>
-<a name="l00221"></a>00221   <span class="keywordflow">for</span> (vector&lt;Edge*&gt;::iterator e = state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.begin();
-<a name="l00222"></a>00222        e != state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.end();
-<a name="l00223"></a>00223        ++e)
-<a name="l00224"></a>00224     <span class="keywordflow">if</span> ((*e)-&gt;rule_-&gt;name_ == rule_name)
-<a name="l00225"></a>00225       <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator out_node = (*e)-&gt;outputs_.begin();
-<a name="l00226"></a>00226            out_node != (*e)-&gt;outputs_.end();
-<a name="l00227"></a>00227            ++out_node)
-<a name="l00228"></a>00228         rules.insert((*out_node)-&gt;file_-&gt;path_);
-<a name="l00229"></a>00229   <span class="comment">// Print them.</span>
-<a name="l00230"></a>00230   <span class="keywordflow">for</span> (set&lt;string&gt;::const_iterator i = rules.begin();
-<a name="l00231"></a>00231        i != rules.end();
-<a name="l00232"></a>00232        ++i)
-<a name="l00233"></a>00233     printf(<span class="stringliteral">&quot;%s\n&quot;</span>, (*i).c_str());
-<a name="l00234"></a>00234   <span class="keywordflow">return</span> 0;
-<a name="l00235"></a>00235 }
-<a name="l00236"></a>00236 
-<a name="l00237"></a><a class="code" href="ninja_8cc.html#a1bbd3c34b5082b513d7b2dc0bdbe8561">00237</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state) {
-<a name="l00238"></a>00238   <span class="keywordflow">for</span> (vector&lt;Edge*&gt;::iterator e = state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.begin();
-<a name="l00239"></a>00239        e != state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.end();
-<a name="l00240"></a>00240        ++e)
-<a name="l00241"></a>00241     <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator out_node = (*e)-&gt;outputs_.begin();
-<a name="l00242"></a>00242          out_node != (*e)-&gt;outputs_.end();
-<a name="l00243"></a>00243          ++out_node)
-<a name="l00244"></a>00244       printf(<span class="stringliteral">&quot;%s: %s\n&quot;</span>,
-<a name="l00245"></a>00245              (*out_node)-&gt;file_-&gt;path_.c_str(),
-<a name="l00246"></a>00246              (*e)-&gt;rule_-&gt;name_.c_str());
-<a name="l00247"></a>00247   <span class="keywordflow">return</span> 0;
-<a name="l00248"></a>00248 }
-<a name="l00249"></a>00249 
-<a name="l00250"></a><a class="code" href="ninja_8cc.html#ac16df1897b9f8907b4c8138404f01131">00250</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#ac16df1897b9f8907b4c8138404f01131">CmdTargets</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
-<a name="l00251"></a>00251   <span class="keywordtype">int</span> depth = 1;
-<a name="l00252"></a>00252   <span class="keywordflow">if</span> (argc &gt;= 1) {
-<a name="l00253"></a>00253     <span class="keywordtype">string</span> mode = argv[0];
-<a name="l00254"></a>00254     <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;rule&quot;</span>) {
-<a name="l00255"></a>00255       <span class="keywordtype">string</span> rule;
-<a name="l00256"></a>00256       <span class="keywordflow">if</span> (argc &gt; 1)
-<a name="l00257"></a>00257         rule = argv[1];
-<a name="l00258"></a>00258       <span class="keywordflow">if</span> (rule.empty())
-<a name="l00259"></a>00259         <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#a565765b011223716cb3ececf24c94a49">CmdTargetsSourceList</a>(state);
-<a name="l00260"></a>00260       <span class="keywordflow">else</span>
-<a name="l00261"></a>00261         <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>(state, rule);
-<a name="l00262"></a>00262     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;depth&quot;</span>) {
-<a name="l00263"></a>00263       <span class="keywordflow">if</span> (argc &gt; 1)
-<a name="l00264"></a>00264         depth = atoi(argv[1]);
-<a name="l00265"></a>00265     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;all&quot;</span>) {
-<a name="l00266"></a>00266       <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>(state);
-<a name="l00267"></a>00267     } <span class="keywordflow">else</span> {
-<a name="l00268"></a>00268       <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;unknown target tool mode &#39;%s&#39;&quot;</span>, mode.c_str());
-<a name="l00269"></a>00269       <span class="keywordflow">return</span> 1;
-<a name="l00270"></a>00270     }
-<a name="l00271"></a>00271   }
-<a name="l00272"></a>00272 
-<a name="l00273"></a>00273   <span class="keywordtype">string</span> err;
-<a name="l00274"></a>00274   vector&lt;Node*&gt; root_nodes = state-&gt;<a class="code" href="structState.html#a7ab43da26456a3ca765e82a01130b5ce">RootNodes</a>(&amp;err);
-<a name="l00275"></a>00275   <span class="keywordflow">if</span> (err.empty()) {
-<a name="l00276"></a>00276     <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#abe0703b5b2a715f91e3fa3992239d07d">CmdTargetsList</a>(root_nodes, depth);
-<a name="l00277"></a>00277   } <span class="keywordflow">else</span> {
-<a name="l00278"></a>00278     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;%s&quot;</span>, err.c_str());
-<a name="l00279"></a>00279     <span class="keywordflow">return</span> 1;
-<a name="l00280"></a>00280   }
-<a name="l00281"></a>00281 }
-<a name="l00282"></a>00282 
-<a name="l00283"></a><a class="code" href="ninja_8cc.html#a429017692874a6dcfcd185c113e60c17">00283</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#a429017692874a6dcfcd185c113e60c17">CmdRules</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
-<a name="l00284"></a>00284   <span class="keywordflow">for</span> (map&lt;string, const Rule*&gt;::iterator i = state-&gt;<a class="code" href="structState.html#a7853ca22a4a26bea1ea0e2b10a033e4a" title="All the rules used in the graph.">rules_</a>.begin();
-<a name="l00285"></a>00285        i != state-&gt;<a class="code" href="structState.html#a7853ca22a4a26bea1ea0e2b10a033e4a" title="All the rules used in the graph.">rules_</a>.end();
-<a name="l00286"></a>00286        ++i) {
-<a name="l00287"></a>00287     <span class="keywordflow">if</span> (i-&gt;second-&gt;description_.unparsed_.empty())
-<a name="l00288"></a>00288       printf(<span class="stringliteral">&quot;%s\n&quot;</span>, i-&gt;first.c_str());
-<a name="l00289"></a>00289     <span class="keywordflow">else</span>
-<a name="l00290"></a>00290       printf(<span class="stringliteral">&quot;%s: %s\n&quot;</span>,
-<a name="l00291"></a>00291              i-&gt;first.c_str(),
-<a name="l00292"></a>00292              i-&gt;second-&gt;description_.unparsed_.c_str());
-<a name="l00293"></a>00293   }
-<a name="l00294"></a>00294   <span class="keywordflow">return</span> 0;
-<a name="l00295"></a>00295 }
-<a name="l00296"></a>00296 
-<a name="l00297"></a><a class="code" href="ninja_8cc.html#aad2c0daab15022ca710f7328f3501fce">00297</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#aad2c0daab15022ca710f7328f3501fce">CmdClean</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state,
-<a name="l00298"></a>00298              <span class="keywordtype">int</span> argc,
-<a name="l00299"></a>00299              <span class="keywordtype">char</span>* argv[],
-<a name="l00300"></a>00300              <span class="keyword">const</span> <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>&amp; config) {
-<a name="l00301"></a>00301   <a class="code" href="classCleaner.html">Cleaner</a> cleaner(state, config);
-<a name="l00302"></a>00302   <span class="keywordflow">if</span> (argc &gt;= 1)
-<a name="l00303"></a>00303   {
-<a name="l00304"></a>00304     <span class="keywordtype">string</span> mode = argv[0];
-<a name="l00305"></a>00305     <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;target&quot;</span>) {
-<a name="l00306"></a>00306       <span class="keywordflow">if</span> (argc &gt;= 2) {
-<a name="l00307"></a>00307         <span class="keywordflow">return</span> cleaner.<a class="code" href="classCleaner.html#adac9772fff3969b8e4b53706cc4dd868">CleanTargets</a>(argc - 1, &amp;argv[1]);
-<a name="l00308"></a>00308       } <span class="keywordflow">else</span> {
-<a name="l00309"></a>00309         <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected a target to clean&quot;</span>);
-<a name="l00310"></a>00310         <span class="keywordflow">return</span> 1;
-<a name="l00311"></a>00311       }
-<a name="l00312"></a>00312     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;rule&quot;</span>) {
-<a name="l00313"></a>00313       <span class="keywordflow">if</span> (argc &gt;= 2) {
-<a name="l00314"></a>00314         <span class="keywordflow">return</span> cleaner.<a class="code" href="classCleaner.html#a77d3abb9b7062c1e8c86fe5ac9fb44c6">CleanRules</a>(argc - 1, &amp;argv[1]);
-<a name="l00315"></a>00315       } <span class="keywordflow">else</span> {
-<a name="l00316"></a>00316         <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected a rule to clean&quot;</span>);
-<a name="l00317"></a>00317         <span class="keywordflow">return</span> 1;
-<a name="l00318"></a>00318       }
-<a name="l00319"></a>00319     } <span class="keywordflow">else</span> {
-<a name="l00320"></a>00320       <span class="keywordflow">return</span> cleaner.<a class="code" href="classCleaner.html#adac9772fff3969b8e4b53706cc4dd868">CleanTargets</a>(argc, argv);
-<a name="l00321"></a>00321     }
-<a name="l00322"></a>00322   }
-<a name="l00323"></a>00323   <span class="keywordflow">else</span> {
-<a name="l00324"></a>00324     cleaner.<a class="code" href="classCleaner.html#aff631d8ef2a1f602e2b5e9a8d6d94a90" title="Clean all built files.">CleanAll</a>();
-<a name="l00325"></a>00325     <span class="keywordflow">return</span> 0;
-<a name="l00326"></a>00326   }
-<a name="l00327"></a>00327 }
-<a name="l00328"></a>00328 
-<a name="l00329"></a><a class="code" href="ninja_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627">00329</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) {
-<a name="l00330"></a>00330   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> config;
-<a name="l00331"></a>00331   <span class="keyword">const</span> <span class="keywordtype">char</span>* input_file = <span class="stringliteral">&quot;build.ninja&quot;</span>;
-<a name="l00332"></a>00332   <span class="keyword">const</span> <span class="keywordtype">char</span>* working_dir = 0;
-<a name="l00333"></a>00333   <span class="keywordtype">string</span> tool;
-<a name="l00334"></a>00334 
-<a name="l00335"></a>00335   config.<a class="code" href="structBuildConfig.html#aedc92d7f5d96f1c94c9cdfb2014ea2f0">parallelism</a> = <a class="code" href="ninja_8cc.html#aa3e522217e7bea4718953fc1d21dd4bd">GuessParallelism</a>();
-<a name="l00336"></a>00336 
-<a name="l00337"></a>00337   <span class="keywordtype">int</span> opt;
-<a name="l00338"></a>00338   <span class="keywordflow">while</span> ((opt = <a class="code" href="getopt_8h.html#aab956264296d2b29c3c5f976e97c7233">getopt_long</a>(argc, argv, <span class="stringliteral">&quot;f:hj:nt:vC:&quot;</span>, options, NULL)) != -1) {
-<a name="l00339"></a>00339     <span class="keywordflow">switch</span> (opt) {
-<a name="l00340"></a>00340       <span class="keywordflow">case</span> <span class="charliteral">&#39;f&#39;</span>:
-<a name="l00341"></a>00341         input_file = <a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>;
-<a name="l00342"></a>00342         <span class="keywordflow">break</span>;
-<a name="l00343"></a>00343       <span class="keywordflow">case</span> <span class="charliteral">&#39;j&#39;</span>:
-<a name="l00344"></a>00344         config.<a class="code" href="structBuildConfig.html#aedc92d7f5d96f1c94c9cdfb2014ea2f0">parallelism</a> = atoi(<a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>);
-<a name="l00345"></a>00345         <span class="keywordflow">break</span>;
-<a name="l00346"></a>00346       <span class="keywordflow">case</span> <span class="charliteral">&#39;n&#39;</span>:
-<a name="l00347"></a>00347         config.<a class="code" href="structBuildConfig.html#aa65c3f1fe7e0faa2b05b36ed1743da5d">dry_run</a> = <span class="keyword">true</span>;
-<a name="l00348"></a>00348         <span class="keywordflow">break</span>;
-<a name="l00349"></a>00349       <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>:
-<a name="l00350"></a>00350         config.<a class="code" href="structBuildConfig.html#ae50beadfa54bab9ea78feb96f56431cf">verbosity</a> = <a class="code" href="structBuildConfig.html#a7a6581026821b221c12ccfc9203b4fffa44ec2c4f7fd9233c06f434e56faf1874">BuildConfig::VERBOSE</a>;
-<a name="l00351"></a>00351         <span class="keywordflow">break</span>;
-<a name="l00352"></a>00352       <span class="keywordflow">case</span> <span class="charliteral">&#39;t&#39;</span>:
-<a name="l00353"></a>00353         tool = <a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>;
-<a name="l00354"></a>00354         <span class="keywordflow">break</span>;
-<a name="l00355"></a>00355       <span class="keywordflow">case</span> <span class="charliteral">&#39;C&#39;</span>:
-<a name="l00356"></a>00356         working_dir = <a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>;
-<a name="l00357"></a>00357         <span class="keywordflow">break</span>;
-<a name="l00358"></a>00358       <span class="keywordflow">case</span> <span class="charliteral">&#39;h&#39;</span>:
-<a name="l00359"></a>00359       <span class="keywordflow">default</span>:
-<a name="l00360"></a>00360         <a class="code" href="ninja_8cc.html#ae366448be5ef061b86f1332dcdec85f5">usage</a>(config);
-<a name="l00361"></a>00361         <span class="keywordflow">return</span> 1;
-<a name="l00362"></a>00362     }
-<a name="l00363"></a>00363   }
-<a name="l00364"></a>00364   <span class="keywordflow">if</span> (<a class="code" href="getopt_8h.html#ad5e1c16213bbee2d5e8cc363309f418c">optind</a> &gt;= argc &amp;&amp; tool.empty()) {
-<a name="l00365"></a>00365     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected target to build&quot;</span>);
-<a name="l00366"></a>00366     <a class="code" href="ninja_8cc.html#ae366448be5ef061b86f1332dcdec85f5">usage</a>(config);
-<a name="l00367"></a>00367     <span class="keywordflow">return</span> 1;
-<a name="l00368"></a>00368   }
-<a name="l00369"></a>00369   argv += <a class="code" href="getopt_8h.html#ad5e1c16213bbee2d5e8cc363309f418c">optind</a>;
-<a name="l00370"></a>00370   argc -= <a class="code" href="getopt_8h.html#ad5e1c16213bbee2d5e8cc363309f418c">optind</a>;
-<a name="l00371"></a>00371 
-<a name="l00372"></a>00372   <span class="keywordflow">if</span> (working_dir) {
-<a name="l00373"></a>00373     <span class="keywordflow">if</span> (chdir(working_dir) &lt; 0) {
-<a name="l00374"></a>00374       <a class="code" href="util_8cc.html#ad98ec6fb76f27b3d5a805cdad742df92" title="Log a fatal message and exit.">Fatal</a>(<span class="stringliteral">&quot;chdir to &#39;%s&#39; - %s&quot;</span>, working_dir, strerror(errno));
-<a name="l00375"></a>00375     }
-<a name="l00376"></a>00376   }
-<a name="l00377"></a>00377 
-<a name="l00378"></a>00378   <a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a> state;
-<a name="l00379"></a>00379   <a class="code" href="structRealFileReader.html" title="An implementation of ManifestParser::FileReader that actually reads the file.">RealFileReader</a> file_reader;
-<a name="l00380"></a>00380   <a class="code" href="structManifestParser.html" title="Parses .ninja files.">ManifestParser</a> parser(&amp;state, &amp;file_reader);
-<a name="l00381"></a>00381   <span class="keywordtype">string</span> err;
-<a name="l00382"></a>00382   <span class="keywordflow">if</span> (!parser.<a class="code" href="structManifestParser.html#afb43144d1bb419456c5d5b376f561a63">Load</a>(input_file, &amp;err)) {
-<a name="l00383"></a>00383     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;loading &#39;%s&#39;: %s&quot;</span>, input_file, err.c_str());
-<a name="l00384"></a>00384     <span class="keywordflow">return</span> 1;
-<a name="l00385"></a>00385   }
-<a name="l00386"></a>00386 
-<a name="l00387"></a>00387   <span class="keywordflow">if</span> (!tool.empty()) {
-<a name="l00388"></a>00388     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;graph&quot;</span>)
-<a name="l00389"></a>00389       <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#a1bb0bb60cf61bd6caf02446ac2167bd7">CmdGraph</a>(&amp;state, argc, argv);
-<a name="l00390"></a>00390     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;query&quot;</span>)
-<a name="l00391"></a>00391       <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#a7355870451c2174964e9bf144b7674ee">CmdQuery</a>(&amp;state, argc, argv);
-<a name="l00392"></a>00392     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;browse&quot;</span>)
-<a name="l00393"></a>00393       <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#a656cef954afc17b9ce5ba5aba58a1963">CmdBrowse</a>(&amp;state, argc, argv);
-<a name="l00394"></a>00394     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;targets&quot;</span>)
-<a name="l00395"></a>00395       <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#ac16df1897b9f8907b4c8138404f01131">CmdTargets</a>(&amp;state, argc, argv);
-<a name="l00396"></a>00396     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;rules&quot;</span>)
-<a name="l00397"></a>00397       <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#a429017692874a6dcfcd185c113e60c17">CmdRules</a>(&amp;state, argc, argv);
-<a name="l00398"></a>00398     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;clean&quot;</span>)
-<a name="l00399"></a>00399       <span class="keywordflow">return</span> <a class="code" href="ninja_8cc.html#aad2c0daab15022ca710f7328f3501fce">CmdClean</a>(&amp;state, argc, argv, config);
-<a name="l00400"></a>00400     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;unknown tool &#39;%s&#39;&quot;</span>, tool.c_str());
-<a name="l00401"></a>00401   }
-<a name="l00402"></a>00402 
-<a name="l00403"></a>00403   <a class="code" href="structBuildLog.html" title="Store a log of every command ran for every build.">BuildLog</a> build_log;
-<a name="l00404"></a>00404   build_log.<a class="code" href="structBuildLog.html#a6cd31c693b9e057d604b9ef27be2bcfa">SetConfig</a>(&amp;config);
-<a name="l00405"></a>00405   state.<a class="code" href="structState.html#a463348843da891ba1f7f1df149051a54">build_log_</a> = &amp;build_log;
-<a name="l00406"></a>00406 
-<a name="l00407"></a>00407   <span class="keyword">const</span> <span class="keywordtype">string</span> build_dir = state.<a class="code" href="structState.html#ae09e90c5524df7fd37a96751930336c9">bindings_</a>.<a class="code" href="structBindingEnv.html#af858f0c4dc64fee67545ffabb18ee2bb">LookupVariable</a>(<span class="stringliteral">&quot;builddir&quot;</span>);
-<a name="l00408"></a>00408   <span class="keyword">const</span> <span class="keywordtype">char</span>* kLogPath = <span class="stringliteral">&quot;.ninja_log&quot;</span>;
-<a name="l00409"></a>00409   <span class="keywordtype">string</span> log_path = kLogPath;
-<a name="l00410"></a>00410   <span class="keywordflow">if</span> (!build_dir.empty()) {
-<a name="l00411"></a>00411     <span class="keywordflow">if</span> (mkdir(build_dir.c_str(), 0777) &lt; 0 &amp;&amp; errno != EEXIST) {
-<a name="l00412"></a>00412       <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;creating build directory %s: %s&quot;</span>,
-<a name="l00413"></a>00413             build_dir.c_str(), strerror(errno));
-<a name="l00414"></a>00414       <span class="keywordflow">return</span> 1;
-<a name="l00415"></a>00415     }
-<a name="l00416"></a>00416     log_path = build_dir + <span class="stringliteral">&quot;/&quot;</span> + kLogPath;
-<a name="l00417"></a>00417   }
-<a name="l00418"></a>00418 
-<a name="l00419"></a>00419   <span class="keywordflow">if</span> (!build_log.<a class="code" href="structBuildLog.html#a0e7f4786ae2aee38095cd7eeed87af73" title="Load the on-disk log.">Load</a>(log_path.c_str(), &amp;err)) {
-<a name="l00420"></a>00420     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;loading build log %s: %s&quot;</span>,
-<a name="l00421"></a>00421           log_path.c_str(), err.c_str());
-<a name="l00422"></a>00422     <span class="keywordflow">return</span> 1;
-<a name="l00423"></a>00423   }
-<a name="l00424"></a>00424 
-<a name="l00425"></a>00425   <span class="keywordflow">if</span> (!build_log.<a class="code" href="structBuildLog.html#a08a600782d1b1c8369b8437d9d9c4264">OpenForWrite</a>(log_path.c_str(), &amp;err)) {
-<a name="l00426"></a>00426     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;opening build log: %s&quot;</span>, err.c_str());
-<a name="l00427"></a>00427     <span class="keywordflow">return</span> 1;
-<a name="l00428"></a>00428   }
+<a name="l00218"></a>00218 <span class="keywordtype">int</span> CmdTargetsList(<span class="keyword">const</span> vector&lt;Node*&gt;&amp; nodes, <span class="keywordtype">int</span> depth) {
+<a name="l00219"></a>00219   <span class="keywordflow">return</span> CmdTargetsList(nodes, depth, 0);
+<a name="l00220"></a>00220 }
+<a name="l00221"></a>00221 
+<a name="l00222"></a>00222 <span class="keywordtype">int</span> CmdTargetsSourceList(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state) {
+<a name="l00223"></a>00223   <span class="keywordflow">for</span> (vector&lt;Edge*&gt;::iterator e = state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.begin();
+<a name="l00224"></a>00224        e != state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.end();
+<a name="l00225"></a>00225        ++e)
+<a name="l00226"></a>00226     <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator inps = (*e)-&gt;inputs_.begin();
+<a name="l00227"></a>00227          inps != (*e)-&gt;inputs_.end();
+<a name="l00228"></a>00228          ++inps)
+<a name="l00229"></a>00229       <span class="keywordflow">if</span> (!(*inps)-&gt;in_edge_)
+<a name="l00230"></a>00230         printf(<span class="stringliteral">&quot;%s\n&quot;</span>, (*inps)-&gt;file_-&gt;path_.c_str());
+<a name="l00231"></a>00231   <span class="keywordflow">return</span> 0;
+<a name="l00232"></a>00232 }
+<a name="l00233"></a>00233 
+<a name="l00234"></a>00234 <span class="keywordtype">int</span> CmdTargetsList(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <span class="keywordtype">string</span>&amp; rule_name) {
+<a name="l00235"></a>00235   set&lt;string&gt; rules;
+<a name="l00236"></a>00236   <span class="comment">// Gather the outputs.</span>
+<a name="l00237"></a>00237   <span class="keywordflow">for</span> (vector&lt;Edge*&gt;::iterator e = state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.begin();
+<a name="l00238"></a>00238        e != state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.end();
+<a name="l00239"></a>00239        ++e)
+<a name="l00240"></a>00240     <span class="keywordflow">if</span> ((*e)-&gt;rule_-&gt;name_ == rule_name)
+<a name="l00241"></a>00241       <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator out_node = (*e)-&gt;outputs_.begin();
+<a name="l00242"></a>00242            out_node != (*e)-&gt;outputs_.end();
+<a name="l00243"></a>00243            ++out_node)
+<a name="l00244"></a>00244         rules.insert((*out_node)-&gt;file_-&gt;path_);
+<a name="l00245"></a>00245   <span class="comment">// Print them.</span>
+<a name="l00246"></a>00246   <span class="keywordflow">for</span> (set&lt;string&gt;::const_iterator i = rules.begin();
+<a name="l00247"></a>00247        i != rules.end();
+<a name="l00248"></a>00248        ++i)
+<a name="l00249"></a>00249     printf(<span class="stringliteral">&quot;%s\n&quot;</span>, (*i).c_str());
+<a name="l00250"></a>00250   <span class="keywordflow">return</span> 0;
+<a name="l00251"></a>00251 }
+<a name="l00252"></a>00252 
+<a name="l00253"></a>00253 <span class="keywordtype">int</span> CmdTargetsList(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state) {
+<a name="l00254"></a>00254   <span class="keywordflow">for</span> (vector&lt;Edge*&gt;::iterator e = state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.begin();
+<a name="l00255"></a>00255        e != state-&gt;<a class="code" href="structState.html#ab0f23f5026709fcb48d83e93d4bbed97" title="All the edges of the graph.">edges_</a>.end();
+<a name="l00256"></a>00256        ++e)
+<a name="l00257"></a>00257     <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator out_node = (*e)-&gt;outputs_.begin();
+<a name="l00258"></a>00258          out_node != (*e)-&gt;outputs_.end();
+<a name="l00259"></a>00259          ++out_node)
+<a name="l00260"></a>00260       printf(<span class="stringliteral">&quot;%s: %s\n&quot;</span>,
+<a name="l00261"></a>00261              (*out_node)-&gt;file_-&gt;path_.c_str(),
+<a name="l00262"></a>00262              (*e)-&gt;rule_-&gt;name_.c_str());
+<a name="l00263"></a>00263   <span class="keywordflow">return</span> 0;
+<a name="l00264"></a>00264 }
+<a name="l00265"></a>00265 
+<a name="l00266"></a>00266 <span class="keywordtype">int</span> CmdTargets(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
+<a name="l00267"></a>00267   <span class="keywordtype">int</span> depth = 1;
+<a name="l00268"></a>00268   <span class="keywordflow">if</span> (argc &gt;= 1) {
+<a name="l00269"></a>00269     <span class="keywordtype">string</span> mode = argv[0];
+<a name="l00270"></a>00270     <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;rule&quot;</span>) {
+<a name="l00271"></a>00271       <span class="keywordtype">string</span> rule;
+<a name="l00272"></a>00272       <span class="keywordflow">if</span> (argc &gt; 1)
+<a name="l00273"></a>00273         rule = argv[1];
+<a name="l00274"></a>00274       <span class="keywordflow">if</span> (rule.empty())
+<a name="l00275"></a>00275         <span class="keywordflow">return</span> CmdTargetsSourceList(state);
+<a name="l00276"></a>00276       <span class="keywordflow">else</span>
+<a name="l00277"></a>00277         <span class="keywordflow">return</span> CmdTargetsList(state, rule);
+<a name="l00278"></a>00278     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;depth&quot;</span>) {
+<a name="l00279"></a>00279       <span class="keywordflow">if</span> (argc &gt; 1)
+<a name="l00280"></a>00280         depth = atoi(argv[1]);
+<a name="l00281"></a>00281     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;all&quot;</span>) {
+<a name="l00282"></a>00282       <span class="keywordflow">return</span> CmdTargetsList(state);
+<a name="l00283"></a>00283     } <span class="keywordflow">else</span> {
+<a name="l00284"></a>00284       <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;unknown target tool mode &#39;%s&#39;&quot;</span>, mode.c_str());
+<a name="l00285"></a>00285       <span class="keywordflow">return</span> 1;
+<a name="l00286"></a>00286     }
+<a name="l00287"></a>00287   }
+<a name="l00288"></a>00288 
+<a name="l00289"></a>00289   <span class="keywordtype">string</span> err;
+<a name="l00290"></a>00290   vector&lt;Node*&gt; root_nodes = state-&gt;<a class="code" href="structState.html#a7ab43da26456a3ca765e82a01130b5ce">RootNodes</a>(&amp;err);
+<a name="l00291"></a>00291   <span class="keywordflow">if</span> (err.empty()) {
+<a name="l00292"></a>00292     <span class="keywordflow">return</span> CmdTargetsList(root_nodes, depth);
+<a name="l00293"></a>00293   } <span class="keywordflow">else</span> {
+<a name="l00294"></a>00294     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;%s&quot;</span>, err.c_str());
+<a name="l00295"></a>00295     <span class="keywordflow">return</span> 1;
+<a name="l00296"></a>00296   }
+<a name="l00297"></a>00297 }
+<a name="l00298"></a>00298 
+<a name="l00299"></a>00299 <span class="keywordtype">int</span> CmdRules(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) {
+<a name="l00300"></a>00300   <span class="keywordflow">for</span> (map&lt;string, const Rule*&gt;::iterator i = state-&gt;<a class="code" href="structState.html#a7853ca22a4a26bea1ea0e2b10a033e4a" title="All the rules used in the graph.">rules_</a>.begin();
+<a name="l00301"></a>00301        i != state-&gt;<a class="code" href="structState.html#a7853ca22a4a26bea1ea0e2b10a033e4a" title="All the rules used in the graph.">rules_</a>.end();
+<a name="l00302"></a>00302        ++i) {
+<a name="l00303"></a>00303     <span class="keywordflow">if</span> (i-&gt;second-&gt;description_.unparsed_.empty())
+<a name="l00304"></a>00304       printf(<span class="stringliteral">&quot;%s\n&quot;</span>, i-&gt;first.c_str());
+<a name="l00305"></a>00305     <span class="keywordflow">else</span>
+<a name="l00306"></a>00306       printf(<span class="stringliteral">&quot;%s: %s\n&quot;</span>,
+<a name="l00307"></a>00307              i-&gt;first.c_str(),
+<a name="l00308"></a>00308              i-&gt;second-&gt;description_.unparsed_.c_str());
+<a name="l00309"></a>00309   }
+<a name="l00310"></a>00310   <span class="keywordflow">return</span> 0;
+<a name="l00311"></a>00311 }
+<a name="l00312"></a>00312 
+<a name="l00313"></a>00313 <span class="keywordtype">int</span> CmdClean(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state,
+<a name="l00314"></a>00314              <span class="keywordtype">int</span> argc,
+<a name="l00315"></a>00315              <span class="keywordtype">char</span>* argv[],
+<a name="l00316"></a>00316              <span class="keyword">const</span> <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>&amp; config) {
+<a name="l00317"></a>00317   <a class="code" href="classCleaner.html">Cleaner</a> cleaner(state, config);
+<a name="l00318"></a>00318   <span class="keywordflow">if</span> (argc &gt;= 1)
+<a name="l00319"></a>00319   {
+<a name="l00320"></a>00320     <span class="keywordtype">string</span> mode = argv[0];
+<a name="l00321"></a>00321     <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;target&quot;</span>) {
+<a name="l00322"></a>00322       <span class="keywordflow">if</span> (argc &gt;= 2) {
+<a name="l00323"></a>00323         <span class="keywordflow">return</span> cleaner.CleanTargets(argc - 1, &amp;argv[1]);
+<a name="l00324"></a>00324       } <span class="keywordflow">else</span> {
+<a name="l00325"></a>00325         <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected a target to clean&quot;</span>);
+<a name="l00326"></a>00326         <span class="keywordflow">return</span> 1;
+<a name="l00327"></a>00327       }
+<a name="l00328"></a>00328     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mode == <span class="stringliteral">&quot;rule&quot;</span>) {
+<a name="l00329"></a>00329       <span class="keywordflow">if</span> (argc &gt;= 2) {
+<a name="l00330"></a>00330         <span class="keywordflow">return</span> cleaner.CleanRules(argc - 1, &amp;argv[1]);
+<a name="l00331"></a>00331       } <span class="keywordflow">else</span> {
+<a name="l00332"></a>00332         <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;expected a rule to clean&quot;</span>);
+<a name="l00333"></a>00333         <span class="keywordflow">return</span> 1;
+<a name="l00334"></a>00334       }
+<a name="l00335"></a>00335     } <span class="keywordflow">else</span> {
+<a name="l00336"></a>00336       <span class="keywordflow">return</span> cleaner.CleanTargets(argc, argv);
+<a name="l00337"></a>00337     }
+<a name="l00338"></a>00338   }
+<a name="l00339"></a>00339   <span class="keywordflow">else</span> {
+<a name="l00340"></a>00340     <span class="keywordflow">return</span> cleaner.CleanAll();
+<a name="l00341"></a>00341   }
+<a name="l00342"></a>00342 }
+<a name="l00343"></a>00343 
+<a name="l00344"></a>00344 }  <span class="comment">// anonymous namespace</span>
+<a name="l00345"></a>00345 
+<a name="l00346"></a><a class="code" href="ninja_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627">00346</a> <span class="keywordtype">int</span> <a class="code" href="ninja_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) {
+<a name="l00347"></a>00347   <span class="keyword">const</span> <span class="keywordtype">char</span>* ninja_command = argv[0];
+<a name="l00348"></a>00348   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> config;
+<a name="l00349"></a>00349   <span class="keyword">const</span> <span class="keywordtype">char</span>* input_file = <span class="stringliteral">&quot;build.ninja&quot;</span>;
+<a name="l00350"></a>00350   <span class="keyword">const</span> <span class="keywordtype">char</span>* working_dir = 0;
+<a name="l00351"></a>00351   <span class="keywordtype">string</span> tool;
+<a name="l00352"></a>00352 
+<a name="l00353"></a>00353   config.<a class="code" href="structBuildConfig.html#aedc92d7f5d96f1c94c9cdfb2014ea2f0">parallelism</a> = GuessParallelism();
+<a name="l00354"></a>00354 
+<a name="l00355"></a>00355   <span class="keywordtype">int</span> opt;
+<a name="l00356"></a>00356   <span class="keywordflow">while</span> ((opt = <a class="code" href="getopt_8h.html#ac43de49b0ae60f45ef43921fdc3be623">getopt_long</a>(argc, argv, <span class="stringliteral">&quot;f:hj:k:nt:vC:&quot;</span>, options,
+<a name="l00357"></a>00357                             NULL)) != -1) {
+<a name="l00358"></a>00358     <span class="keywordflow">switch</span> (opt) {
+<a name="l00359"></a>00359       <span class="keywordflow">case</span> <span class="charliteral">&#39;f&#39;</span>:
+<a name="l00360"></a>00360         input_file = <a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>;
+<a name="l00361"></a>00361         <span class="keywordflow">break</span>;
+<a name="l00362"></a>00362       <span class="keywordflow">case</span> <span class="charliteral">&#39;j&#39;</span>:
+<a name="l00363"></a>00363         config.<a class="code" href="structBuildConfig.html#aedc92d7f5d96f1c94c9cdfb2014ea2f0">parallelism</a> = atoi(<a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>);
+<a name="l00364"></a>00364         <span class="keywordflow">break</span>;
+<a name="l00365"></a>00365       <span class="keywordflow">case</span> <span class="charliteral">&#39;k&#39;</span>:
+<a name="l00366"></a>00366         <span class="comment">// We want to go until N jobs fail, which means we should ignore</span>
+<a name="l00367"></a>00367         <span class="comment">// the first N-1 that fail and then stop.</span>
+<a name="l00368"></a>00368         config.<a class="code" href="structBuildConfig.html#a72b55b8ea7568fdcad7e237b3dfea8c2">swallow_failures</a> = atoi(<a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>) - 1;
+<a name="l00369"></a>00369         <span class="keywordflow">break</span>;
+<a name="l00370"></a>00370       <span class="keywordflow">case</span> <span class="charliteral">&#39;n&#39;</span>:
+<a name="l00371"></a>00371         config.<a class="code" href="structBuildConfig.html#aa65c3f1fe7e0faa2b05b36ed1743da5d">dry_run</a> = <span class="keyword">true</span>;
+<a name="l00372"></a>00372         <span class="keywordflow">break</span>;
+<a name="l00373"></a>00373       <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>:
+<a name="l00374"></a>00374         config.<a class="code" href="structBuildConfig.html#ae50beadfa54bab9ea78feb96f56431cf">verbosity</a> = <a class="code" href="structBuildConfig.html#a7a6581026821b221c12ccfc9203b4fffa44ec2c4f7fd9233c06f434e56faf1874">BuildConfig::VERBOSE</a>;
+<a name="l00375"></a>00375         <span class="keywordflow">break</span>;
+<a name="l00376"></a>00376       <span class="keywordflow">case</span> <span class="charliteral">&#39;t&#39;</span>:
+<a name="l00377"></a>00377         tool = <a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>;
+<a name="l00378"></a>00378         <span class="keywordflow">break</span>;
+<a name="l00379"></a>00379       <span class="keywordflow">case</span> <span class="charliteral">&#39;C&#39;</span>:
+<a name="l00380"></a>00380         working_dir = <a class="code" href="getopt_8h.html#adb50a0eab9fed92fc3bfc7dfa4f2c410">optarg</a>;
+<a name="l00381"></a>00381         <span class="keywordflow">break</span>;
+<a name="l00382"></a>00382       <span class="keywordflow">case</span> <span class="charliteral">&#39;h&#39;</span>:
+<a name="l00383"></a>00383       <span class="keywordflow">default</span>:
+<a name="l00384"></a>00384         usage(config);
+<a name="l00385"></a>00385         <span class="keywordflow">return</span> 1;
+<a name="l00386"></a>00386     }
+<a name="l00387"></a>00387   }
+<a name="l00388"></a>00388   argv += <a class="code" href="getopt_8h.html#ad5e1c16213bbee2d5e8cc363309f418c">optind</a>;
+<a name="l00389"></a>00389   argc -= <a class="code" href="getopt_8h.html#ad5e1c16213bbee2d5e8cc363309f418c">optind</a>;
+<a name="l00390"></a>00390 
+<a name="l00391"></a>00391   <span class="keywordflow">if</span> (working_dir) {
+<a name="l00392"></a>00392 <span class="preprocessor">#ifdef _WIN32</span>
+<a name="l00393"></a>00393 <span class="preprocessor"></span>    <span class="keywordflow">if</span> (_chdir(working_dir) &lt; 0) {
+<a name="l00394"></a>00394 <span class="preprocessor">#else</span>
+<a name="l00395"></a>00395 <span class="preprocessor"></span>    <span class="keywordflow">if</span> (chdir(working_dir) &lt; 0) {
+<a name="l00396"></a>00396 <span class="preprocessor">#endif</span>
+<a name="l00397"></a>00397 <span class="preprocessor"></span>      <a class="code" href="util_8cc.html#ad98ec6fb76f27b3d5a805cdad742df92" title="Log a fatal message and exit.">Fatal</a>(<span class="stringliteral">&quot;chdir to &#39;%s&#39; - %s&quot;</span>, working_dir, strerror(errno));
+<a name="l00398"></a>00398     }
+<a name="l00399"></a>00399   }
+<a name="l00400"></a>00400 
+<a name="l00401"></a>00401   <a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a> state;
+<a name="l00402"></a>00402   RealFileReader file_reader;
+<a name="l00403"></a>00403   <a class="code" href="structManifestParser.html" title="Parses .ninja files.">ManifestParser</a> parser(&amp;state, &amp;file_reader);
+<a name="l00404"></a>00404   <span class="keywordtype">string</span> err;
+<a name="l00405"></a>00405   <span class="keywordflow">if</span> (!parser.<a class="code" href="structManifestParser.html#afb43144d1bb419456c5d5b376f561a63">Load</a>(input_file, &amp;err)) {
+<a name="l00406"></a>00406     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;loading &#39;%s&#39;: %s&quot;</span>, input_file, err.c_str());
+<a name="l00407"></a>00407     <span class="keywordflow">return</span> 1;
+<a name="l00408"></a>00408   }
+<a name="l00409"></a>00409 
+<a name="l00410"></a>00410   <span class="keywordflow">if</span> (!tool.empty()) {
+<a name="l00411"></a>00411     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;graph&quot;</span>)
+<a name="l00412"></a>00412       <span class="keywordflow">return</span> CmdGraph(&amp;state, argc, argv);
+<a name="l00413"></a>00413     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;query&quot;</span>)
+<a name="l00414"></a>00414       <span class="keywordflow">return</span> CmdQuery(&amp;state, argc, argv);
+<a name="l00415"></a>00415     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;browse&quot;</span>)
+<a name="l00416"></a>00416       <span class="keywordflow">return</span> CmdBrowse(&amp;state, ninja_command, argc, argv);
+<a name="l00417"></a>00417     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;targets&quot;</span>)
+<a name="l00418"></a>00418       <span class="keywordflow">return</span> CmdTargets(&amp;state, argc, argv);
+<a name="l00419"></a>00419     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;rules&quot;</span>)
+<a name="l00420"></a>00420       <span class="keywordflow">return</span> CmdRules(&amp;state, argc, argv);
+<a name="l00421"></a>00421     <span class="keywordflow">if</span> (tool == <span class="stringliteral">&quot;clean&quot;</span>)
+<a name="l00422"></a>00422       <span class="keywordflow">return</span> CmdClean(&amp;state, argc, argv, config);
+<a name="l00423"></a>00423     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;unknown tool &#39;%s&#39;&quot;</span>, tool.c_str());
+<a name="l00424"></a>00424   }
+<a name="l00425"></a>00425 
+<a name="l00426"></a>00426   <a class="code" href="structBuildLog.html" title="Store a log of every command ran for every build.">BuildLog</a> build_log;
+<a name="l00427"></a>00427   build_log.<a class="code" href="structBuildLog.html#a6cd31c693b9e057d604b9ef27be2bcfa">SetConfig</a>(&amp;config);
+<a name="l00428"></a>00428   state.<a class="code" href="structState.html#a463348843da891ba1f7f1df149051a54">build_log_</a> = &amp;build_log;
 <a name="l00429"></a>00429 
-<a name="l00430"></a>00430   <a class="code" href="structBuilder.html" title="Builder wraps the build process: starting commands, updating status.">Builder</a> builder(&amp;state, config);
-<a name="l00431"></a>00431   <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; argc; ++i) {
-<a name="l00432"></a>00432     <span class="keywordtype">string</span> path = argv[i];
-<a name="l00433"></a>00433     <span class="keywordtype">string</span> err;
-<a name="l00434"></a>00434     <span class="keywordflow">if</span> (!<a class="code" href="util_8cc.html#abdb5937692c9c5a0fbe6cbbab7941414" title="Canonicalize a path like &amp;quot;foo/../bar.h&amp;quot; into just &amp;quot;bar.h&amp;quot;.">CanonicalizePath</a>(&amp;path, &amp;err))
-<a name="l00435"></a>00435       <a class="code" href="util_8cc.html#ad98ec6fb76f27b3d5a805cdad742df92" title="Log a fatal message and exit.">Fatal</a>(<span class="stringliteral">&quot;can&#39;t canonicalize &#39;%s&#39;: %s&quot;</span>, path.c_str(), err.c_str());
-<a name="l00436"></a>00436 
-<a name="l00437"></a>00437     <span class="keywordflow">if</span> (!builder.<a class="code" href="structBuilder.html#aacbe026e5a186342d39939ea003e7ebc">AddTarget</a>(path, &amp;err)) {
-<a name="l00438"></a>00438       <span class="keywordflow">if</span> (!err.empty()) {
-<a name="l00439"></a>00439         <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;%s&quot;</span>, err.c_str());
-<a name="l00440"></a>00440         <span class="keywordflow">return</span> 1;
-<a name="l00441"></a>00441       } <span class="keywordflow">else</span> {
-<a name="l00442"></a>00442         <span class="comment">// Added a target that is already up-to-date; not really</span>
-<a name="l00443"></a>00443         <span class="comment">// an error.</span>
-<a name="l00444"></a>00444       }
-<a name="l00445"></a>00445     }
+<a name="l00430"></a>00430   <span class="keyword">const</span> <span class="keywordtype">string</span> build_dir = state.<a class="code" href="structState.html#ae09e90c5524df7fd37a96751930336c9">bindings_</a>.<a class="code" href="structBindingEnv.html#af858f0c4dc64fee67545ffabb18ee2bb">LookupVariable</a>(<span class="stringliteral">&quot;builddir&quot;</span>);
+<a name="l00431"></a>00431   <span class="keyword">const</span> <span class="keywordtype">char</span>* kLogPath = <span class="stringliteral">&quot;.ninja_log&quot;</span>;
+<a name="l00432"></a>00432   <span class="keywordtype">string</span> log_path = kLogPath;
+<a name="l00433"></a>00433   <span class="keywordflow">if</span> (!build_dir.empty()) {
+<a name="l00434"></a>00434     <span class="keywordflow">if</span> (<a class="code" href="util_8cc.html#ae04109d68ece0ef0be9b662a35e09f1d" title="Create a directory (mode 0777 on Unix).">MakeDir</a>(build_dir) &lt; 0 &amp;&amp; errno != EEXIST) {
+<a name="l00435"></a>00435       <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;creating build directory %s: %s&quot;</span>,
+<a name="l00436"></a>00436             build_dir.c_str(), strerror(errno));
+<a name="l00437"></a>00437       <span class="keywordflow">return</span> 1;
+<a name="l00438"></a>00438     }
+<a name="l00439"></a>00439     log_path = build_dir + <span class="stringliteral">&quot;/&quot;</span> + kLogPath;
+<a name="l00440"></a>00440   }
+<a name="l00441"></a>00441 
+<a name="l00442"></a>00442   <span class="keywordflow">if</span> (!build_log.<a class="code" href="structBuildLog.html#a0e7f4786ae2aee38095cd7eeed87af73" title="Load the on-disk log.">Load</a>(log_path.c_str(), &amp;err)) {
+<a name="l00443"></a>00443     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;loading build log %s: %s&quot;</span>,
+<a name="l00444"></a>00444           log_path.c_str(), err.c_str());
+<a name="l00445"></a>00445     <span class="keywordflow">return</span> 1;
 <a name="l00446"></a>00446   }
 <a name="l00447"></a>00447 
-<a name="l00448"></a>00448   <span class="keywordtype">bool</span> success = builder.<a class="code" href="structBuilder.html#a8c2b02f9c4f068cbb57c56052310a6c4">Build</a>(&amp;err);
-<a name="l00449"></a>00449   <span class="keywordflow">if</span> (!err.empty()) {
-<a name="l00450"></a>00450     printf(<span class="stringliteral">&quot;build stopped: %s.\n&quot;</span>, err.c_str());
+<a name="l00448"></a>00448   <span class="keywordflow">if</span> (!build_log.<a class="code" href="structBuildLog.html#a08a600782d1b1c8369b8437d9d9c4264">OpenForWrite</a>(log_path.c_str(), &amp;err)) {
+<a name="l00449"></a>00449     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;opening build log: %s&quot;</span>, err.c_str());
+<a name="l00450"></a>00450     <span class="keywordflow">return</span> 1;
 <a name="l00451"></a>00451   }
 <a name="l00452"></a>00452 
-<a name="l00453"></a>00453   <span class="keywordflow">return</span> success ? 0 : 1;
-<a name="l00454"></a>00454 }
+<a name="l00453"></a>00453   vector&lt;Node*&gt; targets;
+<a name="l00454"></a>00454   <span class="keywordflow">if</span> (!CollectTargetsFromArgs(&amp;state, argc, argv, &amp;targets, &amp;err)) {
+<a name="l00455"></a>00455     <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;%s&quot;</span>, err.c_str());
+<a name="l00456"></a>00456     <span class="keywordflow">return</span> 1;
+<a name="l00457"></a>00457   }
+<a name="l00458"></a>00458 
+<a name="l00459"></a>00459   <a class="code" href="structBuilder.html" title="Builder wraps the build process: starting commands, updating status.">Builder</a> builder(&amp;state, config);
+<a name="l00460"></a>00460   <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; targets.size(); ++i) {
+<a name="l00461"></a>00461     <span class="keywordflow">if</span> (!builder.<a class="code" href="structBuilder.html#aacbe026e5a186342d39939ea003e7ebc">AddTarget</a>(targets[i], &amp;err)) {
+<a name="l00462"></a>00462       <span class="keywordflow">if</span> (!err.empty()) {
+<a name="l00463"></a>00463         <a class="code" href="util_8cc.html#a8d48223b92317abcaf5984a00a97efb4" title="Log an error message.">Error</a>(<span class="stringliteral">&quot;%s&quot;</span>, err.c_str());
+<a name="l00464"></a>00464         <span class="keywordflow">return</span> 1;
+<a name="l00465"></a>00465       } <span class="keywordflow">else</span> {
+<a name="l00466"></a>00466         <span class="comment">// Added a target that is already up-to-date; not really</span>
+<a name="l00467"></a>00467         <span class="comment">// an error.</span>
+<a name="l00468"></a>00468       }
+<a name="l00469"></a>00469     }
+<a name="l00470"></a>00470   }
+<a name="l00471"></a>00471 
+<a name="l00472"></a>00472   <span class="keywordtype">bool</span> success = builder.<a class="code" href="structBuilder.html#a8c2b02f9c4f068cbb57c56052310a6c4">Build</a>(&amp;err);
+<a name="l00473"></a>00473   <span class="keywordflow">if</span> (!err.empty()) {
+<a name="l00474"></a>00474     printf(<span class="stringliteral">&quot;build stopped: %s.\n&quot;</span>, err.c_str());
+<a name="l00475"></a>00475   }
+<a name="l00476"></a>00476 
+<a name="l00477"></a>00477   <span class="keywordflow">return</span> success ? 0 : 1;
+<a name="l00478"></a>00478 }
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

@@ -43,10 +43,14 @@
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#ac5d014b015600d5b88f0ab55b0b5c750">ManifestParser</a> (<a class="el" href="structState.html">State</a> *state, <a class="el" href="structManifestParser_1_1FileReader.html">FileReader</a> *file_reader)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#a7c813cbd0fcd3e7a7395876d266d5e02">Parse</a> (const string &amp;input, string *err)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#a70208843bcad06d5796b98ba7d24ec35">ParseEdge</a> (string *err)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#a4492452159dbed1b530e33af6a874afc">ParseFileInclude</a> (<a class="el" href="structToken.html#acf70e9411196c602738c3ed2428c7137">Token::Type</a> type, string *err)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse either a 'subninja' or 'include' line.  <a href="#a4492452159dbed1b530e33af6a874afc"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#a537e4f464c73ff952b3bde10fddea90c">ParseLet</a> (string *key, string *val, bool expand, string *err)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse a key=val statement.  <a href="#a537e4f464c73ff952b3bde10fddea90c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#aafcf7abbccfe40f3d26b554c0843b3bf">ParseFileInclude</a> (string *err)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse either a 'subninja' or 'include' line.  <a href="#aafcf7abbccfe40f3d26b554c0843b3bf"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#a179beee432fde754656df673ace7c639">ParseLet</a> (string *key, string *val, string *err)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse a key=val statement, expanding $vars in the value with the current env.  <a href="#a179beee432fde754656df673ace7c639"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#a1e6388e645310ec55eb563fe02d98e4b">ParseLetKey</a> (string *key, string *err)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse the "key=" half of a key=val statement.  <a href="#a1e6388e645310ec55eb563fe02d98e4b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#aab5c32f71f44a7ce22296321b5c2ec0d">ParseLetValue</a> (<a class="el" href="structEvalString.html">EvalString</a> *eval, string *err)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse the val half of a key=val statement, writing and parsing output into an <a class="el" href="structEvalString.html" title="A tokenized string that contains variable references.">EvalString</a> (ready for expansion).  <a href="#aab5c32f71f44a7ce22296321b5c2ec0d"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#ad8e59ed84a6c318e2169ae6c52b96379">ParseRule</a> (string *err)</td></tr>
 <tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBindingEnv.html">BindingEnv</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structManifestParser.html#a0dbb40eddd53ef84a018cb2de667fcb1">env_</a></td></tr>
@@ -57,7 +61,7 @@
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Parses .ninja files. </p>
 
-<p>Definition at line <a class="el" href="parsers_8h_source.html#l00103">103</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8h_source.html#l00126">126</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ac5d014b015600d5b88f0ab55b0b5c750"></a><!-- doxytag: member="ManifestParser::ManifestParser" ref="ac5d014b015600d5b88f0ab55b0b5c750" args="(State *state, FileReader *file_reader)" -->
 <div class="memitem">
@@ -84,9 +88,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00259">259</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00268">268</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
 
-<p>References <a class="el" href="ninja_8h_source.html#l00100">State::bindings_</a>, and <a class="el" href="parsers_8h_source.html#l00124">env_</a>.</p>
+<p>References <a class="el" href="ninja_8h_source.html#l00105">State::bindings_</a>, and <a class="el" href="parsers_8h_source.html#l00154">env_</a>.</p>
 
 </div>
 </div>
@@ -116,11 +120,11 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00263">263</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00272">272</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
 
-<p>References <a class="el" href="parsers_8h_source.html#l00125">file_reader_</a>, <a class="el" href="parsers_8cc_source.html#l00270">Parse()</a>, and <a class="el" href="structManifestParser_1_1FileReader.html#a2189a2031f8731473f1c4979c5b4fda5">ManifestParser::FileReader::ReadFile()</a>.</p>
+<p>References <a class="el" href="parsers_8h_source.html#l00155">file_reader_</a>, <a class="el" href="parsers_8cc_source.html#l00279">Parse()</a>, and <a class="el" href="structManifestParser_1_1FileReader.html#a2189a2031f8731473f1c4979c5b4fda5">ManifestParser::FileReader::ReadFile()</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00329">main()</a>.</p>
+<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00346">main()</a>.</p>
 
 </div>
 </div>
@@ -149,11 +153,11 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00270">270</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00279">279</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
 
-<p>References <a class="el" href="eval__env_8cc_source.html#l00026">BindingEnv::AddBinding()</a>, <a class="el" href="parsers_8cc_source.html#l00026">Token::AsString()</a>, <a class="el" href="parsers_8h_source.html#l00033">Token::BUILD</a>, <a class="el" href="parsers_8h_source.html#l00124">env_</a>, <a class="el" href="parsers_8cc_source.html#l00053">Tokenizer::Error()</a>, <a class="el" href="parsers_8h_source.html#l00031">Token::IDENT</a>, <a class="el" href="parsers_8h_source.html#l00035">Token::INCLUDE</a>, <a class="el" href="parsers_8cc_source.html#l00400">ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00518">ParseFileInclude()</a>, <a class="el" href="parsers_8cc_source.html#l00367">ParseLet()</a>, <a class="el" href="parsers_8cc_source.html#l00317">ParseRule()</a>, <a class="el" href="parsers_8cc_source.html#l00160">Tokenizer::PeekToken()</a>, <a class="el" href="parsers_8h_source.html#l00032">Token::RULE</a>, <a class="el" href="parsers_8cc_source.html#l00067">Tokenizer::SkipWhitespace()</a>, <a class="el" href="parsers_8cc_source.html#l00048">Tokenizer::Start()</a>, <a class="el" href="parsers_8h_source.html#l00034">Token::SUBNINJA</a>, <a class="el" href="parsers_8h_source.html#l00043">Token::TEOF</a>, <a class="el" href="parsers_8h_source.html#l00067">Tokenizer::token()</a>, <a class="el" href="parsers_8h_source.html#l00126">tokenizer_</a>, and <a class="el" href="parsers_8h_source.html#l00050">Token::type_</a>.</p>
+<p>References <a class="el" href="eval__env_8cc_source.html#l00026">BindingEnv::AddBinding()</a>, <a class="el" href="parsers_8cc_source.html#l00026">Token::AsString()</a>, <a class="el" href="parsers_8h_source.html#l00048">Token::end_</a>, <a class="el" href="parsers_8h_source.html#l00154">env_</a>, <a class="el" href="parsers_8cc_source.html#l00057">Tokenizer::Error()</a>, <a class="el" href="parsers_8h_source.html#l00031">Token::IDENT</a>, <a class="el" href="parsers_8cc_source.html#l00415">ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00533">ParseFileInclude()</a>, <a class="el" href="parsers_8cc_source.html#l00370">ParseLet()</a>, <a class="el" href="parsers_8cc_source.html#l00318">ParseRule()</a>, <a class="el" href="parsers_8cc_source.html#l00177">Tokenizer::PeekToken()</a>, <a class="el" href="parsers_8h_source.html#l00047">Token::pos_</a>, <a class="el" href="parsers_8cc_source.html#l00065">Tokenizer::SkipWhitespace()</a>, <a class="el" href="parsers_8cc_source.html#l00052">Tokenizer::Start()</a>, <a class="el" href="parsers_8h_source.html#l00039">Token::TEOF</a>, <a class="el" href="parsers_8h_source.html#l00084">Tokenizer::token()</a>, <a class="el" href="parsers_8h_source.html#l00156">tokenizer_</a>, and <a class="el" href="parsers_8h_source.html#l00046">Token::type_</a>.</p>
 
-<p>Referenced by <a class="el" href="test_8cc_source.html#l00029">AssertParse()</a>, <a class="el" href="parsers__test_8cc_source.html#l00024">ParserTest::AssertParse()</a>, <a class="el" href="parsers_8cc_source.html#l00263">Load()</a>, <a class="el" href="parsers_8cc_source.html#l00518">ParseFileInclude()</a>, and <a class="el" href="parsers__test_8cc_source.html#l00177">TEST_F()</a>.</p>
+<p>Referenced by <a class="el" href="test_8cc_source.html#l00029">AssertParse()</a>, <a class="el" href="parsers__test_8cc_source.html#l00024">ParserTest::AssertParse()</a>, <a class="el" href="parsers_8cc_source.html#l00272">Load()</a>, <a class="el" href="parsers_8cc_source.html#l00533">ParseFileInclude()</a>, and <a class="el" href="parsers__test_8cc_source.html#l00196">TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -173,34 +177,25 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00400">400</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00415">415</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
 
-<p>References <a class="el" href="eval__env_8cc_source.html#l00026">BindingEnv::AddBinding()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00148">State::AddEdge()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00170">State::AddIn()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00176">State::AddOut()</a>, <a class="el" href="parsers_8h_source.html#l00033">Token::BUILD</a>, <a class="el" href="util_8cc_source.html#l00043">CanonicalizePath()</a>, <a class="el" href="parsers_8h_source.html#l00038">Token::COLON</a>, <a class="el" href="parsers_8cc_source.html#l00231">Tokenizer::ConsumeToken()</a>, <a class="el" href="graph_8h_source.html#l00085">Rule::depfile_</a>, <a class="el" href="eval__env_8h_source.html#l00048">EvalString::empty()</a>, <a class="el" href="graph_8h_source.html#l00104">Edge::env_</a>, <a class="el" href="parsers_8h_source.html#l00124">env_</a>, <a class="el" href="parsers_8cc_source.html#l00053">Tokenizer::Error()</a>, <a class="el" href="parsers_8cc_source.html#l00063">Tokenizer::ErrorExpected()</a>, <a class="el" href="eval__env_8cc_source.html#l00082">EvalString::Evaluate()</a>, <a class="el" href="parsers_8cc_source.html#l00109">Tokenizer::ExpectToken()</a>, <a class="el" href="graph_8h_source.html#l00117">Edge::implicit_deps_</a>, <a class="el" href="parsers_8h_source.html#l00041">Token::INDENT</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00136">State::LookupRule()</a>, <a class="el" href="parsers_8cc_source.html#l00094">Tokenizer::Newline()</a>, <a class="el" href="graph_8h_source.html#l00118">Edge::order_only_deps_</a>, <a class="el" href="parsers_8h_source.html#l00042">Token::OUTDENT</a>, <a class="el" href="eval__env_8h_source.html#l00038">BindingEnv::parent_</a>, <a class="el" href="eval__env_8cc_source.html#l00030">EvalString::Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00367">ParseLet()</a>, <a class="el" href="parsers_8cc_source.html#l00160">Tokenizer::PeekToken()</a>, <a class="el" href="parsers_8h_source.html#l00039">Token::PIPE</a>, <a class="el" href="parsers_8h_source.html#l00040">Token::PIPE2</a>, <a class="el" href="parsers_8cc_source.html#l00117">Tokenizer::ReadIdent()</a>, <a class="el" href="parsers_8h_source.html#l00123">state_</a>, and <a class="el" href="parsers_8h_source.html#l00126">tokenizer_</a>.</p>
+<p>References <a class="el" href="eval__env_8cc_source.html#l00026">BindingEnv::AddBinding()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00140">State::AddEdge()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00162">State::AddIn()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00168">State::AddOut()</a>, <a class="el" href="util_8cc_source.html#l00064">CanonicalizePath()</a>, <a class="el" href="parsers_8h_source.html#l00034">Token::COLON</a>, <a class="el" href="parsers_8cc_source.html#l00238">Tokenizer::ConsumeToken()</a>, <a class="el" href="graph_8h_source.html#l00085">Rule::depfile_</a>, <a class="el" href="eval__env_8h_source.html#l00048">EvalString::empty()</a>, <a class="el" href="graph_8h_source.html#l00104">Edge::env_</a>, <a class="el" href="parsers_8h_source.html#l00154">env_</a>, <a class="el" href="parsers_8cc_source.html#l00057">Tokenizer::Error()</a>, <a class="el" href="parsers_8cc_source.html#l00061">Tokenizer::ErrorExpected()</a>, <a class="el" href="eval__env_8cc_source.html#l00085">EvalString::Evaluate()</a>, <a class="el" href="parsers_8cc_source.html#l00117">Tokenizer::ExpectIdent()</a>, <a class="el" href="graph_8h_source.html#l00117">Edge::implicit_deps_</a>, <a class="el" href="parsers_8h_source.html#l00037">Token::INDENT</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00128">State::LookupRule()</a>, <a class="el" href="parsers_8cc_source.html#l00094">Tokenizer::Newline()</a>, <a class="el" href="graph_8h_source.html#l00118">Edge::order_only_deps_</a>, <a class="el" href="parsers_8h_source.html#l00038">Token::OUTDENT</a>, <a class="el" href="eval__env_8h_source.html#l00038">BindingEnv::parent_</a>, <a class="el" href="eval__env_8cc_source.html#l00030">EvalString::Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00370">ParseLet()</a>, <a class="el" href="parsers_8cc_source.html#l00177">Tokenizer::PeekToken()</a>, <a class="el" href="parsers_8h_source.html#l00035">Token::PIPE</a>, <a class="el" href="parsers_8h_source.html#l00036">Token::PIPE2</a>, <a class="el" href="parsers_8cc_source.html#l00127">Tokenizer::ReadIdent()</a>, <a class="el" href="parsers_8h_source.html#l00153">state_</a>, and <a class="el" href="parsers_8h_source.html#l00156">tokenizer_</a>.</p>
 
-<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00270">Parse()</a>.</p>
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00279">Parse()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4492452159dbed1b530e33af6a874afc"></a><!-- doxytag: member="ManifestParser::ParseFileInclude" ref="a4492452159dbed1b530e33af6a874afc" args="(Token::Type type, string *err)" -->
+<a class="anchor" id="aafcf7abbccfe40f3d26b554c0843b3bf"></a><!-- doxytag: member="ManifestParser::ParseFileInclude" ref="aafcf7abbccfe40f3d26b554c0843b3bf" args="(string *err)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool ManifestParser::ParseFileInclude </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structToken.html#acf70e9411196c602738c3ed2428c7137">Token::Type</a>&nbsp;</td>
-          <td class="paramname"> <em>type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">string *&nbsp;</td>
-          <td class="paramname"> <em>err</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
+          <td class="paramname"> <em>err</em></td>
+          <td>&nbsp;)&nbsp;</td>
           <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -208,15 +203,15 @@
 
 <p>Parse either a 'subninja' or 'include' line. </p>
 
-<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00518">518</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00533">533</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
 
-<p>References <a class="el" href="parsers_8h_source.html#l00124">env_</a>, <a class="el" href="parsers_8cc_source.html#l00053">Tokenizer::Error()</a>, <a class="el" href="parsers_8cc_source.html#l00063">Tokenizer::ErrorExpected()</a>, <a class="el" href="parsers_8cc_source.html#l00109">Tokenizer::ExpectToken()</a>, <a class="el" href="parsers_8h_source.html#l00125">file_reader_</a>, <a class="el" href="parsers_8cc_source.html#l00094">Tokenizer::Newline()</a>, <a class="el" href="eval__env_8h_source.html#l00038">BindingEnv::parent_</a>, <a class="el" href="parsers_8cc_source.html#l00270">Parse()</a>, <a class="el" href="structManifestParser_1_1FileReader.html#a2189a2031f8731473f1c4979c5b4fda5">ManifestParser::FileReader::ReadFile()</a>, <a class="el" href="parsers_8cc_source.html#l00117">Tokenizer::ReadIdent()</a>, <a class="el" href="parsers_8h_source.html#l00123">state_</a>, <a class="el" href="parsers_8h_source.html#l00034">Token::SUBNINJA</a>, and <a class="el" href="parsers_8h_source.html#l00126">tokenizer_</a>.</p>
+<p>References <a class="el" href="parsers_8h_source.html#l00154">env_</a>, <a class="el" href="parsers_8cc_source.html#l00057">Tokenizer::Error()</a>, <a class="el" href="parsers_8cc_source.html#l00061">Tokenizer::ErrorExpected()</a>, <a class="el" href="parsers_8h_source.html#l00155">file_reader_</a>, <a class="el" href="parsers_8cc_source.html#l00094">Tokenizer::Newline()</a>, <a class="el" href="eval__env_8h_source.html#l00038">BindingEnv::parent_</a>, <a class="el" href="parsers_8cc_source.html#l00279">Parse()</a>, <a class="el" href="structManifestParser_1_1FileReader.html#a2189a2031f8731473f1c4979c5b4fda5">ManifestParser::FileReader::ReadFile()</a>, <a class="el" href="parsers_8cc_source.html#l00127">Tokenizer::ReadIdent()</a>, <a class="el" href="parsers_8h_source.html#l00153">state_</a>, and <a class="el" href="parsers_8h_source.html#l00156">tokenizer_</a>.</p>
 
-<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00270">Parse()</a>.</p>
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00279">Parse()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a537e4f464c73ff952b3bde10fddea90c"></a><!-- doxytag: member="ManifestParser::ParseLet" ref="a537e4f464c73ff952b3bde10fddea90c" args="(string *key, string *val, bool expand, string *err)" -->
+<a class="anchor" id="a179beee432fde754656df673ace7c639"></a><!-- doxytag: member="ManifestParser::ParseLet" ref="a179beee432fde754656df673ace7c639" args="(string *key, string *val, string *err)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -235,8 +230,37 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&nbsp;</td>
-          <td class="paramname"> <em>expand</em>, </td>
+          <td class="paramtype">string *&nbsp;</td>
+          <td class="paramname"> <em>err</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Parse a key=val statement, expanding $vars in the value with the current env. </p>
+
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00370">370</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+
+<p>References <a class="el" href="parsers_8h_source.html#l00154">env_</a>, <a class="el" href="eval__env_8cc_source.html#l00085">EvalString::Evaluate()</a>, <a class="el" href="parsers_8cc_source.html#l00383">ParseLetKey()</a>, and <a class="el" href="parsers_8cc_source.html#l00391">ParseLetValue()</a>.</p>
+
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00279">Parse()</a>, and <a class="el" href="parsers_8cc_source.html#l00415">ParseEdge()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1e6388e645310ec55eb563fe02d98e4b"></a><!-- doxytag: member="ManifestParser::ParseLetKey" ref="a1e6388e645310ec55eb563fe02d98e4b" args="(string *key, string *err)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ManifestParser::ParseLetKey </td>
+          <td>(</td>
+          <td class="paramtype">string *&nbsp;</td>
+          <td class="paramname"> <em>key</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -253,14 +277,48 @@
 </div>
 <div class="memdoc">
 
-<p>Parse a key=val statement. </p>
-<p>If expand is true, evaluate variables within the value immediately. </p>
+<p>Parse the "key=" half of a key=val statement. </p>
 
-<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00367">367</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00383">383</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
 
-<p>References <a class="el" href="parsers_8h_source.html#l00124">env_</a>, <a class="el" href="parsers_8h_source.html#l00037">Token::EQUALS</a>, <a class="el" href="parsers_8cc_source.html#l00053">Tokenizer::Error()</a>, <a class="el" href="parsers_8cc_source.html#l00063">Tokenizer::ErrorExpected()</a>, <a class="el" href="eval__env_8cc_source.html#l00082">EvalString::Evaluate()</a>, <a class="el" href="parsers_8cc_source.html#l00109">Tokenizer::ExpectToken()</a>, <a class="el" href="eval__env_8cc_source.html#l00030">EvalString::Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00117">Tokenizer::ReadIdent()</a>, <a class="el" href="parsers_8cc_source.html#l00126">Tokenizer::ReadToNewline()</a>, and <a class="el" href="parsers_8h_source.html#l00126">tokenizer_</a>.</p>
+<p>References <a class="el" href="parsers_8h_source.html#l00033">Token::EQUALS</a>, <a class="el" href="parsers_8cc_source.html#l00061">Tokenizer::ErrorExpected()</a>, <a class="el" href="parsers_8cc_source.html#l00109">Tokenizer::ExpectToken()</a>, <a class="el" href="parsers_8cc_source.html#l00127">Tokenizer::ReadIdent()</a>, and <a class="el" href="parsers_8h_source.html#l00156">tokenizer_</a>.</p>
 
-<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00270">Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00400">ParseEdge()</a>, and <a class="el" href="parsers_8cc_source.html#l00317">ParseRule()</a>.</p>
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00370">ParseLet()</a>, and <a class="el" href="parsers_8cc_source.html#l00318">ParseRule()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aab5c32f71f44a7ce22296321b5c2ec0d"></a><!-- doxytag: member="ManifestParser::ParseLetValue" ref="aab5c32f71f44a7ce22296321b5c2ec0d" args="(EvalString *eval, string *err)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ManifestParser::ParseLetValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structEvalString.html">EvalString</a> *&nbsp;</td>
+          <td class="paramname"> <em>eval</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string *&nbsp;</td>
+          <td class="paramname"> <em>err</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Parse the val half of a key=val statement, writing and parsing output into an <a class="el" href="structEvalString.html" title="A tokenized string that contains variable references.">EvalString</a> (ready for expansion). </p>
+
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00391">391</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+
+<p>References <a class="el" href="parsers_8cc_source.html#l00057">Tokenizer::Error()</a>, <a class="el" href="eval__env_8cc_source.html#l00030">EvalString::Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00148">Tokenizer::ReadToNewline()</a>, and <a class="el" href="parsers_8h_source.html#l00156">tokenizer_</a>.</p>
+
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00370">ParseLet()</a>, and <a class="el" href="parsers_8cc_source.html#l00318">ParseRule()</a>.</p>
 
 </div>
 </div>
@@ -280,11 +338,11 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00317">317</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8cc_source.html#l00318">318</a> of file <a class="el" href="parsers_8cc_source.html">parsers.cc</a>.</p>
 
-<p>References <a class="el" href="ninja__jumble_8cc_source.html#l00143">State::AddRule()</a>, <a class="el" href="graph_8h_source.html#l00083">Rule::command_</a>, <a class="el" href="parsers_8cc_source.html#l00231">Tokenizer::ConsumeToken()</a>, <a class="el" href="graph_8h_source.html#l00085">Rule::depfile_</a>, <a class="el" href="graph_8h_source.html#l00084">Rule::description_</a>, <a class="el" href="parsers_8cc_source.html#l00053">Tokenizer::Error()</a>, <a class="el" href="parsers_8cc_source.html#l00063">Tokenizer::ErrorExpected()</a>, <a class="el" href="parsers_8cc_source.html#l00109">Tokenizer::ExpectToken()</a>, <a class="el" href="parsers_8h_source.html#l00041">Token::INDENT</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00136">State::LookupRule()</a>, <a class="el" href="parsers_8cc_source.html#l00094">Tokenizer::Newline()</a>, <a class="el" href="parsers_8h_source.html#l00042">Token::OUTDENT</a>, <a class="el" href="eval__env_8cc_source.html#l00030">EvalString::Parse()</a>, <a class="el" href="graph_8h_source.html#l00079">Rule::ParseCommand()</a>, <a class="el" href="parsers_8cc_source.html#l00367">ParseLet()</a>, <a class="el" href="parsers_8cc_source.html#l00160">Tokenizer::PeekToken()</a>, <a class="el" href="parsers_8cc_source.html#l00117">Tokenizer::ReadIdent()</a>, <a class="el" href="parsers_8h_source.html#l00032">Token::RULE</a>, <a class="el" href="parsers_8h_source.html#l00123">state_</a>, <a class="el" href="parsers_8h_source.html#l00126">tokenizer_</a>, and <a class="el" href="eval__env_8h_source.html#l00047">EvalString::unparsed()</a>.</p>
+<p>References <a class="el" href="ninja__jumble_8cc_source.html#l00135">State::AddRule()</a>, <a class="el" href="graph_8h_source.html#l00083">Rule::command_</a>, <a class="el" href="parsers_8cc_source.html#l00238">Tokenizer::ConsumeToken()</a>, <a class="el" href="graph_8h_source.html#l00085">Rule::depfile_</a>, <a class="el" href="graph_8h_source.html#l00084">Rule::description_</a>, <a class="el" href="parsers_8cc_source.html#l00057">Tokenizer::Error()</a>, <a class="el" href="parsers_8cc_source.html#l00044">SourceLocation::Error()</a>, <a class="el" href="parsers_8cc_source.html#l00061">Tokenizer::ErrorExpected()</a>, <a class="el" href="parsers_8cc_source.html#l00117">Tokenizer::ExpectIdent()</a>, <a class="el" href="parsers_8h_source.html#l00037">Token::INDENT</a>, <a class="el" href="parsers_8h_source.html#l00097">Tokenizer::Location()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00128">State::LookupRule()</a>, <a class="el" href="parsers_8cc_source.html#l00094">Tokenizer::Newline()</a>, <a class="el" href="parsers_8h_source.html#l00038">Token::OUTDENT</a>, <a class="el" href="parsers_8cc_source.html#l00383">ParseLetKey()</a>, <a class="el" href="parsers_8cc_source.html#l00391">ParseLetValue()</a>, <a class="el" href="parsers_8cc_source.html#l00177">Tokenizer::PeekToken()</a>, <a class="el" href="parsers_8cc_source.html#l00127">Tokenizer::ReadIdent()</a>, <a class="el" href="parsers_8h_source.html#l00153">state_</a>, <a class="el" href="parsers_8h_source.html#l00156">tokenizer_</a>, and <a class="el" href="eval__env_8h_source.html#l00047">EvalString::unparsed()</a>.</p>
 
-<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00270">Parse()</a>.</p>
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00279">Parse()</a>.</p>
 
 </div>
 </div>
@@ -300,9 +358,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8h_source.html#l00124">124</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8h_source.html#l00154">154</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
 
-<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00259">ManifestParser()</a>, <a class="el" href="parsers_8cc_source.html#l00270">Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00400">ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00518">ParseFileInclude()</a>, and <a class="el" href="parsers_8cc_source.html#l00367">ParseLet()</a>.</p>
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00268">ManifestParser()</a>, <a class="el" href="parsers_8cc_source.html#l00279">Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00415">ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00533">ParseFileInclude()</a>, and <a class="el" href="parsers_8cc_source.html#l00370">ParseLet()</a>.</p>
 
 </div>
 </div>
@@ -317,9 +375,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8h_source.html#l00125">125</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8h_source.html#l00155">155</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
 
-<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00263">Load()</a>, and <a class="el" href="parsers_8cc_source.html#l00518">ParseFileInclude()</a>.</p>
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00272">Load()</a>, and <a class="el" href="parsers_8cc_source.html#l00533">ParseFileInclude()</a>.</p>
 
 </div>
 </div>
@@ -334,9 +392,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8h_source.html#l00123">123</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8h_source.html#l00153">153</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
 
-<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00400">ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00518">ParseFileInclude()</a>, and <a class="el" href="parsers_8cc_source.html#l00317">ParseRule()</a>.</p>
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00415">ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00533">ParseFileInclude()</a>, and <a class="el" href="parsers_8cc_source.html#l00318">ParseRule()</a>.</p>
 
 </div>
 </div>
@@ -351,9 +409,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="parsers_8h_source.html#l00126">126</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
+<p>Definition at line <a class="el" href="parsers_8h_source.html#l00156">156</a> of file <a class="el" href="parsers_8h_source.html">parsers.h</a>.</p>
 
-<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00270">Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00400">ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00518">ParseFileInclude()</a>, <a class="el" href="parsers_8cc_source.html#l00367">ParseLet()</a>, and <a class="el" href="parsers_8cc_source.html#l00317">ParseRule()</a>.</p>
+<p>Referenced by <a class="el" href="parsers_8cc_source.html#l00279">Parse()</a>, <a class="el" href="parsers_8cc_source.html#l00415">ParseEdge()</a>, <a class="el" href="parsers_8cc_source.html#l00533">ParseFileInclude()</a>, <a class="el" href="parsers_8cc_source.html#l00383">ParseLetKey()</a>, <a class="el" href="parsers_8cc_source.html#l00391">ParseLetValue()</a>, and <a class="el" href="parsers_8cc_source.html#l00318">ParseRule()</a>.</p>
 
 </div>
 </div>
@@ -362,7 +420,7 @@
 <li><a class="el" href="parsers_8cc_source.html">parsers.cc</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:29 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

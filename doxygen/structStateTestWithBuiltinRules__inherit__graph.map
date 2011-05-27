@@ -1,7 +1,8 @@
 <map id="G" name="G">
 <area shape="rect" href="$structBuildLogTest.html" title="BuildLogTest" alt="" coords="5,83,101,112"/>
 <area shape="rect" href="$structBuildTest.html" title="BuildTest" alt="" coords="125,83,200,112"/>
-<area shape="rect" href="$structGraphTest.html" title="GraphTest" alt="" coords="224,83,304,112"/>
-<area shape="rect" href="$structPlanTest.html" title="Fixture for tests involving Plan." alt="" coords="328,83,400,112"/>
-<area shape="rect" href="$structStatTest.html" title="StatTest" alt="" coords="424,83,493,112"/>
+<area shape="rect" href="$structCleanTest.html" title="CleanTest" alt="" coords="224,83,304,112"/>
+<area shape="rect" href="$structGraphTest.html" title="GraphTest" alt="" coords="328,83,408,112"/>
+<area shape="rect" href="$structPlanTest.html" title="Fixture for tests involving Plan." alt="" coords="432,83,504,112"/>
+<area shape="rect" href="$structStatTest.html" title="StatTest" alt="" coords="528,83,597,112"/>
 </map>

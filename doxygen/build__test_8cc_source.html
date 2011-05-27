@@ -236,315 +236,375 @@
 <a name="l00210"></a>00210   <span class="comment">// CommandRunner impl</span>
 <a name="l00211"></a>00211   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structBuildTest.html#ac1d6dce2805d5c18d757bf8ae501c4b1">CanRunMore</a>();
 <a name="l00212"></a>00212   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structBuildTest.html#a0cc789a1cd6605b09a803ca2d55a683e">StartCommand</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge);
-<a name="l00213"></a>00213   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structBuildTest.html#ad18fabe9c6e66a159ba698d3c8a2f086" title="Wait for commands to make progress; return false if there is no progress to be made...">WaitForCommands</a>();
-<a name="l00214"></a>00214   <span class="keyword">virtual</span> <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* <a class="code" href="structBuildTest.html#ae30b6c2adc85466fa36a5786a2a99521">NextFinishedCommand</a>(<span class="keywordtype">bool</span>* success);
-<a name="l00215"></a>00215 
-<a name="l00216"></a><a class="code" href="structBuildTest.html#a591bffbbff3975fb44ce22f16ae4427e">00216</a>   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> <a class="code" href="structBuildTest.html#a591bffbbff3975fb44ce22f16ae4427e">MakeConfig</a>() {
-<a name="l00217"></a>00217     <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> config;
-<a name="l00218"></a>00218     config.<a class="code" href="structBuildConfig.html#ae50beadfa54bab9ea78feb96f56431cf">verbosity</a> = <a class="code" href="structBuildConfig.html#a7a6581026821b221c12ccfc9203b4fffa77a8643bf70b1759e3c27a915cc42b92">BuildConfig::QUIET</a>;
-<a name="l00219"></a>00219     <span class="keywordflow">return</span> config;
-<a name="l00220"></a>00220   }
-<a name="l00221"></a>00221 
-<a name="l00222"></a><a class="code" href="structBuildTest.html#adbf3fa7b00240708b88705af5f0eb5bb">00222</a>   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> <a class="code" href="structBuildTest.html#adbf3fa7b00240708b88705af5f0eb5bb">config_</a>;
-<a name="l00223"></a><a class="code" href="structBuildTest.html#a0fe0069156a94f69e378effdd4f382fe">00223</a>   <a class="code" href="structBuilder.html" title="Builder wraps the build process: starting commands, updating status.">Builder</a> <a class="code" href="structBuildTest.html#a0fe0069156a94f69e378effdd4f382fe">builder_</a>;
-<a name="l00224"></a><a class="code" href="structBuildTest.html#a0155c083f453329f7874f34024415774">00224</a>   <span class="keywordtype">int</span> <a class="code" href="structBuildTest.html#a0155c083f453329f7874f34024415774">now_</a>;
-<a name="l00225"></a>00225 
-<a name="l00226"></a><a class="code" href="structBuildTest.html#a9ea88eb9c32d3eb77b0df06696b2d529">00226</a>   <a class="code" href="structVirtualFileSystem.html" title="An implementation of DiskInterface that uses an in-memory representation of disk...">VirtualFileSystem</a> <a class="code" href="structBuildTest.html#a9ea88eb9c32d3eb77b0df06696b2d529">fs_</a>;
-<a name="l00227"></a>00227 
-<a name="l00228"></a><a class="code" href="structBuildTest.html#a2d5bad0febef5843b7bdba0a538c452c">00228</a>   vector&lt;string&gt; <a class="code" href="structBuildTest.html#a2d5bad0febef5843b7bdba0a538c452c">commands_ran_</a>;
-<a name="l00229"></a><a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">00229</a>   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a>;
-<a name="l00230"></a>00230 };
-<a name="l00231"></a>00231 
-<a name="l00232"></a><a class="code" href="structBuildTest.html#a5c99bd787d394a683cbc696db30b47dd">00232</a> <span class="keywordtype">void</span> <a class="code" href="structBuildTest.html#a5c99bd787d394a683cbc696db30b47dd">BuildTest::Dirty</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path) {
-<a name="l00233"></a>00233   <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* node = <a class="code" href="structStateTestWithBuiltinRules.html#a73a86246aefb2b8aeed71ac6979f37f3">GetNode</a>(path);
-<a name="l00234"></a>00234   node-&gt;<a class="code" href="structNode.html#acaef6422e9a4543ab3100bfc48692633">dirty_</a> = <span class="keyword">true</span>;
-<a name="l00235"></a>00235 
-<a name="l00236"></a>00236   <span class="comment">// If it&#39;s an input file, mark that we&#39;ve already stat()ed it and</span>
-<a name="l00237"></a>00237   <span class="comment">// it&#39;s missing.</span>
-<a name="l00238"></a>00238   <span class="keywordflow">if</span> (!node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>)
-<a name="l00239"></a>00239     node-&gt;<a class="code" href="structNode.html#a7b183cd2969fd95bbd00e4e61460d141">file_</a>-&gt;<a class="code" href="structFileStat.html#abb13d43b8c2907cd41b9e235449739ef">mtime_</a> = 0;
-<a name="l00240"></a>00240 }
-<a name="l00241"></a>00241 
-<a name="l00242"></a><a class="code" href="structBuildTest.html#ac1d6dce2805d5c18d757bf8ae501c4b1">00242</a> <span class="keywordtype">bool</span> <a class="code" href="structBuildTest.html#ac1d6dce2805d5c18d757bf8ae501c4b1">BuildTest::CanRunMore</a>() {
-<a name="l00243"></a>00243   <span class="comment">// Only run one at a time.</span>
-<a name="l00244"></a>00244   <span class="keywordflow">return</span> <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a> == NULL;
-<a name="l00245"></a>00245 }
-<a name="l00246"></a>00246 
-<a name="l00247"></a><a class="code" href="structBuildTest.html#a0cc789a1cd6605b09a803ca2d55a683e">00247</a> <span class="keywordtype">bool</span> <a class="code" href="structBuildTest.html#a0cc789a1cd6605b09a803ca2d55a683e">BuildTest::StartCommand</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge) {
-<a name="l00248"></a>00248   assert(!<a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a>);
-<a name="l00249"></a>00249   <a class="code" href="structBuildTest.html#a2d5bad0febef5843b7bdba0a538c452c">commands_ran_</a>.push_back(edge-&gt;<a class="code" href="structEdge.html#a877d1c3fb799293027584c2f145e21fb">EvaluateCommand</a>());
-<a name="l00250"></a>00250   <span class="keywordflow">if</span> (edge-&gt;<a class="code" href="structEdge.html#a6553b57e59b77a3f8a4bf9b19c25d7f8">rule_</a>-&gt;<a class="code" href="structRule.html#ab78c8a835c42cf88c8344d9134432b67">name_</a> == <span class="stringliteral">&quot;cat&quot;</span> || edge-&gt;<a class="code" href="structEdge.html#a6553b57e59b77a3f8a4bf9b19c25d7f8">rule_</a>-&gt;<a class="code" href="structRule.html#ab78c8a835c42cf88c8344d9134432b67">name_</a> == <span class="stringliteral">&quot;cc&quot;</span>) {
-<a name="l00251"></a>00251     <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator out = edge-&gt;<a class="code" href="structEdge.html#ac4ab5a6898d716f32683b63fafc65bb6">outputs_</a>.begin();
-<a name="l00252"></a>00252          out != edge-&gt;<a class="code" href="structEdge.html#ac4ab5a6898d716f32683b63fafc65bb6">outputs_</a>.end(); ++out) {
-<a name="l00253"></a>00253       (*out)-&gt;file_-&gt;mtime_ = <a class="code" href="structBuildTest.html#a0155c083f453329f7874f34024415774">now_</a>;
-<a name="l00254"></a>00254       (*out)-&gt;dirty_ = <span class="keyword">false</span>;
-<a name="l00255"></a>00255     }
-<a name="l00256"></a>00256     <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a> = edge;
-<a name="l00257"></a>00257     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00258"></a>00258   } <span class="keywordflow">else</span> {
-<a name="l00259"></a>00259     printf(<span class="stringliteral">&quot;unkown command\n&quot;</span>);
+<a name="l00213"></a>00213   <span class="keyword">virtual</span> <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* <a class="code" href="structBuildTest.html#a2a43f20982dc42ed8f2efceeae17e4c4" title="Wait for a command to complete.">WaitForCommand</a>(<span class="keywordtype">bool</span>* success, <span class="keywordtype">string</span>* output);
+<a name="l00214"></a>00214 
+<a name="l00215"></a><a class="code" href="structBuildTest.html#a591bffbbff3975fb44ce22f16ae4427e">00215</a>   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> <a class="code" href="structBuildTest.html#a591bffbbff3975fb44ce22f16ae4427e">MakeConfig</a>() {
+<a name="l00216"></a>00216     <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> config;
+<a name="l00217"></a>00217     config.<a class="code" href="structBuildConfig.html#ae50beadfa54bab9ea78feb96f56431cf">verbosity</a> = <a class="code" href="structBuildConfig.html#a7a6581026821b221c12ccfc9203b4fffa77a8643bf70b1759e3c27a915cc42b92">BuildConfig::QUIET</a>;
+<a name="l00218"></a>00218     <span class="keywordflow">return</span> config;
+<a name="l00219"></a>00219   }
+<a name="l00220"></a>00220 
+<a name="l00221"></a><a class="code" href="structBuildTest.html#adbf3fa7b00240708b88705af5f0eb5bb">00221</a>   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> <a class="code" href="structBuildTest.html#adbf3fa7b00240708b88705af5f0eb5bb">config_</a>;
+<a name="l00222"></a><a class="code" href="structBuildTest.html#a0fe0069156a94f69e378effdd4f382fe">00222</a>   <a class="code" href="structBuilder.html" title="Builder wraps the build process: starting commands, updating status.">Builder</a> <a class="code" href="structBuildTest.html#a0fe0069156a94f69e378effdd4f382fe">builder_</a>;
+<a name="l00223"></a><a class="code" href="structBuildTest.html#a0155c083f453329f7874f34024415774">00223</a>   <span class="keywordtype">int</span> <a class="code" href="structBuildTest.html#a0155c083f453329f7874f34024415774">now_</a>;
+<a name="l00224"></a>00224 
+<a name="l00225"></a><a class="code" href="structBuildTest.html#a9ea88eb9c32d3eb77b0df06696b2d529">00225</a>   <a class="code" href="structVirtualFileSystem.html" title="An implementation of DiskInterface that uses an in-memory representation of disk...">VirtualFileSystem</a> <a class="code" href="structBuildTest.html#a9ea88eb9c32d3eb77b0df06696b2d529">fs_</a>;
+<a name="l00226"></a>00226 
+<a name="l00227"></a><a class="code" href="structBuildTest.html#a2d5bad0febef5843b7bdba0a538c452c">00227</a>   vector&lt;string&gt; <a class="code" href="structBuildTest.html#a2d5bad0febef5843b7bdba0a538c452c">commands_ran_</a>;
+<a name="l00228"></a><a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">00228</a>   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a>;
+<a name="l00229"></a>00229 };
+<a name="l00230"></a>00230 
+<a name="l00231"></a><a class="code" href="structBuildTest.html#a5c99bd787d394a683cbc696db30b47dd">00231</a> <span class="keywordtype">void</span> <a class="code" href="structBuildTest.html#a5c99bd787d394a683cbc696db30b47dd">BuildTest::Dirty</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path) {
+<a name="l00232"></a>00232   <a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* node = <a class="code" href="structStateTestWithBuiltinRules.html#a73a86246aefb2b8aeed71ac6979f37f3">GetNode</a>(path);
+<a name="l00233"></a>00233   node-&gt;<a class="code" href="structNode.html#acaef6422e9a4543ab3100bfc48692633">dirty_</a> = <span class="keyword">true</span>;
+<a name="l00234"></a>00234 
+<a name="l00235"></a>00235   <span class="comment">// If it&#39;s an input file, mark that we&#39;ve already stat()ed it and</span>
+<a name="l00236"></a>00236   <span class="comment">// it&#39;s missing.</span>
+<a name="l00237"></a>00237   <span class="keywordflow">if</span> (!node-&gt;<a class="code" href="structNode.html#accd8ebf1e30b9624dc4566183207c8a9">in_edge_</a>)
+<a name="l00238"></a>00238     node-&gt;<a class="code" href="structNode.html#a7b183cd2969fd95bbd00e4e61460d141">file_</a>-&gt;<a class="code" href="structFileStat.html#abb13d43b8c2907cd41b9e235449739ef">mtime_</a> = 0;
+<a name="l00239"></a>00239 }
+<a name="l00240"></a>00240 
+<a name="l00241"></a><a class="code" href="structBuildTest.html#ac1d6dce2805d5c18d757bf8ae501c4b1">00241</a> <span class="keywordtype">bool</span> <a class="code" href="structBuildTest.html#ac1d6dce2805d5c18d757bf8ae501c4b1">BuildTest::CanRunMore</a>() {
+<a name="l00242"></a>00242   <span class="comment">// Only run one at a time.</span>
+<a name="l00243"></a>00243   <span class="keywordflow">return</span> <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a> == NULL;
+<a name="l00244"></a>00244 }
+<a name="l00245"></a>00245 
+<a name="l00246"></a><a class="code" href="structBuildTest.html#a0cc789a1cd6605b09a803ca2d55a683e">00246</a> <span class="keywordtype">bool</span> <a class="code" href="structBuildTest.html#a0cc789a1cd6605b09a803ca2d55a683e">BuildTest::StartCommand</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge) {
+<a name="l00247"></a>00247   assert(!<a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a>);
+<a name="l00248"></a>00248   <a class="code" href="structBuildTest.html#a2d5bad0febef5843b7bdba0a538c452c">commands_ran_</a>.push_back(edge-&gt;<a class="code" href="structEdge.html#a877d1c3fb799293027584c2f145e21fb">EvaluateCommand</a>());
+<a name="l00249"></a>00249   <span class="keywordflow">if</span> (edge-&gt;<a class="code" href="structEdge.html#a6553b57e59b77a3f8a4bf9b19c25d7f8">rule_</a>-&gt;<a class="code" href="structRule.html#ab78c8a835c42cf88c8344d9134432b67">name_</a> == <span class="stringliteral">&quot;cat&quot;</span> || edge-&gt;<a class="code" href="structEdge.html#a6553b57e59b77a3f8a4bf9b19c25d7f8">rule_</a>-&gt;<a class="code" href="structRule.html#ab78c8a835c42cf88c8344d9134432b67">name_</a> == <span class="stringliteral">&quot;cc&quot;</span>) {
+<a name="l00250"></a>00250     <span class="keywordflow">for</span> (vector&lt;Node*&gt;::iterator out = edge-&gt;<a class="code" href="structEdge.html#ac4ab5a6898d716f32683b63fafc65bb6">outputs_</a>.begin();
+<a name="l00251"></a>00251          out != edge-&gt;<a class="code" href="structEdge.html#ac4ab5a6898d716f32683b63fafc65bb6">outputs_</a>.end(); ++out) {
+<a name="l00252"></a>00252       (*out)-&gt;file_-&gt;mtime_ = <a class="code" href="structBuildTest.html#a0155c083f453329f7874f34024415774">now_</a>;
+<a name="l00253"></a>00253       (*out)-&gt;dirty_ = <span class="keyword">false</span>;
+<a name="l00254"></a>00254     }
+<a name="l00255"></a>00255   } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (edge-&gt;<a class="code" href="structEdge.html#a6553b57e59b77a3f8a4bf9b19c25d7f8">rule_</a>-&gt;<a class="code" href="structRule.html#ab78c8a835c42cf88c8344d9134432b67">name_</a> == <span class="stringliteral">&quot;fail&quot;</span>) {
+<a name="l00256"></a>00256     <span class="comment">// Don&#39;t do anything.</span>
+<a name="l00257"></a>00257   } <span class="keywordflow">else</span> {
+<a name="l00258"></a>00258     printf(<span class="stringliteral">&quot;unknown command\n&quot;</span>);
+<a name="l00259"></a>00259     <span class="keywordflow">return</span> <span class="keyword">false</span>;
 <a name="l00260"></a>00260   }
 <a name="l00261"></a>00261 
-<a name="l00262"></a>00262   <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00263"></a>00263 }
-<a name="l00264"></a>00264 
-<a name="l00265"></a><a class="code" href="structBuildTest.html#ad18fabe9c6e66a159ba698d3c8a2f086">00265</a> <span class="keywordtype">bool</span> <a class="code" href="structBuildTest.html#ad18fabe9c6e66a159ba698d3c8a2f086" title="Wait for commands to make progress; return false if there is no progress to be made...">BuildTest::WaitForCommands</a>() {
-<a name="l00266"></a>00266   assert(<a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a>);
-<a name="l00267"></a>00267   <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00268"></a>00268 }
-<a name="l00269"></a>00269 
-<a name="l00270"></a><a class="code" href="structBuildTest.html#ae30b6c2adc85466fa36a5786a2a99521">00270</a> <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* <a class="code" href="structBuildTest.html#ae30b6c2adc85466fa36a5786a2a99521">BuildTest::NextFinishedCommand</a>(<span class="keywordtype">bool</span>* success) {
-<a name="l00271"></a>00271   <span class="keywordflow">if</span> (<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge = <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a>) {
-<a name="l00272"></a>00272     *success = <span class="keyword">true</span>;
-<a name="l00273"></a>00273     <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a> = NULL;
-<a name="l00274"></a>00274     <span class="keywordflow">return</span> edge;
-<a name="l00275"></a>00275   }
-<a name="l00276"></a>00276   <span class="keywordflow">return</span> NULL;
-<a name="l00277"></a>00277 }
-<a name="l00278"></a>00278 
-<a name="l00279"></a><a class="code" href="build__test_8cc.html#aeb100edada9b6d88d32289cdb07f6fe3">00279</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, NoWork) {
-<a name="l00280"></a>00280   <span class="keywordtype">string</span> err;
-<a name="l00281"></a>00281   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00282"></a>00282   EXPECT_EQ(<span class="stringliteral">&quot;no work to do&quot;</span>, err);
-<a name="l00283"></a>00283   EXPECT_EQ(0, commands_ran_.size());
-<a name="l00284"></a>00284 }
-<a name="l00285"></a>00285 
-<a name="l00286"></a><a class="code" href="build__test_8cc.html#acd1f5902b337d6867f59c773af5525f8">00286</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, OneStep) {
-<a name="l00287"></a>00287   <span class="comment">// Given a dirty target with one ready input,</span>
-<a name="l00288"></a>00288   <span class="comment">// we should rebuild the target.</span>
-<a name="l00289"></a>00289   Dirty(<span class="stringliteral">&quot;cat1&quot;</span>);
-<a name="l00290"></a>00290   <span class="keywordtype">string</span> err;
-<a name="l00291"></a>00291   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;cat1&quot;</span>, &amp;err));
-<a name="l00292"></a>00292   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00293"></a>00293   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00294"></a>00294   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00295"></a>00295 
-<a name="l00296"></a>00296   ASSERT_EQ(1, commands_ran_.size());
-<a name="l00297"></a>00297   EXPECT_EQ(<span class="stringliteral">&quot;cat in1 &gt; cat1&quot;</span>, commands_ran_[0]);
-<a name="l00298"></a>00298 }
-<a name="l00299"></a>00299 
-<a name="l00300"></a><a class="code" href="build__test_8cc.html#a717e3b6b3779ff8155844c91c065c9fc">00300</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, OneStep2) {
-<a name="l00301"></a>00301   <span class="comment">// Given a target with one dirty input,</span>
-<a name="l00302"></a>00302   <span class="comment">// we should rebuild the target.</span>
-<a name="l00303"></a>00303   Dirty(<span class="stringliteral">&quot;cat1&quot;</span>);
-<a name="l00304"></a>00304   <span class="keywordtype">string</span> err;
-<a name="l00305"></a>00305   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;cat1&quot;</span>, &amp;err));
-<a name="l00306"></a>00306   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00307"></a>00307   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00308"></a>00308   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00309"></a>00309 
-<a name="l00310"></a>00310   ASSERT_EQ(1, commands_ran_.size());
-<a name="l00311"></a>00311   EXPECT_EQ(<span class="stringliteral">&quot;cat in1 &gt; cat1&quot;</span>, commands_ran_[0]);
-<a name="l00312"></a>00312 }
-<a name="l00313"></a>00313 
-<a name="l00314"></a><a class="code" href="build__test_8cc.html#ace3ece4b39c0b4f31fc95f04ff8c4a6b">00314</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, TwoStep) {
-<a name="l00315"></a>00315   <span class="keywordtype">string</span> err;
-<a name="l00316"></a>00316   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;cat12&quot;</span>, &amp;err));
-<a name="l00317"></a>00317   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00318"></a>00318   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00319"></a>00319   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00320"></a>00320   ASSERT_EQ(3, commands_ran_.size());
-<a name="l00321"></a>00321   <span class="comment">// Depending on how the pointers work out, we could&#39;ve ran</span>
-<a name="l00322"></a>00322   <span class="comment">// the first two commands in either order.</span>
-<a name="l00323"></a>00323   EXPECT_TRUE((commands_ran_[0] == <span class="stringliteral">&quot;cat in1 &gt; cat1&quot;</span> &amp;&amp;
-<a name="l00324"></a>00324                commands_ran_[1] == <span class="stringliteral">&quot;cat in1 in2 &gt; cat2&quot;</span>) ||
-<a name="l00325"></a>00325               (commands_ran_[1] == <span class="stringliteral">&quot;cat in1 &gt; cat1&quot;</span> &amp;&amp;
-<a name="l00326"></a>00326                commands_ran_[0] == <span class="stringliteral">&quot;cat in1 in2 &gt; cat2&quot;</span>));
-<a name="l00327"></a>00327 
-<a name="l00328"></a>00328   EXPECT_EQ(<span class="stringliteral">&quot;cat cat1 cat2 &gt; cat12&quot;</span>, commands_ran_[2]);
-<a name="l00329"></a>00329 
-<a name="l00330"></a>00330   <span class="comment">// Modifying in2 requires rebuilding one intermediate file</span>
-<a name="l00331"></a>00331   <span class="comment">// and the final file.</span>
-<a name="l00332"></a>00332   GetNode(<span class="stringliteral">&quot;cat2&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
-<a name="l00333"></a>00333   GetNode(<span class="stringliteral">&quot;cat12&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
-<a name="l00334"></a>00334   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;cat12&quot;</span>, &amp;err));
-<a name="l00335"></a>00335   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00336"></a>00336   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00337"></a>00337   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00338"></a>00338   ASSERT_EQ(5, commands_ran_.size());
-<a name="l00339"></a>00339   EXPECT_EQ(<span class="stringliteral">&quot;cat in1 in2 &gt; cat2&quot;</span>, commands_ran_[3]);
-<a name="l00340"></a>00340   EXPECT_EQ(<span class="stringliteral">&quot;cat cat1 cat2 &gt; cat12&quot;</span>, commands_ran_[4]);
-<a name="l00341"></a>00341 }
-<a name="l00342"></a>00342 
-<a name="l00343"></a><a class="code" href="build__test_8cc.html#a05b8ce5b9038e3ac96054690e6289c80">00343</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, Chain) {
-<a name="l00344"></a>00344   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
-<a name="l00345"></a>00345 <span class="stringliteral">&quot;build c2: cat c1\n&quot;</span>
-<a name="l00346"></a>00346 <span class="stringliteral">&quot;build c3: cat c2\n&quot;</span>
-<a name="l00347"></a>00347 <span class="stringliteral">&quot;build c4: cat c3\n&quot;</span>
-<a name="l00348"></a>00348 <span class="stringliteral">&quot;build c5: cat c4\n&quot;</span>));
-<a name="l00349"></a>00349 
-<a name="l00350"></a>00350   fs_.Create(<span class="stringliteral">&quot;c1&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
-<a name="l00351"></a>00351 
-<a name="l00352"></a>00352   <span class="keywordtype">string</span> err;
-<a name="l00353"></a>00353   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;c5&quot;</span>, &amp;err));
-<a name="l00354"></a>00354   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00355"></a>00355   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00356"></a>00356   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00357"></a>00357   ASSERT_EQ(4, commands_ran_.size());
-<a name="l00358"></a>00358 
-<a name="l00359"></a>00359   err.clear();
-<a name="l00360"></a>00360   commands_ran_.clear();
-<a name="l00361"></a>00361   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;c5&quot;</span>, &amp;err));
-<a name="l00362"></a>00362   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00363"></a>00363   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00364"></a>00364   ASSERT_EQ(0, commands_ran_.size());
-<a name="l00365"></a>00365 
-<a name="l00366"></a>00366   GetNode(<span class="stringliteral">&quot;c4&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
-<a name="l00367"></a>00367   GetNode(<span class="stringliteral">&quot;c5&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
-<a name="l00368"></a>00368   err.clear();
-<a name="l00369"></a>00369   commands_ran_.clear();
-<a name="l00370"></a>00370   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;c5&quot;</span>, &amp;err));
-<a name="l00371"></a>00371   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00372"></a>00372   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00373"></a>00373   ASSERT_EQ(2, commands_ran_.size());  <span class="comment">// 3-&gt;4, 4-&gt;5</span>
-<a name="l00374"></a>00374 }
-<a name="l00375"></a>00375 
-<a name="l00376"></a><a class="code" href="build__test_8cc.html#a2bb777934cdb98dc1dac325dd3d17b87">00376</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, MissingInput) {
-<a name="l00377"></a>00377   <span class="comment">// Input is referenced by build file, but no rule for it.</span>
-<a name="l00378"></a>00378   <span class="keywordtype">string</span> err;
-<a name="l00379"></a>00379   Dirty(<span class="stringliteral">&quot;in1&quot;</span>);
-<a name="l00380"></a>00380   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;cat1&quot;</span>, &amp;err));
-<a name="l00381"></a>00381   EXPECT_EQ(<span class="stringliteral">&quot;&#39;in1&#39;, needed by &#39;cat1&#39;, missing and no known rule to make it&quot;</span>,
-<a name="l00382"></a>00382             err);
-<a name="l00383"></a>00383 }
-<a name="l00384"></a>00384 
-<a name="l00385"></a><a class="code" href="build__test_8cc.html#a4bc1ce124ac151045412a17ac316c46e">00385</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, MissingTarget) {
-<a name="l00386"></a>00386   <span class="comment">// Target is not referenced by build file.</span>
-<a name="l00387"></a>00387   <span class="keywordtype">string</span> err;
-<a name="l00388"></a>00388   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;meow&quot;</span>, &amp;err));
-<a name="l00389"></a>00389   EXPECT_EQ(<span class="stringliteral">&quot;unknown target: &#39;meow&#39;&quot;</span>, err);
-<a name="l00390"></a>00390 }
-<a name="l00391"></a>00391 
-<a name="l00392"></a><a class="code" href="build__test_8cc.html#aaadbae9982b7daa69c50bab528e334a6">00392</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, MakeDirs) {
-<a name="l00393"></a>00393   <span class="keywordtype">string</span> err;
-<a name="l00394"></a>00394   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
-<a name="l00395"></a>00395 <span class="stringliteral">&quot;build subdir/dir2/file: cat in1\n&quot;</span>));
-<a name="l00396"></a>00396 
-<a name="l00397"></a>00397   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;subdir/dir2/file&quot;</span>, &amp;err));
-<a name="l00398"></a>00398   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00399"></a>00399   now_ = 0;  <span class="comment">// Make all stat()s return file not found.</span>
-<a name="l00400"></a>00400   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00401"></a>00401   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00402"></a>00402   ASSERT_EQ(2, fs_.directories_made_.size());
-<a name="l00403"></a>00403   EXPECT_EQ(<span class="stringliteral">&quot;subdir&quot;</span>, fs_.directories_made_[0]);
-<a name="l00404"></a>00404   EXPECT_EQ(<span class="stringliteral">&quot;subdir/dir2&quot;</span>, fs_.directories_made_[1]);
-<a name="l00405"></a>00405 }
-<a name="l00406"></a>00406 
-<a name="l00407"></a><a class="code" href="build__test_8cc.html#abe7584bb63eae56272542d797b97b210">00407</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, DepFileMissing) {
-<a name="l00408"></a>00408   <span class="keywordtype">string</span> err;
-<a name="l00409"></a>00409   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
-<a name="l00410"></a>00410 <span class="stringliteral">&quot;rule cc\n  command = cc $in\n  depfile = $out.d\n&quot;</span>
-<a name="l00411"></a>00411 <span class="stringliteral">&quot;build foo.o: cc foo.c\n&quot;</span>));
-<a name="l00412"></a>00412   fs_.Create(<span class="stringliteral">&quot;foo.c&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
-<a name="l00413"></a>00413 
-<a name="l00414"></a>00414   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
-<a name="l00415"></a>00415   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00416"></a>00416   ASSERT_EQ(1, fs_.files_read_.size());
-<a name="l00417"></a>00417   EXPECT_EQ(<span class="stringliteral">&quot;foo.o.d&quot;</span>, fs_.files_read_[0]);
-<a name="l00418"></a>00418 }
-<a name="l00419"></a>00419 
-<a name="l00420"></a><a class="code" href="build__test_8cc.html#abc6af995c7a59b3be29e6dfe99b99d57">00420</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, DepFileOK) {
-<a name="l00421"></a>00421   <span class="keywordtype">string</span> err;
-<a name="l00422"></a>00422   <span class="keywordtype">int</span> orig_edges = state_.edges_.size();
-<a name="l00423"></a>00423   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
-<a name="l00424"></a>00424 <span class="stringliteral">&quot;rule cc\n  command = cc $in\n  depfile = $out.d\n&quot;</span>
-<a name="l00425"></a>00425 <span class="stringliteral">&quot;build foo.o: cc foo.c\n&quot;</span>));
-<a name="l00426"></a>00426   fs_.Create(<span class="stringliteral">&quot;foo.c&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
-<a name="l00427"></a>00427   GetNode(<span class="stringliteral">&quot;bar.h&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;  <span class="comment">// Mark bar.h as missing.</span>
-<a name="l00428"></a>00428   fs_.Create(<span class="stringliteral">&quot;foo.o.d&quot;</span>, now_, <span class="stringliteral">&quot;foo.o: blah.h bar.h\n&quot;</span>);
-<a name="l00429"></a>00429   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
-<a name="l00430"></a>00430   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00431"></a>00431   ASSERT_EQ(1, fs_.files_read_.size());
-<a name="l00432"></a>00432   EXPECT_EQ(<span class="stringliteral">&quot;foo.o.d&quot;</span>, fs_.files_read_[0]);
-<a name="l00433"></a>00433 
-<a name="l00434"></a>00434   <span class="comment">// Expect our edge to now have three inputs: foo.c and two headers.</span>
-<a name="l00435"></a>00435   ASSERT_EQ(orig_edges + 1, state_.edges_.size());
-<a name="l00436"></a>00436   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge = state_.edges_.back();
-<a name="l00437"></a>00437   ASSERT_EQ(3, edge-&gt;inputs_.size());
-<a name="l00438"></a>00438 
-<a name="l00439"></a>00439   <span class="comment">// Expect the command line we generate to only use the original input.</span>
-<a name="l00440"></a>00440   ASSERT_EQ(<span class="stringliteral">&quot;cc foo.c&quot;</span>, edge-&gt;EvaluateCommand());
-<a name="l00441"></a>00441 }
-<a name="l00442"></a>00442 
-<a name="l00443"></a><a class="code" href="build__test_8cc.html#a02c5903988358c30c5a3ec47d3abfde8">00443</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, DepFileParseError) {
-<a name="l00444"></a>00444   <span class="keywordtype">string</span> err;
-<a name="l00445"></a>00445   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
-<a name="l00446"></a>00446 <span class="stringliteral">&quot;rule cc\n  command = cc $in\n  depfile = $out.d\n&quot;</span>
-<a name="l00447"></a>00447 <span class="stringliteral">&quot;build foo.o: cc foo.c\n&quot;</span>));
-<a name="l00448"></a>00448   fs_.Create(<span class="stringliteral">&quot;foo.c&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
-<a name="l00449"></a>00449   fs_.Create(<span class="stringliteral">&quot;foo.o.d&quot;</span>, now_, <span class="stringliteral">&quot;foo.o blah.h bar.h\n&quot;</span>);
-<a name="l00450"></a>00450   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
-<a name="l00451"></a>00451   EXPECT_EQ(<span class="stringliteral">&quot;foo.o.d: line 1, col 7: expected &#39;:&#39;, got &#39;blah.h&#39;&quot;</span>, err);
-<a name="l00452"></a>00452 }
-<a name="l00453"></a>00453 
-<a name="l00454"></a><a class="code" href="build__test_8cc.html#a48c0b8b1c43e57402a1e4bf1f1dd1b79">00454</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, OrderOnlyDeps) {
-<a name="l00455"></a>00455   <span class="keywordtype">string</span> err;
-<a name="l00456"></a>00456   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
-<a name="l00457"></a>00457 <span class="stringliteral">&quot;rule cc\n  command = cc $in\n  depfile = $out.d\n&quot;</span>
-<a name="l00458"></a>00458 <span class="stringliteral">&quot;build foo.o: cc foo.c || otherfile\n&quot;</span>));
-<a name="l00459"></a>00459   fs_.Create(<span class="stringliteral">&quot;foo.c&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
-<a name="l00460"></a>00460   fs_.Create(<span class="stringliteral">&quot;otherfile&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
-<a name="l00461"></a>00461   fs_.Create(<span class="stringliteral">&quot;foo.o.d&quot;</span>, now_, <span class="stringliteral">&quot;foo.o: blah.h bar.h\n&quot;</span>);
-<a name="l00462"></a>00462   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
-<a name="l00463"></a>00463   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00464"></a>00464 
-<a name="l00465"></a>00465   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge = state_.edges_.back();
-<a name="l00466"></a>00466   <span class="comment">// One explicit, two implicit, one order only.</span>
-<a name="l00467"></a>00467   ASSERT_EQ(4, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>.size());
-<a name="l00468"></a>00468   EXPECT_EQ(2, edge-&gt;<a class="code" href="structEdge.html#a4dcd12be59a0653c7beef3c37edcf4ed">implicit_deps_</a>);
-<a name="l00469"></a>00469   EXPECT_EQ(1, edge-&gt;<a class="code" href="structEdge.html#a7adc7b047f6574167758c27d87d9b5f8">order_only_deps_</a>);
-<a name="l00470"></a>00470   <span class="comment">// Verify the inputs are in the order we expect</span>
-<a name="l00471"></a>00471   <span class="comment">// (explicit then implicit then orderonly).</span>
-<a name="l00472"></a>00472   EXPECT_EQ(<span class="stringliteral">&quot;foo.c&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>[0]-&gt;file_-&gt;path_);
-<a name="l00473"></a>00473   EXPECT_EQ(<span class="stringliteral">&quot;blah.h&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>[1]-&gt;file_-&gt;path_);
-<a name="l00474"></a>00474   EXPECT_EQ(<span class="stringliteral">&quot;bar.h&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>[2]-&gt;file_-&gt;path_);
-<a name="l00475"></a>00475   EXPECT_EQ(<span class="stringliteral">&quot;otherfile&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>[3]-&gt;file_-&gt;path_);
-<a name="l00476"></a>00476 
-<a name="l00477"></a>00477   <span class="comment">// Expect the command line we generate to only use the original input.</span>
-<a name="l00478"></a>00478   ASSERT_EQ(<span class="stringliteral">&quot;cc foo.c&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a877d1c3fb799293027584c2f145e21fb">EvaluateCommand</a>());
+<a name="l00262"></a>00262   <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a> = edge;
+<a name="l00263"></a>00263   <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00264"></a>00264 }
+<a name="l00265"></a>00265 
+<a name="l00266"></a><a class="code" href="structBuildTest.html#a2a43f20982dc42ed8f2efceeae17e4c4">00266</a> <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* <a class="code" href="structBuildTest.html#a2a43f20982dc42ed8f2efceeae17e4c4" title="Wait for a command to complete.">BuildTest::WaitForCommand</a>(<span class="keywordtype">bool</span>* success, <span class="keywordtype">string</span>* output) {
+<a name="l00267"></a>00267   <span class="keywordflow">if</span> (<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge = <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a>) {
+<a name="l00268"></a>00268     <span class="keywordflow">if</span> (edge-&gt;rule_-&gt;name_ == <span class="stringliteral">&quot;fail&quot;</span>)
+<a name="l00269"></a>00269       *success = <span class="keyword">false</span>;
+<a name="l00270"></a>00270     <span class="keywordflow">else</span>
+<a name="l00271"></a>00271       *success = <span class="keyword">true</span>;
+<a name="l00272"></a>00272     <a class="code" href="structBuildTest.html#a8c8456d33bc7f05bf04b78deed5ddad4">last_command_</a> = NULL;
+<a name="l00273"></a>00273     <span class="keywordflow">return</span> edge;
+<a name="l00274"></a>00274   }
+<a name="l00275"></a>00275   <span class="keywordflow">return</span> NULL;
+<a name="l00276"></a>00276 }
+<a name="l00277"></a>00277 
+<a name="l00278"></a><a class="code" href="build__test_8cc.html#aeb100edada9b6d88d32289cdb07f6fe3">00278</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, NoWork) {
+<a name="l00279"></a>00279   <span class="keywordtype">string</span> err;
+<a name="l00280"></a>00280   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00281"></a>00281   EXPECT_EQ(<span class="stringliteral">&quot;no work to do&quot;</span>, err);
+<a name="l00282"></a>00282   EXPECT_EQ(0u, commands_ran_.size());
+<a name="l00283"></a>00283 }
+<a name="l00284"></a>00284 
+<a name="l00285"></a><a class="code" href="build__test_8cc.html#acd1f5902b337d6867f59c773af5525f8">00285</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, OneStep) {
+<a name="l00286"></a>00286   <span class="comment">// Given a dirty target with one ready input,</span>
+<a name="l00287"></a>00287   <span class="comment">// we should rebuild the target.</span>
+<a name="l00288"></a>00288   Dirty(<span class="stringliteral">&quot;cat1&quot;</span>);
+<a name="l00289"></a>00289   <span class="keywordtype">string</span> err;
+<a name="l00290"></a>00290   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;cat1&quot;</span>, &amp;err));
+<a name="l00291"></a>00291   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00292"></a>00292   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00293"></a>00293   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00294"></a>00294 
+<a name="l00295"></a>00295   ASSERT_EQ(1u, commands_ran_.size());
+<a name="l00296"></a>00296   EXPECT_EQ(<span class="stringliteral">&quot;cat in1 &gt; cat1&quot;</span>, commands_ran_[0]);
+<a name="l00297"></a>00297 }
+<a name="l00298"></a>00298 
+<a name="l00299"></a><a class="code" href="build__test_8cc.html#a717e3b6b3779ff8155844c91c065c9fc">00299</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, OneStep2) {
+<a name="l00300"></a>00300   <span class="comment">// Given a target with one dirty input,</span>
+<a name="l00301"></a>00301   <span class="comment">// we should rebuild the target.</span>
+<a name="l00302"></a>00302   Dirty(<span class="stringliteral">&quot;cat1&quot;</span>);
+<a name="l00303"></a>00303   <span class="keywordtype">string</span> err;
+<a name="l00304"></a>00304   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;cat1&quot;</span>, &amp;err));
+<a name="l00305"></a>00305   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00306"></a>00306   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00307"></a>00307   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00308"></a>00308 
+<a name="l00309"></a>00309   ASSERT_EQ(1u, commands_ran_.size());
+<a name="l00310"></a>00310   EXPECT_EQ(<span class="stringliteral">&quot;cat in1 &gt; cat1&quot;</span>, commands_ran_[0]);
+<a name="l00311"></a>00311 }
+<a name="l00312"></a>00312 
+<a name="l00313"></a><a class="code" href="build__test_8cc.html#ace3ece4b39c0b4f31fc95f04ff8c4a6b">00313</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, TwoStep) {
+<a name="l00314"></a>00314   <span class="keywordtype">string</span> err;
+<a name="l00315"></a>00315   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;cat12&quot;</span>, &amp;err));
+<a name="l00316"></a>00316   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00317"></a>00317   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00318"></a>00318   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00319"></a>00319   ASSERT_EQ(3u, commands_ran_.size());
+<a name="l00320"></a>00320   <span class="comment">// Depending on how the pointers work out, we could&#39;ve ran</span>
+<a name="l00321"></a>00321   <span class="comment">// the first two commands in either order.</span>
+<a name="l00322"></a>00322   EXPECT_TRUE((commands_ran_[0] == <span class="stringliteral">&quot;cat in1 &gt; cat1&quot;</span> &amp;&amp;
+<a name="l00323"></a>00323                commands_ran_[1] == <span class="stringliteral">&quot;cat in1 in2 &gt; cat2&quot;</span>) ||
+<a name="l00324"></a>00324               (commands_ran_[1] == <span class="stringliteral">&quot;cat in1 &gt; cat1&quot;</span> &amp;&amp;
+<a name="l00325"></a>00325                commands_ran_[0] == <span class="stringliteral">&quot;cat in1 in2 &gt; cat2&quot;</span>));
+<a name="l00326"></a>00326 
+<a name="l00327"></a>00327   EXPECT_EQ(<span class="stringliteral">&quot;cat cat1 cat2 &gt; cat12&quot;</span>, commands_ran_[2]);
+<a name="l00328"></a>00328 
+<a name="l00329"></a>00329   <span class="comment">// Modifying in2 requires rebuilding one intermediate file</span>
+<a name="l00330"></a>00330   <span class="comment">// and the final file.</span>
+<a name="l00331"></a>00331   GetNode(<span class="stringliteral">&quot;cat2&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
+<a name="l00332"></a>00332   GetNode(<span class="stringliteral">&quot;cat12&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
+<a name="l00333"></a>00333   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;cat12&quot;</span>, &amp;err));
+<a name="l00334"></a>00334   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00335"></a>00335   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00336"></a>00336   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00337"></a>00337   ASSERT_EQ(5u, commands_ran_.size());
+<a name="l00338"></a>00338   EXPECT_EQ(<span class="stringliteral">&quot;cat in1 in2 &gt; cat2&quot;</span>, commands_ran_[3]);
+<a name="l00339"></a>00339   EXPECT_EQ(<span class="stringliteral">&quot;cat cat1 cat2 &gt; cat12&quot;</span>, commands_ran_[4]);
+<a name="l00340"></a>00340 }
+<a name="l00341"></a>00341 
+<a name="l00342"></a><a class="code" href="build__test_8cc.html#a05b8ce5b9038e3ac96054690e6289c80">00342</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, Chain) {
+<a name="l00343"></a>00343   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00344"></a>00344 <span class="stringliteral">&quot;build c2: cat c1\n&quot;</span>
+<a name="l00345"></a>00345 <span class="stringliteral">&quot;build c3: cat c2\n&quot;</span>
+<a name="l00346"></a>00346 <span class="stringliteral">&quot;build c4: cat c3\n&quot;</span>
+<a name="l00347"></a>00347 <span class="stringliteral">&quot;build c5: cat c4\n&quot;</span>));
+<a name="l00348"></a>00348 
+<a name="l00349"></a>00349   fs_.Create(<span class="stringliteral">&quot;c1&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00350"></a>00350 
+<a name="l00351"></a>00351   <span class="keywordtype">string</span> err;
+<a name="l00352"></a>00352   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;c5&quot;</span>, &amp;err));
+<a name="l00353"></a>00353   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00354"></a>00354   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00355"></a>00355   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00356"></a>00356   ASSERT_EQ(4u, commands_ran_.size());
+<a name="l00357"></a>00357 
+<a name="l00358"></a>00358   err.clear();
+<a name="l00359"></a>00359   commands_ran_.clear();
+<a name="l00360"></a>00360   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;c5&quot;</span>, &amp;err));
+<a name="l00361"></a>00361   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00362"></a>00362   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00363"></a>00363   ASSERT_EQ(0u, commands_ran_.size());
+<a name="l00364"></a>00364 
+<a name="l00365"></a>00365   GetNode(<span class="stringliteral">&quot;c4&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
+<a name="l00366"></a>00366   GetNode(<span class="stringliteral">&quot;c5&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
+<a name="l00367"></a>00367   err.clear();
+<a name="l00368"></a>00368   commands_ran_.clear();
+<a name="l00369"></a>00369   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;c5&quot;</span>, &amp;err));
+<a name="l00370"></a>00370   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00371"></a>00371   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00372"></a>00372   ASSERT_EQ(2u, commands_ran_.size());  <span class="comment">// 3-&gt;4, 4-&gt;5</span>
+<a name="l00373"></a>00373 }
+<a name="l00374"></a>00374 
+<a name="l00375"></a><a class="code" href="build__test_8cc.html#a2bb777934cdb98dc1dac325dd3d17b87">00375</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, MissingInput) {
+<a name="l00376"></a>00376   <span class="comment">// Input is referenced by build file, but no rule for it.</span>
+<a name="l00377"></a>00377   <span class="keywordtype">string</span> err;
+<a name="l00378"></a>00378   Dirty(<span class="stringliteral">&quot;in1&quot;</span>);
+<a name="l00379"></a>00379   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;cat1&quot;</span>, &amp;err));
+<a name="l00380"></a>00380   EXPECT_EQ(<span class="stringliteral">&quot;&#39;in1&#39;, needed by &#39;cat1&#39;, missing and no known rule to make it&quot;</span>,
+<a name="l00381"></a>00381             err);
+<a name="l00382"></a>00382 }
+<a name="l00383"></a>00383 
+<a name="l00384"></a><a class="code" href="build__test_8cc.html#a4bc1ce124ac151045412a17ac316c46e">00384</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, MissingTarget) {
+<a name="l00385"></a>00385   <span class="comment">// Target is not referenced by build file.</span>
+<a name="l00386"></a>00386   <span class="keywordtype">string</span> err;
+<a name="l00387"></a>00387   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;meow&quot;</span>, &amp;err));
+<a name="l00388"></a>00388   EXPECT_EQ(<span class="stringliteral">&quot;unknown target: &#39;meow&#39;&quot;</span>, err);
+<a name="l00389"></a>00389 }
+<a name="l00390"></a>00390 
+<a name="l00391"></a><a class="code" href="build__test_8cc.html#aaadbae9982b7daa69c50bab528e334a6">00391</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, MakeDirs) {
+<a name="l00392"></a>00392   <span class="keywordtype">string</span> err;
+<a name="l00393"></a>00393   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00394"></a>00394 <span class="stringliteral">&quot;build subdir/dir2/file: cat in1\n&quot;</span>));
+<a name="l00395"></a>00395 
+<a name="l00396"></a>00396   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;subdir/dir2/file&quot;</span>, &amp;err));
+<a name="l00397"></a>00397   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00398"></a>00398   now_ = 0;  <span class="comment">// Make all stat()s return file not found.</span>
+<a name="l00399"></a>00399   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00400"></a>00400   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00401"></a>00401   ASSERT_EQ(2u, fs_.directories_made_.size());
+<a name="l00402"></a>00402   EXPECT_EQ(<span class="stringliteral">&quot;subdir&quot;</span>, fs_.directories_made_[0]);
+<a name="l00403"></a>00403   EXPECT_EQ(<span class="stringliteral">&quot;subdir/dir2&quot;</span>, fs_.directories_made_[1]);
+<a name="l00404"></a>00404 }
+<a name="l00405"></a>00405 
+<a name="l00406"></a><a class="code" href="build__test_8cc.html#abe7584bb63eae56272542d797b97b210">00406</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, DepFileMissing) {
+<a name="l00407"></a>00407   <span class="keywordtype">string</span> err;
+<a name="l00408"></a>00408   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00409"></a>00409 <span class="stringliteral">&quot;rule cc\n  command = cc $in\n  depfile = $out.d\n&quot;</span>
+<a name="l00410"></a>00410 <span class="stringliteral">&quot;build foo.o: cc foo.c\n&quot;</span>));
+<a name="l00411"></a>00411   fs_.Create(<span class="stringliteral">&quot;foo.c&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00412"></a>00412 
+<a name="l00413"></a>00413   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
+<a name="l00414"></a>00414   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00415"></a>00415   ASSERT_EQ(1u, fs_.files_read_.size());
+<a name="l00416"></a>00416   EXPECT_EQ(<span class="stringliteral">&quot;foo.o.d&quot;</span>, fs_.files_read_[0]);
+<a name="l00417"></a>00417 }
+<a name="l00418"></a>00418 
+<a name="l00419"></a><a class="code" href="build__test_8cc.html#abc6af995c7a59b3be29e6dfe99b99d57">00419</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, DepFileOK) {
+<a name="l00420"></a>00420   <span class="keywordtype">string</span> err;
+<a name="l00421"></a>00421   <span class="keywordtype">int</span> orig_edges = state_.edges_.size();
+<a name="l00422"></a>00422   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00423"></a>00423 <span class="stringliteral">&quot;rule cc\n  command = cc $in\n  depfile = $out.d\n&quot;</span>
+<a name="l00424"></a>00424 <span class="stringliteral">&quot;build foo.o: cc foo.c\n&quot;</span>));
+<a name="l00425"></a>00425   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge = state_.edges_.back();
+<a name="l00426"></a>00426 
+<a name="l00427"></a>00427   fs_.Create(<span class="stringliteral">&quot;foo.c&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00428"></a>00428   GetNode(<span class="stringliteral">&quot;bar.h&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;  <span class="comment">// Mark bar.h as missing.</span>
+<a name="l00429"></a>00429   fs_.Create(<span class="stringliteral">&quot;foo.o.d&quot;</span>, now_, <span class="stringliteral">&quot;foo.o: blah.h bar.h\n&quot;</span>);
+<a name="l00430"></a>00430   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
+<a name="l00431"></a>00431   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00432"></a>00432   ASSERT_EQ(1u, fs_.files_read_.size());
+<a name="l00433"></a>00433   EXPECT_EQ(<span class="stringliteral">&quot;foo.o.d&quot;</span>, fs_.files_read_[0]);
+<a name="l00434"></a>00434 
+<a name="l00435"></a>00435   <span class="comment">// Expect three new edges: one generating foo.o, and two more from</span>
+<a name="l00436"></a>00436   <span class="comment">// loading the depfile.</span>
+<a name="l00437"></a>00437   ASSERT_EQ(orig_edges + 3, (<span class="keywordtype">int</span>)state_.edges_.size());
+<a name="l00438"></a>00438   <span class="comment">// Expect our edge to now have three inputs: foo.c and two headers.</span>
+<a name="l00439"></a>00439   ASSERT_EQ(3u, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>.size());
+<a name="l00440"></a>00440 
+<a name="l00441"></a>00441   <span class="comment">// Expect the command line we generate to only use the original input.</span>
+<a name="l00442"></a>00442   ASSERT_EQ(<span class="stringliteral">&quot;cc foo.c&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a877d1c3fb799293027584c2f145e21fb">EvaluateCommand</a>());
+<a name="l00443"></a>00443 }
+<a name="l00444"></a>00444 
+<a name="l00445"></a><a class="code" href="build__test_8cc.html#a02c5903988358c30c5a3ec47d3abfde8">00445</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, DepFileParseError) {
+<a name="l00446"></a>00446   <span class="keywordtype">string</span> err;
+<a name="l00447"></a>00447   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00448"></a>00448 <span class="stringliteral">&quot;rule cc\n  command = cc $in\n  depfile = $out.d\n&quot;</span>
+<a name="l00449"></a>00449 <span class="stringliteral">&quot;build foo.o: cc foo.c\n&quot;</span>));
+<a name="l00450"></a>00450   fs_.Create(<span class="stringliteral">&quot;foo.c&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00451"></a>00451   fs_.Create(<span class="stringliteral">&quot;foo.o.d&quot;</span>, now_, <span class="stringliteral">&quot;foo.o blah.h bar.h\n&quot;</span>);
+<a name="l00452"></a>00452   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
+<a name="l00453"></a>00453   EXPECT_EQ(<span class="stringliteral">&quot;foo.o.d: line 1, col 7: expected &#39;:&#39;, got &#39;blah.h&#39;&quot;</span>, err);
+<a name="l00454"></a>00454 }
+<a name="l00455"></a>00455 
+<a name="l00456"></a><a class="code" href="build__test_8cc.html#a48c0b8b1c43e57402a1e4bf1f1dd1b79">00456</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, OrderOnlyDeps) {
+<a name="l00457"></a>00457   <span class="keywordtype">string</span> err;
+<a name="l00458"></a>00458   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00459"></a>00459 <span class="stringliteral">&quot;rule cc\n  command = cc $in\n  depfile = $out.d\n&quot;</span>
+<a name="l00460"></a>00460 <span class="stringliteral">&quot;build foo.o: cc foo.c || otherfile\n&quot;</span>));
+<a name="l00461"></a>00461   <a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge = state_.edges_.back();
+<a name="l00462"></a>00462 
+<a name="l00463"></a>00463   fs_.Create(<span class="stringliteral">&quot;foo.c&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00464"></a>00464   fs_.Create(<span class="stringliteral">&quot;otherfile&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00465"></a>00465   fs_.Create(<span class="stringliteral">&quot;foo.o.d&quot;</span>, now_, <span class="stringliteral">&quot;foo.o: blah.h bar.h\n&quot;</span>);
+<a name="l00466"></a>00466   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
+<a name="l00467"></a>00467   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00468"></a>00468 
+<a name="l00469"></a>00469   <span class="comment">// One explicit, two implicit, one order only.</span>
+<a name="l00470"></a>00470   ASSERT_EQ(4u, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>.size());
+<a name="l00471"></a>00471   EXPECT_EQ(2, edge-&gt;<a class="code" href="structEdge.html#a4dcd12be59a0653c7beef3c37edcf4ed">implicit_deps_</a>);
+<a name="l00472"></a>00472   EXPECT_EQ(1, edge-&gt;<a class="code" href="structEdge.html#a7adc7b047f6574167758c27d87d9b5f8">order_only_deps_</a>);
+<a name="l00473"></a>00473   <span class="comment">// Verify the inputs are in the order we expect</span>
+<a name="l00474"></a>00474   <span class="comment">// (explicit then implicit then orderonly).</span>
+<a name="l00475"></a>00475   EXPECT_EQ(<span class="stringliteral">&quot;foo.c&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>[0]-&gt;file_-&gt;path_);
+<a name="l00476"></a>00476   EXPECT_EQ(<span class="stringliteral">&quot;blah.h&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>[1]-&gt;file_-&gt;path_);
+<a name="l00477"></a>00477   EXPECT_EQ(<span class="stringliteral">&quot;bar.h&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>[2]-&gt;file_-&gt;path_);
+<a name="l00478"></a>00478   EXPECT_EQ(<span class="stringliteral">&quot;otherfile&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a4fd6b2daa2559765aaf2fed1de96f345">inputs_</a>[3]-&gt;file_-&gt;path_);
 <a name="l00479"></a>00479 
-<a name="l00480"></a>00480   <span class="comment">// explicit dep dirty, expect a rebuild.</span>
-<a name="l00481"></a>00481   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00482"></a>00482   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00483"></a>00483   ASSERT_EQ(1, commands_ran_.size());
-<a name="l00484"></a>00484 
-<a name="l00485"></a>00485   <span class="comment">// implicit dep dirty, expect a rebuild.</span>
-<a name="l00486"></a>00486   commands_ran_.clear();
-<a name="l00487"></a>00487   GetNode(<span class="stringliteral">&quot;blah.h&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
-<a name="l00488"></a>00488   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
-<a name="l00489"></a>00489   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00490"></a>00490   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00491"></a>00491   ASSERT_EQ(1, commands_ran_.size());
-<a name="l00492"></a>00492 
-<a name="l00493"></a>00493   <span class="comment">// order only dep dirty, no rebuild.</span>
-<a name="l00494"></a>00494   commands_ran_.clear();
-<a name="l00495"></a>00495   GetNode(<span class="stringliteral">&quot;otherfile&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
-<a name="l00496"></a>00496   <span class="comment">// We should fail to even add the depenency on foo.o, because</span>
-<a name="l00497"></a>00497   <span class="comment">// there&#39;s nothing to do.</span>
-<a name="l00498"></a>00498   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
-<a name="l00499"></a>00499 }
-<a name="l00500"></a>00500 
-<a name="l00501"></a><a class="code" href="build__test_8cc.html#ac6e6bab4702d4d11bc3dd57025cee96e">00501</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, Phony) {
-<a name="l00502"></a>00502   <span class="keywordtype">string</span> err;
-<a name="l00503"></a>00503   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
-<a name="l00504"></a>00504 <span class="stringliteral">&quot;build out: cat bar.cc\n&quot;</span>
-<a name="l00505"></a>00505 <span class="stringliteral">&quot;build all: phony out\n&quot;</span>));
-<a name="l00506"></a>00506   fs_.Create(<span class="stringliteral">&quot;bar.cc&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
-<a name="l00507"></a>00507 
-<a name="l00508"></a>00508   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;all&quot;</span>, &amp;err));
-<a name="l00509"></a>00509   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00510"></a>00510 
-<a name="l00511"></a>00511   <span class="comment">// Only one command to run, because phony runs no command.</span>
-<a name="l00512"></a>00512   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00480"></a>00480   <span class="comment">// Expect the command line we generate to only use the original input.</span>
+<a name="l00481"></a>00481   ASSERT_EQ(<span class="stringliteral">&quot;cc foo.c&quot;</span>, edge-&gt;<a class="code" href="structEdge.html#a877d1c3fb799293027584c2f145e21fb">EvaluateCommand</a>());
+<a name="l00482"></a>00482 
+<a name="l00483"></a>00483   <span class="comment">// explicit dep dirty, expect a rebuild.</span>
+<a name="l00484"></a>00484   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00485"></a>00485   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00486"></a>00486   ASSERT_EQ(1u, commands_ran_.size());
+<a name="l00487"></a>00487 
+<a name="l00488"></a>00488   <span class="comment">// implicit dep dirty, expect a rebuild.</span>
+<a name="l00489"></a>00489   commands_ran_.clear();
+<a name="l00490"></a>00490   GetNode(<span class="stringliteral">&quot;blah.h&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
+<a name="l00491"></a>00491   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
+<a name="l00492"></a>00492   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00493"></a>00493   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00494"></a>00494   ASSERT_EQ(1u, commands_ran_.size());
+<a name="l00495"></a>00495 
+<a name="l00496"></a>00496   <span class="comment">// order only dep dirty, no rebuild.</span>
+<a name="l00497"></a>00497   commands_ran_.clear();
+<a name="l00498"></a>00498   GetNode(<span class="stringliteral">&quot;otherfile&quot;</span>)-&gt;dirty_ = <span class="keyword">true</span>;
+<a name="l00499"></a>00499   <span class="comment">// We should fail to even add the depenency on foo.o, because</span>
+<a name="l00500"></a>00500   <span class="comment">// there&#39;s nothing to do.</span>
+<a name="l00501"></a>00501   EXPECT_FALSE(builder_.AddTarget(<span class="stringliteral">&quot;foo.o&quot;</span>, &amp;err));
+<a name="l00502"></a>00502   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00503"></a>00503 }
+<a name="l00504"></a>00504 
+<a name="l00505"></a><a class="code" href="build__test_8cc.html#ac6e6bab4702d4d11bc3dd57025cee96e">00505</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, Phony) {
+<a name="l00506"></a>00506   <span class="keywordtype">string</span> err;
+<a name="l00507"></a>00507   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00508"></a>00508 <span class="stringliteral">&quot;build out: cat bar.cc\n&quot;</span>
+<a name="l00509"></a>00509 <span class="stringliteral">&quot;build all: phony out\n&quot;</span>));
+<a name="l00510"></a>00510   fs_.Create(<span class="stringliteral">&quot;bar.cc&quot;</span>, now_, <span class="stringliteral">&quot;&quot;</span>);
+<a name="l00511"></a>00511 
+<a name="l00512"></a>00512   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;all&quot;</span>, &amp;err));
 <a name="l00513"></a>00513   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00514"></a>00514   ASSERT_EQ(1, commands_ran_.size());
-<a name="l00515"></a>00515 
+<a name="l00514"></a>00514 
+<a name="l00515"></a>00515   <span class="comment">// Only one command to run, because phony runs no command.</span>
 <a name="l00516"></a>00516   EXPECT_TRUE(builder_.Build(&amp;err));
-<a name="l00517"></a>00517   ASSERT_NE(<span class="stringliteral">&quot;&quot;</span>, err);
-<a name="l00518"></a>00518 }
+<a name="l00517"></a>00517   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00518"></a>00518   ASSERT_EQ(1u, commands_ran_.size());
 <a name="l00519"></a>00519 
+<a name="l00520"></a>00520   EXPECT_TRUE(builder_.Build(&amp;err));
+<a name="l00521"></a>00521   ASSERT_NE(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00522"></a>00522 }
+<a name="l00523"></a>00523 
+<a name="l00524"></a><a class="code" href="build__test_8cc.html#a171d30ba1a29a2a87b69b4137cd7453b">00524</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, Fail) {
+<a name="l00525"></a>00525   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00526"></a>00526 <span class="stringliteral">&quot;rule fail\n&quot;</span>
+<a name="l00527"></a>00527 <span class="stringliteral">&quot;  command = fail\n&quot;</span>
+<a name="l00528"></a>00528 <span class="stringliteral">&quot;build out1: fail\n&quot;</span>));
+<a name="l00529"></a>00529 
+<a name="l00530"></a>00530   <span class="keywordtype">string</span> err;
+<a name="l00531"></a>00531   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;out1&quot;</span>, &amp;err));
+<a name="l00532"></a>00532   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00533"></a>00533 
+<a name="l00534"></a>00534   EXPECT_FALSE(builder_.Build(&amp;err));
+<a name="l00535"></a>00535   ASSERT_EQ(1u, commands_ran_.size());
+<a name="l00536"></a>00536   ASSERT_EQ(<span class="stringliteral">&quot;subcommand failed&quot;</span>, err);
+<a name="l00537"></a>00537 }
+<a name="l00538"></a>00538 
+<a name="l00539"></a><a class="code" href="build__test_8cc.html#a1f958058d537a879393548df4fbfde8a">00539</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, SwallowFailures) {
+<a name="l00540"></a>00540   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00541"></a>00541 <span class="stringliteral">&quot;rule fail\n&quot;</span>
+<a name="l00542"></a>00542 <span class="stringliteral">&quot;  command = fail\n&quot;</span>
+<a name="l00543"></a>00543 <span class="stringliteral">&quot;build out1: fail\n&quot;</span>
+<a name="l00544"></a>00544 <span class="stringliteral">&quot;build out2: fail\n&quot;</span>
+<a name="l00545"></a>00545 <span class="stringliteral">&quot;build out3: fail\n&quot;</span>
+<a name="l00546"></a>00546 <span class="stringliteral">&quot;build all: phony out1 out2 out3\n&quot;</span>));
+<a name="l00547"></a>00547 
+<a name="l00548"></a>00548   <span class="comment">// Swallow two failures, die on the third.</span>
+<a name="l00549"></a>00549   config_.swallow_failures = 2;
+<a name="l00550"></a>00550 
+<a name="l00551"></a>00551   <span class="keywordtype">string</span> err;
+<a name="l00552"></a>00552   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;all&quot;</span>, &amp;err));
+<a name="l00553"></a>00553   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00554"></a>00554 
+<a name="l00555"></a>00555   EXPECT_FALSE(builder_.Build(&amp;err));
+<a name="l00556"></a>00556   ASSERT_EQ(3u, commands_ran_.size());
+<a name="l00557"></a>00557   ASSERT_EQ(<span class="stringliteral">&quot;subcommands failed&quot;</span>, err);
+<a name="l00558"></a>00558 }
+<a name="l00559"></a>00559 
+<a name="l00560"></a><a class="code" href="build__test_8cc.html#a43d85064a23e9f9ac4de0507dfb3a774">00560</a> <a class="code" href="build__log__test_8cc.html#ae03a9172fa1162c08264256ff54fe8cf">TEST_F</a>(<a class="code" href="structBuildTest.html">BuildTest</a>, SwallowFailuresLimit) {
+<a name="l00561"></a>00561   ASSERT_NO_FATAL_FAILURE(<a class="code" href="test_8cc.html#afb20bae83c4de264129c46c005ad3907">AssertParse</a>(&amp;state_,
+<a name="l00562"></a>00562 <span class="stringliteral">&quot;rule fail\n&quot;</span>
+<a name="l00563"></a>00563 <span class="stringliteral">&quot;  command = fail\n&quot;</span>
+<a name="l00564"></a>00564 <span class="stringliteral">&quot;build out1: fail\n&quot;</span>
+<a name="l00565"></a>00565 <span class="stringliteral">&quot;build out2: fail\n&quot;</span>
+<a name="l00566"></a>00566 <span class="stringliteral">&quot;build out3: fail\n&quot;</span>
+<a name="l00567"></a>00567 <span class="stringliteral">&quot;build final: cat out1 out2 out3\n&quot;</span>));
+<a name="l00568"></a>00568 
+<a name="l00569"></a>00569   <span class="comment">// Swallow ten failures; we should stop before building final.</span>
+<a name="l00570"></a>00570   config_.swallow_failures = 10;
+<a name="l00571"></a>00571 
+<a name="l00572"></a>00572   <span class="keywordtype">string</span> err;
+<a name="l00573"></a>00573   EXPECT_TRUE(builder_.AddTarget(<span class="stringliteral">&quot;final&quot;</span>, &amp;err));
+<a name="l00574"></a>00574   ASSERT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00575"></a>00575 
+<a name="l00576"></a>00576   EXPECT_FALSE(builder_.Build(&amp;err));
+<a name="l00577"></a>00577   ASSERT_EQ(3u, commands_ran_.size());
+<a name="l00578"></a>00578   ASSERT_EQ(<span class="stringliteral">&quot;cannot make progress due to previous errors&quot;</span>, err);
+<a name="l00579"></a>00579 }
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

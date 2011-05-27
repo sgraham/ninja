@@ -39,26 +39,26 @@ Include dependency graph for subprocess_test.cc:</div>
 <p><a href="subprocess__test_8cc_source.html">Go to the source code of this file.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="subprocess__test_8cc.html#ab533e57916af33f56bf81ccd0f868e65">TEST</a> (<a class="el" href="structSubprocessSet.html">SubprocessSet</a>, Multi)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="subprocess__test_8cc.html#a6c1f139ed2efa1bf2b1547bb10b1978a">TEST</a> (<a class="el" href="structSubprocessSet.html">SubprocessSet</a>, Single)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="subprocess__test_8cc.html#a940be2c541c0f271190e3e319a78354e">TEST</a> (<a class="el" href="structSubprocess.html">Subprocess</a>, BadCommand)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="subprocess__test_8cc.html#a827c1b8fa3b7885170b3efd6118eb0f6">TEST</a> (<a class="el" href="structSubprocess.html">Subprocess</a>, Ls)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="subprocess__test_8cc.html#a21f43215ecf6c654a031a94126341d95">TEST_F</a> (SubprocessTest, SetWithMulti)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="subprocess__test_8cc.html#ac98552282f3b231a41e3fa3edd665620">TEST_F</a> (SubprocessTest, SetWithSingle)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="subprocess__test_8cc.html#a775f99b7e07e1594fca350359ab00a1b">TEST_F</a> (SubprocessTest, BadCommandStderr)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="subprocess__test_8cc.html#a8d37f9c7b6b190135bcbd15f89d8f310">TEST_F</a> (SubprocessTest, GoodCommandStdout)</td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="ab533e57916af33f56bf81ccd0f868e65"></a><!-- doxytag: member="subprocess_test.cc::TEST" ref="ab533e57916af33f56bf81ccd0f868e65" args="(SubprocessSet, Multi)" -->
+<a class="anchor" id="a21f43215ecf6c654a031a94126341d95"></a><!-- doxytag: member="subprocess_test.cc::TEST_F" ref="a21f43215ecf6c654a031a94126341d95" args="(SubprocessTest, SetWithMulti)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TEST </td>
+          <td class="memname">TEST_F </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structSubprocessSet.html">SubprocessSet</a>&nbsp;</td>
+          <td class="paramtype">SubprocessTest&nbsp;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Multi&nbsp;</td>
+          <td class="paramtype">SetWithMulti&nbsp;</td>
           <td class="paramname"></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -70,26 +70,24 @@ Include dependency graph for subprocess_test.cc:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="subprocess__test_8cc_source.html#l00058">58</a> of file <a class="el" href="subprocess__test_8cc_source.html">subprocess_test.cc</a>.</p>
-
-<p>References <a class="el" href="subprocess_8cc_source.html#l00127">SubprocessSet::Add()</a>, <a class="el" href="subprocess_8cc_source.html#l00131">SubprocessSet::DoWork()</a>, <a class="el" href="subprocess_8h_source.html#l00058">SubprocessSet::finished_</a>, and <a class="el" href="subprocess_8h_source.html#l00057">SubprocessSet::running_</a>.</p>
+<p>Definition at line <a class="el" href="subprocess__test_8cc_source.html#l00075">75</a> of file <a class="el" href="subprocess__test_8cc_source.html">subprocess_test.cc</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a6c1f139ed2efa1bf2b1547bb10b1978a"></a><!-- doxytag: member="subprocess_test.cc::TEST" ref="a6c1f139ed2efa1bf2b1547bb10b1978a" args="(SubprocessSet, Single)" -->
+<a class="anchor" id="ac98552282f3b231a41e3fa3edd665620"></a><!-- doxytag: member="subprocess_test.cc::TEST_F" ref="ac98552282f3b231a41e3fa3edd665620" args="(SubprocessTest, SetWithSingle)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TEST </td>
+          <td class="memname">TEST_F </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structSubprocessSet.html">SubprocessSet</a>&nbsp;</td>
+          <td class="paramtype">SubprocessTest&nbsp;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Single&nbsp;</td>
+          <td class="paramtype">SetWithSingle&nbsp;</td>
           <td class="paramname"></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -101,26 +99,26 @@ Include dependency graph for subprocess_test.cc:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="subprocess__test_8cc_source.html#l00043">43</a> of file <a class="el" href="subprocess__test_8cc_source.html">subprocess_test.cc</a>.</p>
+<p>Definition at line <a class="el" href="subprocess__test_8cc_source.html#l00061">61</a> of file <a class="el" href="subprocess__test_8cc_source.html">subprocess_test.cc</a>.</p>
 
-<p>References <a class="el" href="subprocess_8cc_source.html#l00127">SubprocessSet::Add()</a>, <a class="el" href="subprocess_8h_source.html#l00035">Subprocess::done()</a>, <a class="el" href="subprocess_8cc_source.html#l00131">SubprocessSet::DoWork()</a>, <a class="el" href="subprocess_8cc_source.html#l00112">Subprocess::Finish()</a>, <a class="el" href="subprocess_8h_source.html#l00058">SubprocessSet::finished_</a>, <a class="el" href="subprocess_8cc_source.html#l00043">Subprocess::Start()</a>, and <a class="el" href="subprocess_8h_source.html#l00045">Subprocess::stdout_</a>.</p>
+<p>References <a class="el" href="subprocess-win32_8cc_source.html#l00161">Subprocess::Done()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00148">Subprocess::Finish()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00165">Subprocess::GetOutput()</a>, and <a class="el" href="subprocess-win32_8cc_source.html#l00091">Subprocess::Start()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a940be2c541c0f271190e3e319a78354e"></a><!-- doxytag: member="subprocess_test.cc::TEST" ref="a940be2c541c0f271190e3e319a78354e" args="(Subprocess, BadCommand)" -->
+<a class="anchor" id="a775f99b7e07e1594fca350359ab00a1b"></a><!-- doxytag: member="subprocess_test.cc::TEST_F" ref="a775f99b7e07e1594fca350359ab00a1b" args="(SubprocessTest, BadCommandStderr)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TEST </td>
+          <td class="memname">TEST_F </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structSubprocess.html">Subprocess</a>&nbsp;</td>
+          <td class="paramtype">SubprocessTest&nbsp;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">BadCommand&nbsp;</td>
+          <td class="paramtype">BadCommandStderr&nbsp;</td>
           <td class="paramname"></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -132,26 +130,26 @@ Include dependency graph for subprocess_test.cc:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="subprocess__test_8cc_source.html#l00031">31</a> of file <a class="el" href="subprocess__test_8cc_source.html">subprocess_test.cc</a>.</p>
+<p>Definition at line <a class="el" href="subprocess__test_8cc_source.html#l00048">48</a> of file <a class="el" href="subprocess__test_8cc_source.html">subprocess_test.cc</a>.</p>
 
-<p>References <a class="el" href="subprocess_8cc_source.html#l00112">Subprocess::Finish()</a>, <a class="el" href="subprocess_8cc_source.html#l00098">Subprocess::OnFDReady()</a>, <a class="el" href="subprocess_8cc_source.html#l00043">Subprocess::Start()</a>, <a class="el" href="subprocess_8h_source.html#l00045">Subprocess::stderr_</a>, and <a class="el" href="subprocess_8h_source.html#l00045">Subprocess::stdout_</a>.</p>
+<p>References <a class="el" href="subprocess-win32_8cc_source.html#l00161">Subprocess::Done()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00148">Subprocess::Finish()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00165">Subprocess::GetOutput()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00123">Subprocess::OnPipeReady()</a>, and <a class="el" href="subprocess-win32_8cc_source.html#l00091">Subprocess::Start()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a827c1b8fa3b7885170b3efd6118eb0f6"></a><!-- doxytag: member="subprocess_test.cc::TEST" ref="a827c1b8fa3b7885170b3efd6118eb0f6" args="(Subprocess, Ls)" -->
+<a class="anchor" id="a8d37f9c7b6b190135bcbd15f89d8f310"></a><!-- doxytag: member="subprocess_test.cc::TEST_F" ref="a8d37f9c7b6b190135bcbd15f89d8f310" args="(SubprocessTest, GoodCommandStdout)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TEST </td>
+          <td class="memname">TEST_F </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structSubprocess.html">Subprocess</a>&nbsp;</td>
+          <td class="paramtype">SubprocessTest&nbsp;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Ls&nbsp;</td>
+          <td class="paramtype">GoodCommandStdout&nbsp;</td>
           <td class="paramname"></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -163,14 +161,14 @@ Include dependency graph for subprocess_test.cc:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="subprocess__test_8cc_source.html#l00019">19</a> of file <a class="el" href="subprocess__test_8cc_source.html">subprocess_test.cc</a>.</p>
+<p>Definition at line <a class="el" href="subprocess__test_8cc_source.html#l00034">34</a> of file <a class="el" href="subprocess__test_8cc_source.html">subprocess_test.cc</a>.</p>
 
-<p>References <a class="el" href="subprocess_8cc_source.html#l00112">Subprocess::Finish()</a>, <a class="el" href="subprocess_8cc_source.html#l00098">Subprocess::OnFDReady()</a>, <a class="el" href="subprocess_8cc_source.html#l00043">Subprocess::Start()</a>, <a class="el" href="subprocess_8h_source.html#l00045">Subprocess::stderr_</a>, and <a class="el" href="subprocess_8h_source.html#l00045">Subprocess::stdout_</a>.</p>
+<p>References <a class="el" href="subprocess-win32_8cc_source.html#l00161">Subprocess::Done()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00148">Subprocess::Finish()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00165">Subprocess::GetOutput()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00123">Subprocess::OnPipeReady()</a>, and <a class="el" href="subprocess-win32_8cc_source.html#l00091">Subprocess::Start()</a>.</p>
 
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:28 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

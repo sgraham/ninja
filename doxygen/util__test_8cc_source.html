@@ -79,8 +79,16 @@
 <a name="l00053"></a>00053   EXPECT_EQ(<span class="stringliteral">&quot;can&#39;t canonicalize path &#39;./x/../foo/../../bar.h&#39; that reaches &quot;</span>
 <a name="l00054"></a>00054             <span class="stringliteral">&quot;above its directory&quot;</span>, err);
 <a name="l00055"></a>00055 }
+<a name="l00056"></a>00056 
+<a name="l00057"></a><a class="code" href="util__test_8cc.html#a1e8360315e371fcc8ca080cbc43895a1">00057</a> <a class="code" href="ninja__test_8cc.html#a4f9a447c1054028cbe99d8f6227bb834">TEST</a>(<a class="code" href="util_8cc.html#abdb5937692c9c5a0fbe6cbbab7941414" title="Canonicalize a path like &amp;quot;foo/../bar.h&amp;quot; into just &amp;quot;bar.h&amp;quot;.">CanonicalizePath</a>, AbsolutePath) {
+<a name="l00058"></a>00058   <span class="keywordtype">string</span> path = <span class="stringliteral">&quot;/usr/include/stdio.h&quot;</span>;
+<a name="l00059"></a>00059   <span class="keywordtype">string</span> err = <span class="stringliteral">&quot;&quot;</span>;
+<a name="l00060"></a>00060   EXPECT_TRUE(<a class="code" href="util_8cc.html#abdb5937692c9c5a0fbe6cbbab7941414" title="Canonicalize a path like &amp;quot;foo/../bar.h&amp;quot; into just &amp;quot;bar.h&amp;quot;.">CanonicalizePath</a>(&amp;path, &amp;err));
+<a name="l00061"></a>00061   EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, err);
+<a name="l00062"></a>00062   EXPECT_EQ(<span class="stringliteral">&quot;/usr/include/stdio.h&quot;</span>, path);
+<a name="l00063"></a>00063 }
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

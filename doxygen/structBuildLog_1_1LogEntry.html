@@ -39,8 +39,9 @@
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBuildLog_1_1LogEntry.html#afe5b06b8135336c86d91f56c8423f74b">operator==</a> (const <a class="el" href="structBuildLog_1_1LogEntry.html">LogEntry</a> &amp;o)</td></tr>
 <tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBuildLog_1_1LogEntry.html#a0cc61e0f05a2dab553b221e54356e349">command</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBuildLog_1_1LogEntry.html#a8c9d71c8162925f8fe519543d3fb1416">end_time</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBuildLog_1_1LogEntry.html#ab83065a7478526bcb4c5b2544b5f078a">output</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBuildLog_1_1LogEntry.html#a2a51e70eb242968febe228da214a45d0">time_ms</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBuildLog_1_1LogEntry.html#a2ba1f4c7b480857f4b54be8ff28db9fc">start_time</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 
@@ -62,9 +63,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="build__log_8h_source.html#l00048">48</a> of file <a class="el" href="build__log_8h_source.html">build_log.h</a>.</p>
+<p>Definition at line <a class="el" href="build__log_8h_source.html#l00051">51</a> of file <a class="el" href="build__log_8h_source.html">build_log.h</a>.</p>
 
-<p>References <a class="el" href="build__log_8h_source.html#l00046">command</a>, <a class="el" href="build__log_8h_source.html#l00045">output</a>, and <a class="el" href="build__log_8h_source.html#l00047">time_ms</a>.</p>
+<p>References <a class="el" href="build__log_8h_source.html#l00046">command</a>, <a class="el" href="build__log_8h_source.html#l00048">end_time</a>, <a class="el" href="build__log_8h_source.html#l00045">output</a>, and <a class="el" href="build__log_8h_source.html#l00047">start_time</a>.</p>
 
 </div>
 </div>
@@ -82,7 +83,24 @@
 
 <p>Definition at line <a class="el" href="build__log_8h_source.html#l00046">46</a> of file <a class="el" href="build__log_8h_source.html">build_log.h</a>.</p>
 
-<p>Referenced by <a class="el" href="build__log_8cc_source.html#l00084">BuildLog::Load()</a>, <a class="el" href="build__log_8h_source.html#l00048">operator==()</a>, <a class="el" href="graph_8cc_source.html#l00029">Edge::RecomputeDirty()</a>, <a class="el" href="build__log_8cc_source.html#l00054">BuildLog::RecordCommand()</a>, <a class="el" href="build__log__test_8cc_source.html#l00057">TEST_F()</a>, and <a class="el" href="build__log_8cc_source.html#l00146">BuildLog::WriteEntry()</a>.</p>
+<p>Referenced by <a class="el" href="build__log_8cc_source.html#l00100">BuildLog::Load()</a>, <a class="el" href="build__log_8h_source.html#l00051">operator==()</a>, <a class="el" href="graph_8cc_source.html#l00029">Edge::RecomputeDirty()</a>, <a class="el" href="build__log_8cc_source.html#l00069">BuildLog::RecordCommand()</a>, <a class="el" href="build__log__test_8cc_source.html#l00057">TEST_F()</a>, and <a class="el" href="build__log_8cc_source.html#l00197">BuildLog::WriteEntry()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8c9d71c8162925f8fe519543d3fb1416"></a><!-- doxytag: member="BuildLog::LogEntry::end_time" ref="a8c9d71c8162925f8fe519543d3fb1416" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="structBuildLog_1_1LogEntry.html#a8c9d71c8162925f8fe519543d3fb1416">BuildLog::LogEntry::end_time</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="build__log_8h_source.html#l00048">48</a> of file <a class="el" href="build__log_8h_source.html">build_log.h</a>.</p>
+
+<p>Referenced by <a class="el" href="build__log_8cc_source.html#l00100">BuildLog::Load()</a>, <a class="el" href="build__log_8h_source.html#l00051">operator==()</a>, <a class="el" href="build__log_8cc_source.html#l00069">BuildLog::RecordCommand()</a>, and <a class="el" href="build__log_8cc_source.html#l00197">BuildLog::WriteEntry()</a>.</p>
 
 </div>
 </div>
@@ -99,16 +117,16 @@
 
 <p>Definition at line <a class="el" href="build__log_8h_source.html#l00045">45</a> of file <a class="el" href="build__log_8h_source.html">build_log.h</a>.</p>
 
-<p>Referenced by <a class="el" href="build__log_8cc_source.html#l00084">BuildLog::Load()</a>, <a class="el" href="build__log_8h_source.html#l00048">operator==()</a>, <a class="el" href="build__log_8cc_source.html#l00054">BuildLog::RecordCommand()</a>, and <a class="el" href="build__log_8cc_source.html#l00146">BuildLog::WriteEntry()</a>.</p>
+<p>Referenced by <a class="el" href="build__log_8cc_source.html#l00100">BuildLog::Load()</a>, <a class="el" href="build__log_8h_source.html#l00051">operator==()</a>, <a class="el" href="build__log_8cc_source.html#l00069">BuildLog::RecordCommand()</a>, and <a class="el" href="build__log_8cc_source.html#l00197">BuildLog::WriteEntry()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2a51e70eb242968febe228da214a45d0"></a><!-- doxytag: member="BuildLog::LogEntry::time_ms" ref="a2a51e70eb242968febe228da214a45d0" args="" -->
+<a class="anchor" id="a2ba1f4c7b480857f4b54be8ff28db9fc"></a><!-- doxytag: member="BuildLog::LogEntry::start_time" ref="a2ba1f4c7b480857f4b54be8ff28db9fc" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int <a class="el" href="structBuildLog_1_1LogEntry.html#a2a51e70eb242968febe228da214a45d0">BuildLog::LogEntry::time_ms</a></td>
+          <td class="memname">int <a class="el" href="structBuildLog_1_1LogEntry.html#a2ba1f4c7b480857f4b54be8ff28db9fc">BuildLog::LogEntry::start_time</a></td>
         </tr>
       </table>
 </div>
@@ -116,7 +134,7 @@
 
 <p>Definition at line <a class="el" href="build__log_8h_source.html#l00047">47</a> of file <a class="el" href="build__log_8h_source.html">build_log.h</a>.</p>
 
-<p>Referenced by <a class="el" href="build__log_8cc_source.html#l00084">BuildLog::Load()</a>, <a class="el" href="build__log_8h_source.html#l00048">operator==()</a>, <a class="el" href="build__log_8cc_source.html#l00054">BuildLog::RecordCommand()</a>, and <a class="el" href="build__log_8cc_source.html#l00146">BuildLog::WriteEntry()</a>.</p>
+<p>Referenced by <a class="el" href="build__log_8cc_source.html#l00100">BuildLog::Load()</a>, <a class="el" href="build__log_8h_source.html#l00051">operator==()</a>, <a class="el" href="build__log_8cc_source.html#l00069">BuildLog::RecordCommand()</a>, and <a class="el" href="build__log_8cc_source.html#l00197">BuildLog::WriteEntry()</a>.</p>
 
 </div>
 </div>
@@ -124,7 +142,7 @@
 <li><a class="el" href="build__log_8h_source.html">build_log.h</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:28 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

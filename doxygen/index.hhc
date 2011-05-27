@@ -15,6 +15,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="BuildStatus"><param name="Local" value="structBuildStatus.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="BuildTest"><param name="Local" value="structBuildTest.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Cleaner"><param name="Local" value="classCleaner.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="CleanTest"><param name="Local" value="structCleanTest.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="CommandRunner"><param name="Local" value="structCommandRunner.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="DiskInterface"><param name="Local" value="structDiskInterface.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="DiskInterfaceTest"><param name="Local" value="classDiskInterfaceTest.html"><param name="ImageNumber" value="11"></OBJECT>
@@ -39,13 +40,12 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="PlanTest"><param name="Local" value="structPlanTest.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="RealCommandRunner"><param name="Local" value="structRealCommandRunner.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="RealDiskInterface"><param name="Local" value="structRealDiskInterface.html"><param name="ImageNumber" value="11"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Name" value="RealFileReader"><param name="Local" value="structRealFileReader.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Rule"><param name="Local" value="structRule.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="SourceLocation"><param name="Local" value="structSourceLocation.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="StatCache"><param name="Local" value="structStatCache.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="State"><param name="Local" value="structState.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="StateTestWithBuiltinRules"><param name="Local" value="structStateTestWithBuiltinRules.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="StatTest"><param name="Local" value="structStatTest.html"><param name="ImageNumber" value="11"></OBJECT>
-  <LI><OBJECT type="text/sitemap"><param name="Name" value="Subprocess::Stream"><param name="Local" value="structSubprocess_1_1Stream.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Subprocess"><param name="Local" value="structSubprocess.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="SubprocessSet"><param name="Local" value="structSubprocessSet.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="TestEnv"><param name="Local" value="structTestEnv.html"><param name="ImageNumber" value="11"></OBJECT>
@@ -85,7 +85,6 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="ManifestParser::FileReader"><param name="Local" value="structManifestParser_1_1FileReader.html"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="ParserTest"><param name="Local" value="structParserTest.html"><param name="ImageNumber" value="11"></OBJECT>
-    <LI><OBJECT type="text/sitemap"><param name="Name" value="RealFileReader"><param name="Local" value="structRealFileReader.html"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="FileStat"><param name="Local" value="structFileStat.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="GETOPT_LONG_OPTION_T"><param name="Local" value="structGETOPT__LONG__OPTION__T.html"><param name="ImageNumber" value="11"></OBJECT>
@@ -97,17 +96,18 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Node"><param name="Local" value="structNode.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Plan"><param name="Local" value="structPlan.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Rule"><param name="Local" value="structRule.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="SourceLocation"><param name="Local" value="structSourceLocation.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="StatCache"><param name="Local" value="structStatCache.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="State"><param name="Local" value="structState.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="StateTestWithBuiltinRules"><param name="Local" value="structStateTestWithBuiltinRules.html"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="BuildLogTest"><param name="Local" value="structBuildLogTest.html"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="BuildTest"><param name="Local" value="structBuildTest.html"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="CleanTest"><param name="Local" value="structCleanTest.html"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="GraphTest"><param name="Local" value="structGraphTest.html"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="PlanTest"><param name="Local" value="structPlanTest.html"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="StatTest"><param name="Local" value="structStatTest.html"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
-  <LI><OBJECT type="text/sitemap"><param name="Name" value="Subprocess::Stream"><param name="Local" value="structSubprocess_1_1Stream.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Subprocess"><param name="Local" value="structSubprocess.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="SubprocessSet"><param name="Local" value="structSubprocessSet.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="Token"><param name="Local" value="structToken.html"><param name="ImageNumber" value="11"></OBJECT>
@@ -132,6 +132,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="build_test.cc"><param name="Local" value="build__test_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="clean.cc"><param name="Local" value="clean_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="clean.h"><param name="Local" value="clean_8h.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="clean_test.cc"><param name="Local" value="clean__test_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="eval_env.cc"><param name="Local" value="eval__env_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="eval_env.h"><param name="Local" value="eval__env_8h.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="getopt.h"><param name="Local" value="getopt_8h.html"><param name="ImageNumber" value="11"></OBJECT>
@@ -145,9 +146,11 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="ninja.h"><param name="Local" value="ninja_8h.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="ninja_jumble.cc"><param name="Local" value="ninja__jumble_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="ninja_test.cc"><param name="Local" value="ninja__test_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="parser_perftest.cc"><param name="Local" value="parser__perftest_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="parsers.cc"><param name="Local" value="parsers_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="parsers.h"><param name="Local" value="parsers_8h.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="parsers_test.cc"><param name="Local" value="parsers__test_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="subprocess-win32.cc"><param name="Local" value="subprocess-win32_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="subprocess.cc"><param name="Local" value="subprocess_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="subprocess.h"><param name="Local" value="subprocess_8h.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="subprocess_test.cc"><param name="Local" value="subprocess__test_8cc.html"><param name="ImageNumber" value="11"></OBJECT>

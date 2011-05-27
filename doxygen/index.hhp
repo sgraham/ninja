@@ -24,6 +24,7 @@ build__log__test_8cc_source.html
 build__test_8cc_source.html
 clean_8cc_source.html
 clean_8h_source.html
+clean__test_8cc_source.html
 eval__env_8cc_source.html
 eval__env_8h_source.html
 getopt_8h_source.html
@@ -37,9 +38,11 @@ ninja_8cc_source.html
 ninja_8h_source.html
 ninja__jumble_8cc_source.html
 ninja__test_8cc_source.html
+parser__perftest_8cc_source.html
 parsers_8cc_source.html
 parsers_8h_source.html
 parsers__test_8cc_source.html
+subprocess-win32_8cc_source.html
 subprocess_8cc_source.html
 subprocess_8h_source.html
 subprocess__test_8cc_source.html
@@ -59,6 +62,7 @@ build__log__test_8cc.html
 build__test_8cc.html
 clean_8cc.html
 clean_8h.html
+clean__test_8cc.html
 eval__env_8cc.html
 eval__env_8h.html
 getopt_8h.html
@@ -72,9 +76,11 @@ ninja_8cc.html
 ninja_8h.html
 ninja__jumble_8cc.html
 ninja__test_8cc.html
+parser__perftest_8cc.html
 parsers_8cc.html
 parsers_8h.html
 parsers__test_8cc.html
+subprocess-win32_8cc.html
 subprocess_8cc.html
 subprocess_8h.html
 subprocess__test_8cc.html
@@ -114,6 +120,7 @@ functions_vars.html
 functions_type.html
 functions_enum.html
 functions_eval.html
+functions_rela.html
 structBindingEnv.html
 structBindingEnv-members.html
 structBuildConfig.html
@@ -132,6 +139,8 @@ structBuildTest.html
 structBuildTest-members.html
 classCleaner.html
 classCleaner-members.html
+structCleanTest.html
+structCleanTest-members.html
 structCommandRunner.html
 structCommandRunner-members.html
 structDiskInterface.html
@@ -174,10 +183,10 @@ structRealCommandRunner.html
 structRealCommandRunner-members.html
 structRealDiskInterface.html
 structRealDiskInterface-members.html
-structRealFileReader.html
-structRealFileReader-members.html
 structRule.html
 structRule-members.html
+structSourceLocation.html
+structSourceLocation-members.html
 structStatCache.html
 structStatCache-members.html
 structState.html
@@ -188,8 +197,6 @@ structStatTest.html
 structStatTest-members.html
 structSubprocess.html
 structSubprocess-members.html
-structSubprocess_1_1Stream.html
-structSubprocess_1_1Stream-members.html
 structSubprocessSet.html
 structSubprocessSet-members.html
 structTestEnv.html

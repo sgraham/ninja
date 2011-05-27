@@ -2,6 +2,8 @@
 <area shape="rect" href="$build__log_8cc.html" title="build_log.cc" alt="" coords="5,83,96,112"/>
 <area shape="rect" href="$build__test_8cc.html" title="build_test.cc" alt="" coords="120,83,216,112"/>
 <area shape="rect" href="$clean_8cc.html" title="clean.cc" alt="" coords="240,83,309,112"/>
-<area shape="rect" href="$ninja_8cc.html" title="ninja.cc" alt="" coords="357,83,424,112"/>
-<area shape="rect" href="$ninja__test_8cc.html" title="ninja_test.cc" alt="" coords="448,83,544,112"/>
+<area shape="rect" href="$clean_8h.html" title="clean.h" alt="" coords="408,83,472,112"/>
+<area shape="rect" href="$clean__test_8cc.html" title="clean_test.cc" alt="" coords="329,160,428,189"/>
+<area shape="rect" href="$ninja_8cc.html" title="ninja.cc" alt="" coords="468,160,535,189"/>
+<area shape="rect" href="$ninja__test_8cc.html" title="ninja_test.cc" alt="" coords="547,83,643,112"/>
 </map>

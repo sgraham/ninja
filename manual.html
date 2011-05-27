@@ -832,7 +832,13 @@ If you provide a variable named <tt>builddir</tt> in the outermost scope,
 <div class="sectionbody">
 <div class="paragraph"><p>A work-in-progress patch to <a href="http://gyp.googlecode.com">gyp, the system
 used to generate build files for the Chromium browser</a> to generate
-ninja files for Linux is included in the source distribution.</p></div>
+ninja files for Linux is available from
+<a href="https://github.com/martine/gyp/tree/ninja">my "ninja" branch of the
+upstream gyp project</a>.  To use it, put that branch in place of
+Chromium&#8217;s gyp, set <tt>GYP_GENERATORS=ninja</tt> in your environment, and
+run <tt>./build/gyp_chromium</tt> to regenerate the build files.</p></div>
+<div class="paragraph"><p>I have heard from people who have been working on generating Ninja
+files from CMake, but I don&#8217;t think it&#8217;s in a working state yet.</p></div>
 <div class="paragraph"><p>Conceptually, you could coax Automake into producing ninja files as
 well, but I haven&#8217;t tried it.  It may very well be the case that most
 projects use too much Makefile syntax in their <tt>.am</tt> files for this to
@@ -881,7 +887,7 @@ graph for all root targets.
 output a list of targets either by rule or by depth.  If used
 like this <tt>ninja -t targets rule <em>name</em></tt> it prints the list of targets
 using the given rule to be built.  If no rule is given, it prints the source
-files (the leaf of the graph).  If used like this
+files (the leaves of the graph).  If used like this
 <tt>ninja -t targets depth <em>digit</em></tt> it
 prints the list of targets in a depth-first manner starting by the root
 targets (the ones with no outputs). Indentation is used to mark dependencies.
@@ -936,9 +942,9 @@ A rule declaration, which begins with <tt>rule <em>rulename</em></tt>, and
 A build edge, which looks like <tt>build <em>output1</em> <em>output2</em>:
    <em>rulename</em> <em>input1</em> <em>input2</em></tt>.<br />
    Implicit dependencies may be tacked on the end with <tt>|
-   <em>dependency1</em> <em>dependency2</em></tt>.
+   <em>dependency1</em> <em>dependency2</em></tt>.<br />
    Order-only dependencies may be tacked on the end with <tt>||
-   <em>dependency1</em> <em>dependency2</em></tt>.
+   <em>dependency1</em> <em>dependency2</em></tt>.  (See <a href="#ref_dependencies">the reference on    dependency types</a>.)
 </p>
 </li>
 <li>
@@ -955,8 +961,9 @@ References to more files, which look like <tt>subninja <em>path</em></tt> or
 </li>
 </ol></div>
 <div class="paragraph"><p>Comments begin with <tt>#</tt> and extend to the end of the line.</p></div>
-<div class="paragraph"><p>Newlines are significant, but they can be escaped by putting a <tt>\</tt>
-before them.</p></div>
+<div class="paragraph"><p>Newlines are significant, but they can be escaped by putting a <tt>$</tt>
+before them.  To produce a literal <tt>$</tt> in a path or variable value use
+<tt>$$</tt>.</p></div>
 <div class="paragraph"><p>Other whitespace is only significant if it&#8217;s at the beginning of a
 line.  If a line is intended more than the previous one, it&#8217;s
 considered part of its parent&#8217;s scope; if it is indented less than the
@@ -971,7 +978,9 @@ keys.</p></div>
 </dt>
 <dd>
 <p>
-the command line to run.
+the command line to run.  This string (after
+  $variables are expanded) is passed directly to <tt>sh -c</tt> without
+  interpretation by Ninja.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -980,7 +989,7 @@ the command line to run.
 <dd>
 <p>
 path to an optional <tt>Makefile</tt> that contains extra
-  <em>implicit dependencies</em> (see the <a href="#ref_dependencies">the reference on   dependency types</a>).  This is explicitly to support <tt>gcc</tt> and its <tt>-M</tt>
+  <em>implicit dependencies</em> (see <a href="#ref_dependencies">the reference on   dependency types</a>).  This is explicitly to support <tt>gcc</tt> and its <tt>-M</tt>
   family of flags, which output the list of headers a given <tt>.c</tt> file
   depends on.
 </p>
@@ -991,6 +1000,10 @@ path to an optional <tt>Makefile</tt> that contains extra
   depfile = $out.d
   command = gcc -MMD -MF $out.d [other gcc flags here]</tt></pre>
 </div></div>
+<div class="paragraph"><p>When loading a <tt>depfile</tt>, Ninja implicitly adds edges such that it is
+not an error if the listed dependency is missing.  This allows you to
+delete a depfile-discovered header file and rebuild, without the build
+aborting due to a missing input.</p></div>
 </dd>
 <dt class="hdlist1">
 <tt>description</tt>
@@ -1024,14 +1037,16 @@ source file of a compile command.</p></div>
 <p>
 <em>Implicit dependencies</em>, either as picked up from
    a <tt>depfile</tt> attribute on a rule or from the syntax <tt>| <em>dep1</em>
-   <em>dep2</em></tt> on the end of a build line.  Changes in these files cause
-   the output to be rebuilt; if they are missing, they are just
-   skipped.
+   <em>dep2</em></tt> on the end of a build line.  The semantics are identical to
+   explicit dependencies, the only difference is that implicit dependencies
+   don&#8217;t show up in the <tt>$in</tt> variable.
 </p>
 <div class="paragraph"><p>This is for expressing dependencies that don&#8217;t show up on the
 command line of the command; for example, for a rule that runs a
 script, the script itself should be an implicit dependency, as
 changes to the script should cause the output to rebuild.</p></div>
+<div class="paragraph"><p>Note that dependencies as loaded through depfiles have slightly different
+semantics, as described in the <a href="#ref_rule">rule reference</a>.</p></div>
 </li>
 <li>
 <p>
@@ -1105,7 +1120,7 @@ to build.</p></div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-04-29 11:07:30 PDT
+Last updated 2011-05-26 20:14:47 PDT
 </div>
 </div>
 </body>

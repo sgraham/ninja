@@ -61,7 +61,7 @@
 <a name="l00035"></a>00035 
 <a name="l00036"></a><a class="code" href="structBuildLog.html#a6cd31c693b9e057d604b9ef27be2bcfa">00036</a>   <span class="keywordtype">void</span> <a class="code" href="structBuildLog.html#a6cd31c693b9e057d604b9ef27be2bcfa">SetConfig</a>(<a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>* config) { <a class="code" href="structBuildLog.html#ae84b6f83cfb8b0d7e9c49330c3c30c51">config_</a> = config; }
 <a name="l00037"></a>00037   <span class="keywordtype">bool</span> <a class="code" href="structBuildLog.html#a08a600782d1b1c8369b8437d9d9c4264">OpenForWrite</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* err);
-<a name="l00038"></a>00038   <span class="keywordtype">void</span> <a class="code" href="structBuildLog.html#ac591ad693ac0ff5d6919c86e13811c4d">RecordCommand</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge, <span class="keywordtype">int</span> time_ms);
+<a name="l00038"></a>00038   <span class="keywordtype">void</span> <a class="code" href="structBuildLog.html#acf01eeb13ec19f708086f6d7e2514f0e">RecordCommand</a>(<a class="code" href="structEdge.html" title="An edge in the dependency graph; links between Nodes using Rules.">Edge</a>* edge, <span class="keywordtype">int</span> start_time, <span class="keywordtype">int</span> end_time);
 <a name="l00039"></a>00039   <span class="keywordtype">void</span> <a class="code" href="structBuildLog.html#a2f0657ed16b8ba9fadfb5c03e0c81695">Close</a>();
 <a name="l00040"></a>00040 <span class="comment"></span>
 <a name="l00041"></a>00041 <span class="comment">  /// Load the on-disk log.</span>
@@ -70,31 +70,35 @@
 <a name="l00044"></a><a class="code" href="structBuildLog_1_1LogEntry.html">00044</a>   <span class="keyword">struct </span><a class="code" href="structBuildLog_1_1LogEntry.html">LogEntry</a> {
 <a name="l00045"></a><a class="code" href="structBuildLog_1_1LogEntry.html#ab83065a7478526bcb4c5b2544b5f078a">00045</a>     <span class="keywordtype">string</span> <a class="code" href="structBuildLog_1_1LogEntry.html#ab83065a7478526bcb4c5b2544b5f078a">output</a>;
 <a name="l00046"></a><a class="code" href="structBuildLog_1_1LogEntry.html#a0cc61e0f05a2dab553b221e54356e349">00046</a>     <span class="keywordtype">string</span> <a class="code" href="structBuildLog_1_1LogEntry.html#a0cc61e0f05a2dab553b221e54356e349">command</a>;
-<a name="l00047"></a><a class="code" href="structBuildLog_1_1LogEntry.html#a2a51e70eb242968febe228da214a45d0">00047</a>     <span class="keywordtype">int</span> <a class="code" href="structBuildLog_1_1LogEntry.html#a2a51e70eb242968febe228da214a45d0">time_ms</a>;
-<a name="l00048"></a><a class="code" href="structBuildLog_1_1LogEntry.html#afe5b06b8135336c86d91f56c8423f74b">00048</a>     <span class="keywordtype">bool</span> <a class="code" href="structBuildLog_1_1LogEntry.html#afe5b06b8135336c86d91f56c8423f74b">operator==</a>(<span class="keyword">const</span> <a class="code" href="structBuildLog_1_1LogEntry.html">LogEntry</a>&amp; o) {
-<a name="l00049"></a>00049       <span class="keywordflow">return</span> <a class="code" href="structBuildLog_1_1LogEntry.html#ab83065a7478526bcb4c5b2544b5f078a">output</a> == o.<a class="code" href="structBuildLog_1_1LogEntry.html#ab83065a7478526bcb4c5b2544b5f078a">output</a> &amp;&amp; <a class="code" href="structBuildLog_1_1LogEntry.html#a0cc61e0f05a2dab553b221e54356e349">command</a> == o.<a class="code" href="structBuildLog_1_1LogEntry.html#a0cc61e0f05a2dab553b221e54356e349">command</a> &amp;&amp; <a class="code" href="structBuildLog_1_1LogEntry.html#a2a51e70eb242968febe228da214a45d0">time_ms</a> == o.<a class="code" href="structBuildLog_1_1LogEntry.html#a2a51e70eb242968febe228da214a45d0">time_ms</a>;
-<a name="l00050"></a>00050     }
-<a name="l00051"></a>00051   };
-<a name="l00052"></a>00052 <span class="comment"></span>
-<a name="l00053"></a>00053 <span class="comment">  /// Lookup a previously-run command by its output path.</span>
-<a name="l00054"></a>00054 <span class="comment"></span>  LogEntry* <a class="code" href="structBuildLog.html#af01fac6ff13246e414e69b3737692f59" title="Lookup a previously-run command by its output path.">LookupByOutput</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00055"></a>00055 <span class="comment"></span>
-<a name="l00056"></a>00056 <span class="comment">  /// Serialize an entry into a log file.</span>
-<a name="l00057"></a>00057 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="structBuildLog.html#ac1f4853d1fc456d71a0d9940c04234a0" title="Serialize an entry into a log file.">WriteEntry</a>(FILE* f, <span class="keyword">const</span> LogEntry&amp; entry);
-<a name="l00058"></a>00058 <span class="comment"></span>
-<a name="l00059"></a>00059 <span class="comment">  /// Rewrite the known log entries, throwing away old data.</span>
-<a name="l00060"></a>00060 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="structBuildLog.html#a864e5ac4b1d5239ae808b38ab3aeeb41" title="Rewrite the known log entries, throwing away old data.">Recompact</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* err);
-<a name="l00061"></a>00061 
-<a name="l00062"></a><a class="code" href="structBuildLog.html#a5fc6bda3464b26bde950c9d4b23e8987">00062</a>   <span class="keyword">typedef</span> map&lt;string, LogEntry*&gt; <a class="code" href="structBuildLog.html#a5fc6bda3464b26bde950c9d4b23e8987">Log</a>;
-<a name="l00063"></a><a class="code" href="structBuildLog.html#ac0a0abd7f1aa1d7dc56e947d85f91349">00063</a>   <a class="code" href="structBuildLog.html#a5fc6bda3464b26bde950c9d4b23e8987">Log</a> <a class="code" href="structBuildLog.html#ac0a0abd7f1aa1d7dc56e947d85f91349">log_</a>;
-<a name="l00064"></a><a class="code" href="structBuildLog.html#a5fd4ee55ca61796e6d9aecaac2855cba">00064</a>   FILE* <a class="code" href="structBuildLog.html#a5fd4ee55ca61796e6d9aecaac2855cba">log_file_</a>;
-<a name="l00065"></a><a class="code" href="structBuildLog.html#ae84b6f83cfb8b0d7e9c49330c3c30c51">00065</a>   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>* <a class="code" href="structBuildLog.html#ae84b6f83cfb8b0d7e9c49330c3c30c51">config_</a>;
-<a name="l00066"></a><a class="code" href="structBuildLog.html#ab3726d9da8e8ae709671c6e6f3518773">00066</a>   <span class="keywordtype">bool</span> <a class="code" href="structBuildLog.html#ab3726d9da8e8ae709671c6e6f3518773">needs_recompaction_</a>;
-<a name="l00067"></a>00067 };
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069 <span class="preprocessor">#endif // NINJA_BUILD_LOG_H_</span>
+<a name="l00047"></a><a class="code" href="structBuildLog_1_1LogEntry.html#a2ba1f4c7b480857f4b54be8ff28db9fc">00047</a>     <span class="keywordtype">int</span> <a class="code" href="structBuildLog_1_1LogEntry.html#a2ba1f4c7b480857f4b54be8ff28db9fc">start_time</a>;
+<a name="l00048"></a><a class="code" href="structBuildLog_1_1LogEntry.html#a8c9d71c8162925f8fe519543d3fb1416">00048</a>     <span class="keywordtype">int</span> <a class="code" href="structBuildLog_1_1LogEntry.html#a8c9d71c8162925f8fe519543d3fb1416">end_time</a>;
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050     <span class="comment">// Used by tests.</span>
+<a name="l00051"></a><a class="code" href="structBuildLog_1_1LogEntry.html#afe5b06b8135336c86d91f56c8423f74b">00051</a>     <span class="keywordtype">bool</span> <a class="code" href="structBuildLog_1_1LogEntry.html#afe5b06b8135336c86d91f56c8423f74b">operator==</a>(<span class="keyword">const</span> <a class="code" href="structBuildLog_1_1LogEntry.html">LogEntry</a>&amp; o) {
+<a name="l00052"></a>00052       <span class="keywordflow">return</span> <a class="code" href="structBuildLog_1_1LogEntry.html#ab83065a7478526bcb4c5b2544b5f078a">output</a> == o.<a class="code" href="structBuildLog_1_1LogEntry.html#ab83065a7478526bcb4c5b2544b5f078a">output</a> &amp;&amp; <a class="code" href="structBuildLog_1_1LogEntry.html#a0cc61e0f05a2dab553b221e54356e349">command</a> == o.<a class="code" href="structBuildLog_1_1LogEntry.html#a0cc61e0f05a2dab553b221e54356e349">command</a> &amp;&amp;
+<a name="l00053"></a>00053           <a class="code" href="structBuildLog_1_1LogEntry.html#a2ba1f4c7b480857f4b54be8ff28db9fc">start_time</a> == o.<a class="code" href="structBuildLog_1_1LogEntry.html#a2ba1f4c7b480857f4b54be8ff28db9fc">start_time</a> &amp;&amp; <a class="code" href="structBuildLog_1_1LogEntry.html#a8c9d71c8162925f8fe519543d3fb1416">end_time</a> == o.<a class="code" href="structBuildLog_1_1LogEntry.html#a8c9d71c8162925f8fe519543d3fb1416">end_time</a>;
+<a name="l00054"></a>00054     }
+<a name="l00055"></a>00055   };
+<a name="l00056"></a>00056 <span class="comment"></span>
+<a name="l00057"></a>00057 <span class="comment">  /// Lookup a previously-run command by its output path.</span>
+<a name="l00058"></a>00058 <span class="comment"></span>  LogEntry* <a class="code" href="structBuildLog.html#af01fac6ff13246e414e69b3737692f59" title="Lookup a previously-run command by its output path.">LookupByOutput</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00059"></a>00059 <span class="comment"></span>
+<a name="l00060"></a>00060 <span class="comment">  /// Serialize an entry into a log file.</span>
+<a name="l00061"></a>00061 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="structBuildLog.html#ac1f4853d1fc456d71a0d9940c04234a0" title="Serialize an entry into a log file.">WriteEntry</a>(FILE* f, <span class="keyword">const</span> LogEntry&amp; entry);
+<a name="l00062"></a>00062 <span class="comment"></span>
+<a name="l00063"></a>00063 <span class="comment">  /// Rewrite the known log entries, throwing away old data.</span>
+<a name="l00064"></a>00064 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="structBuildLog.html#a864e5ac4b1d5239ae808b38ab3aeeb41" title="Rewrite the known log entries, throwing away old data.">Recompact</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path, <span class="keywordtype">string</span>* err);
+<a name="l00065"></a>00065 
+<a name="l00066"></a><a class="code" href="structBuildLog.html#a5fc6bda3464b26bde950c9d4b23e8987">00066</a>   <span class="keyword">typedef</span> map&lt;string, LogEntry*&gt; <a class="code" href="structBuildLog.html#a5fc6bda3464b26bde950c9d4b23e8987">Log</a>;
+<a name="l00067"></a><a class="code" href="structBuildLog.html#ac0a0abd7f1aa1d7dc56e947d85f91349">00067</a>   <a class="code" href="structBuildLog.html#a5fc6bda3464b26bde950c9d4b23e8987">Log</a> <a class="code" href="structBuildLog.html#ac0a0abd7f1aa1d7dc56e947d85f91349">log_</a>;
+<a name="l00068"></a><a class="code" href="structBuildLog.html#a5fd4ee55ca61796e6d9aecaac2855cba">00068</a>   FILE* <a class="code" href="structBuildLog.html#a5fd4ee55ca61796e6d9aecaac2855cba">log_file_</a>;
+<a name="l00069"></a><a class="code" href="structBuildLog.html#ae84b6f83cfb8b0d7e9c49330c3c30c51">00069</a>   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>* <a class="code" href="structBuildLog.html#ae84b6f83cfb8b0d7e9c49330c3c30c51">config_</a>;
+<a name="l00070"></a><a class="code" href="structBuildLog.html#ab3726d9da8e8ae709671c6e6f3518773">00070</a>   <span class="keywordtype">bool</span> <a class="code" href="structBuildLog.html#ab3726d9da8e8ae709671c6e6f3518773">needs_recompaction_</a>;
+<a name="l00071"></a>00071 };
+<a name="l00072"></a>00072 
+<a name="l00073"></a>00073 <span class="preprocessor">#endif // NINJA_BUILD_LOG_H_</span>
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

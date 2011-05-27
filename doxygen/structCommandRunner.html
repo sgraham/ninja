@@ -45,10 +45,9 @@ Inheritance diagram for CommandRunner:</div>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommandRunner.html#a210f0111087ec050ad9f301f9e6d98f9">CanRunMore</a> ()=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structEdge.html">Edge</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommandRunner.html#a29549dee389df7ab92620e7fa5c547c5">NextFinishedCommand</a> (bool *success)=0</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommandRunner.html#a23a37c5157518ed35fd1a366b1ab3d78">StartCommand</a> (<a class="el" href="structEdge.html">Edge</a> *edge)=0</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommandRunner.html#a6067e6e02c77fcc5685db4994a441b66">WaitForCommands</a> ()=0</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait for commands to make progress; return false if there is no progress to be made.  <a href="#a6067e6e02c77fcc5685db4994a441b66"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structEdge.html">Edge</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommandRunner.html#a57ab30f8e96af5cfe36f816c43b69557">WaitForCommand</a> (bool *success, string *output)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait for a command to complete.  <a href="#a57ab30f8e96af5cfe36f816c43b69557"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCommandRunner.html#adfd406f68aa57e3a0360d8e96cf9355b">~CommandRunner</a> ()</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
@@ -94,29 +93,7 @@ Inheritance diagram for CommandRunner:</div>
 
 <p>Implemented in <a class="el" href="structRealCommandRunner.html#a20c78ac0596d252fd92fc0697826f7f7">RealCommandRunner</a>, <a class="el" href="structDryRunCommandRunner.html#ae813d5cdca72404c3c3849cdec70c36b">DryRunCommandRunner</a>, and <a class="el" href="structBuildTest.html#ac1d6dce2805d5c18d757bf8ae501c4b1">BuildTest</a>.</p>
 
-<p>Referenced by <a class="el" href="build_8cc_source.html#l00388">Builder::Build()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a29549dee389df7ab92620e7fa5c547c5"></a><!-- doxytag: member="CommandRunner::NextFinishedCommand" ref="a29549dee389df7ab92620e7fa5c547c5" args="(bool *success)=0" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="structEdge.html">Edge</a>* CommandRunner::NextFinishedCommand </td>
-          <td>(</td>
-          <td class="paramtype">bool *&nbsp;</td>
-          <td class="paramname"> <em>success</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [pure virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Implemented in <a class="el" href="structRealCommandRunner.html#a55c3ea9aa891ed7006767049ec25f18d">RealCommandRunner</a>, <a class="el" href="structDryRunCommandRunner.html#abc8ac5bae1c0d2e75c187ad79e36e5da">DryRunCommandRunner</a>, and <a class="el" href="structBuildTest.html#ae30b6c2adc85466fa36a5786a2a99521">BuildTest</a>.</p>
-
-<p>Referenced by <a class="el" href="build_8cc_source.html#l00388">Builder::Build()</a>.</p>
+<p>Referenced by <a class="el" href="build_8cc_source.html#l00396">Builder::Build()</a>.</p>
 
 </div>
 </div>
@@ -138,30 +115,40 @@ Inheritance diagram for CommandRunner:</div>
 
 <p>Implemented in <a class="el" href="structRealCommandRunner.html#a314f3738437eb416004396ac267de515">RealCommandRunner</a>, <a class="el" href="structDryRunCommandRunner.html#a10f70f169e7e782ea7e55fc0e8bf15db">DryRunCommandRunner</a>, and <a class="el" href="structBuildTest.html#a0cc789a1cd6605b09a803ca2d55a683e">BuildTest</a>.</p>
 
-<p>Referenced by <a class="el" href="build_8cc_source.html#l00429">Builder::StartEdge()</a>.</p>
+<p>Referenced by <a class="el" href="build_8cc_source.html#l00472">Builder::StartEdge()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a6067e6e02c77fcc5685db4994a441b66"></a><!-- doxytag: member="CommandRunner::WaitForCommands" ref="a6067e6e02c77fcc5685db4994a441b66" args="()=0" -->
+<a class="anchor" id="a57ab30f8e96af5cfe36f816c43b69557"></a><!-- doxytag: member="CommandRunner::WaitForCommand" ref="a57ab30f8e96af5cfe36f816c43b69557" args="(bool *success, string *output)=0" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool CommandRunner::WaitForCommands </td>
+          <td class="memname">virtual <a class="el" href="structEdge.html">Edge</a>* CommandRunner::WaitForCommand </td>
           <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [pure virtual]</code></td>
+          <td class="paramtype">bool *&nbsp;</td>
+          <td class="paramname"> <em>success</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string *&nbsp;</td>
+          <td class="paramname"> <em>output</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [pure virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Wait for commands to make progress; return false if there is no progress to be made. </p>
+<p>Wait for a command to complete. </p>
 
-<p>Implemented in <a class="el" href="structRealCommandRunner.html#ab5dc99b6e71aee8b5ce6b8f830ae4ccd">RealCommandRunner</a>, <a class="el" href="structDryRunCommandRunner.html#afe5f34bc24a358811ba9f4c92fb9dd95">DryRunCommandRunner</a>, and <a class="el" href="structBuildTest.html#ad18fabe9c6e66a159ba698d3c8a2f086">BuildTest</a>.</p>
+<p>Implemented in <a class="el" href="structRealCommandRunner.html#aae52cf96131e42aeb807bf7519fbe1b9">RealCommandRunner</a>, <a class="el" href="structDryRunCommandRunner.html#acf925693edb3669e3ee70ec83b2c1a23">DryRunCommandRunner</a>, and <a class="el" href="structBuildTest.html#a2a43f20982dc42ed8f2efceeae17e4c4">BuildTest</a>.</p>
 
-<p>Referenced by <a class="el" href="build_8cc_source.html#l00388">Builder::Build()</a>.</p>
+<p>Referenced by <a class="el" href="build_8cc_source.html#l00396">Builder::Build()</a>.</p>
 
 </div>
 </div>
@@ -169,7 +156,7 @@ Inheritance diagram for CommandRunner:</div>
 <li><a class="el" href="build_8h_source.html">build.h</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:29 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

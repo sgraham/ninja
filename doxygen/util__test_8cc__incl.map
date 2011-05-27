@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" href="$util_8h.html" title="util.h" alt="" coords="81,83,129,112"/>
-<area shape="rect" href="$test_8h.html" title="test.h" alt="" coords="276,83,329,112"/>
-<area shape="rect" href="$ninja_8h.html" title="ninja.h" alt="" coords="273,160,332,189"/>
-<area shape="rect" href="$eval__env_8h.html" title="eval_env.h" alt="" coords="69,237,152,267"/>
-<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="560,237,651,267"/>
+<area shape="rect" href="$util_8h.html" title="util.h" alt="" coords="83,83,131,112"/>
+<area shape="rect" href="$test_8h.html" title="test.h" alt="" coords="401,83,455,112"/>
+<area shape="rect" href="$ninja_8h.html" title="ninja.h" alt="" coords="399,160,457,189"/>
+<area shape="rect" href="$eval__env_8h.html" title="eval_env.h" alt="" coords="195,237,277,267"/>
+<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="685,237,776,267"/>
 </map>

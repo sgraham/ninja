@@ -6,13 +6,14 @@
 <area shape="rect" href="$graph_8cc.html" title="graph.cc" alt="" coords="520,83,592,112"/>
 <area shape="rect" href="$ninja_8cc.html" title="ninja.cc" alt="" coords="640,83,707,112"/>
 <area shape="rect" href="$ninja__jumble_8cc.html" title="ninja_jumble.cc" alt="" coords="731,83,843,112"/>
-<area shape="rect" href="$ninja__test_8cc.html" title="ninja_test.cc" alt="" coords="832,160,928,189"/>
+<area shape="rect" href="$ninja__test_8cc.html" title="ninja_test.cc" alt="" coords="817,160,913,189"/>
 <area shape="rect" href="$parsers_8cc.html" title="parsers.cc" alt="" coords="917,83,1000,112"/>
 <area shape="rect" href="$parsers__test_8cc.html" title="parsers_test.cc" alt="" coords="1024,83,1136,112"/>
-<area shape="rect" href="$test_8h.html" title="test.h" alt="" coords="1160,83,1213,112"/>
-<area shape="rect" href="$build__test_8cc.html" title="build_test.cc" alt="" coords="952,160,1048,189"/>
-<area shape="rect" href="$graph__test_8cc.html" title="graph_test.cc" alt="" coords="1072,160,1171,189"/>
-<area shape="rect" href="$subprocess__test_8cc.html" title="subprocess_test.cc" alt="" coords="1195,160,1331,189"/>
-<area shape="rect" href="$test_8cc.html" title="test.cc" alt="" coords="1355,160,1416,189"/>
-<area shape="rect" href="$util__test_8cc.html" title="util_test.cc" alt="" coords="1440,160,1525,189"/>
+<area shape="rect" href="$test_8h.html" title="test.h" alt="" coords="1188,83,1241,112"/>
+<area shape="rect" href="$build__test_8cc.html" title="build_test.cc" alt="" coords="937,160,1033,189"/>
+<area shape="rect" href="$clean__test_8cc.html" title="clean_test.cc" alt="" coords="1057,160,1156,189"/>
+<area shape="rect" href="$graph__test_8cc.html" title="graph_test.cc" alt="" coords="1180,160,1279,189"/>
+<area shape="rect" href="$subprocess__test_8cc.html" title="subprocess_test.cc" alt="" coords="1303,160,1439,189"/>
+<area shape="rect" href="$test_8cc.html" title="test.cc" alt="" coords="1463,160,1524,189"/>
+<area shape="rect" href="$util__test_8cc.html" title="util_test.cc" alt="" coords="1548,160,1633,189"/>
 </map>

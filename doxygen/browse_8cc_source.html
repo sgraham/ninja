@@ -46,50 +46,51 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#include &quot;../build/browse_py.h&quot;</span>
 <a name="l00021"></a>00021 <span class="preprocessor">#include &quot;<a class="code" href="ninja_8h.html">ninja.h</a>&quot;</span>
 <a name="l00022"></a>00022 
-<a name="l00023"></a><a class="code" href="browse_8h.html#aa7dd814dc6812765a6391dde6679cdb9">00023</a> <span class="keywordtype">void</span> <a class="code" href="browse_8cc.html#aa7dd814dc6812765a6391dde6679cdb9" title="Run in &amp;quot;browse&amp;quot; mode, which execs a Python webserver.">RunBrowsePython</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <span class="keywordtype">char</span>* ninja_command) {
-<a name="l00024"></a>00024   <span class="comment">// Fork off a Python process and have it run our code via its stdin.</span>
-<a name="l00025"></a>00025   <span class="comment">// (Actually the Python process becomes the parent.)</span>
-<a name="l00026"></a>00026   <span class="keywordtype">int</span> pipefd[2];
-<a name="l00027"></a>00027   <span class="keywordflow">if</span> (pipe(pipefd) &lt; 0) {
-<a name="l00028"></a>00028     perror(<span class="stringliteral">&quot;ninja: pipe&quot;</span>);
-<a name="l00029"></a>00029     <span class="keywordflow">return</span>;
-<a name="l00030"></a>00030   }
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032   pid_t pid = fork();
-<a name="l00033"></a>00033   <span class="keywordflow">if</span> (pid &lt; 0) {
-<a name="l00034"></a>00034     perror(<span class="stringliteral">&quot;ninja: fork&quot;</span>);
-<a name="l00035"></a>00035     <span class="keywordflow">return</span>;
-<a name="l00036"></a>00036   }
-<a name="l00037"></a>00037 
-<a name="l00038"></a>00038   <span class="keywordflow">if</span> (pid &gt; 0) {  <span class="comment">// Parent.</span>
-<a name="l00039"></a>00039     close(pipefd[1]);
-<a name="l00040"></a>00040     <span class="keywordflow">do</span> {
-<a name="l00041"></a>00041       <span class="keywordflow">if</span> (dup2(pipefd[0], 0) &lt; 0) {
-<a name="l00042"></a>00042         perror(<span class="stringliteral">&quot;ninja: dup2&quot;</span>);
-<a name="l00043"></a>00043         <span class="keywordflow">break</span>;
-<a name="l00044"></a>00044       }
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046       <span class="comment">// exec Python, telling it to run the program from stdin.</span>
-<a name="l00047"></a>00047       <span class="keyword">const</span> <span class="keywordtype">char</span>* command[] = {
-<a name="l00048"></a>00048         <span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;-&quot;</span>, ninja_command, NULL
-<a name="l00049"></a>00049       };
-<a name="l00050"></a>00050       execvp(command[0], (<span class="keywordtype">char</span>**)command);
-<a name="l00051"></a>00051       perror(<span class="stringliteral">&quot;ninja: execvp&quot;</span>);
-<a name="l00052"></a>00052     } <span class="keywordflow">while</span> (<span class="keyword">false</span>);
-<a name="l00053"></a>00053     _exit(1);
-<a name="l00054"></a>00054   } <span class="keywordflow">else</span> {  <span class="comment">// Child.</span>
-<a name="l00055"></a>00055     close(pipefd[0]);
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057     <span class="comment">// Write the script file into the stdin of the Python process.</span>
-<a name="l00058"></a>00058     ssize_t len = write(pipefd[1], kBrowsePy, <span class="keyword">sizeof</span>(kBrowsePy));
-<a name="l00059"></a>00059     <span class="keywordflow">if</span> (len &lt; (ssize_t)<span class="keyword">sizeof</span>(kBrowsePy))
-<a name="l00060"></a>00060       perror(<span class="stringliteral">&quot;ninja: write&quot;</span>);
-<a name="l00061"></a>00061     close(pipefd[1]);
-<a name="l00062"></a>00062     exit(0);
-<a name="l00063"></a>00063   }
-<a name="l00064"></a>00064 }
+<a name="l00023"></a><a class="code" href="browse_8h.html#a19bfd0ee33f15bcfce46114a0bdba59a">00023</a> <span class="keywordtype">void</span> <a class="code" href="browse_8cc.html#a19bfd0ee33f15bcfce46114a0bdba59a" title="Run in &amp;quot;browse&amp;quot; mode, which execs a Python webserver.">RunBrowsePython</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <span class="keywordtype">char</span>* ninja_command,
+<a name="l00024"></a>00024                      <span class="keyword">const</span> <span class="keywordtype">char</span>* initial_target) {
+<a name="l00025"></a>00025   <span class="comment">// Fork off a Python process and have it run our code via its stdin.</span>
+<a name="l00026"></a>00026   <span class="comment">// (Actually the Python process becomes the parent.)</span>
+<a name="l00027"></a>00027   <span class="keywordtype">int</span> pipefd[2];
+<a name="l00028"></a>00028   <span class="keywordflow">if</span> (pipe(pipefd) &lt; 0) {
+<a name="l00029"></a>00029     perror(<span class="stringliteral">&quot;ninja: pipe&quot;</span>);
+<a name="l00030"></a>00030     <span class="keywordflow">return</span>;
+<a name="l00031"></a>00031   }
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033   pid_t pid = fork();
+<a name="l00034"></a>00034   <span class="keywordflow">if</span> (pid &lt; 0) {
+<a name="l00035"></a>00035     perror(<span class="stringliteral">&quot;ninja: fork&quot;</span>);
+<a name="l00036"></a>00036     <span class="keywordflow">return</span>;
+<a name="l00037"></a>00037   }
+<a name="l00038"></a>00038 
+<a name="l00039"></a>00039   <span class="keywordflow">if</span> (pid &gt; 0) {  <span class="comment">// Parent.</span>
+<a name="l00040"></a>00040     close(pipefd[1]);
+<a name="l00041"></a>00041     <span class="keywordflow">do</span> {
+<a name="l00042"></a>00042       <span class="keywordflow">if</span> (dup2(pipefd[0], 0) &lt; 0) {
+<a name="l00043"></a>00043         perror(<span class="stringliteral">&quot;ninja: dup2&quot;</span>);
+<a name="l00044"></a>00044         <span class="keywordflow">break</span>;
+<a name="l00045"></a>00045       }
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047       <span class="comment">// exec Python, telling it to run the program from stdin.</span>
+<a name="l00048"></a>00048       <span class="keyword">const</span> <span class="keywordtype">char</span>* command[] = {
+<a name="l00049"></a>00049         <span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;-&quot;</span>, ninja_command, initial_target, NULL
+<a name="l00050"></a>00050       };
+<a name="l00051"></a>00051       execvp(command[0], (<span class="keywordtype">char</span>**)command);
+<a name="l00052"></a>00052       perror(<span class="stringliteral">&quot;ninja: execvp&quot;</span>);
+<a name="l00053"></a>00053     } <span class="keywordflow">while</span> (<span class="keyword">false</span>);
+<a name="l00054"></a>00054     _exit(1);
+<a name="l00055"></a>00055   } <span class="keywordflow">else</span> {  <span class="comment">// Child.</span>
+<a name="l00056"></a>00056     close(pipefd[0]);
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058     <span class="comment">// Write the script file into the stdin of the Python process.</span>
+<a name="l00059"></a>00059     ssize_t len = write(pipefd[1], kBrowsePy, <span class="keyword">sizeof</span>(kBrowsePy));
+<a name="l00060"></a>00060     <span class="keywordflow">if</span> (len &lt; (ssize_t)<span class="keyword">sizeof</span>(kBrowsePy))
+<a name="l00061"></a>00061       perror(<span class="stringliteral">&quot;ninja: write&quot;</span>);
+<a name="l00062"></a>00062     close(pipefd[1]);
+<a name="l00063"></a>00063     exit(0);
+<a name="l00064"></a>00064   }
+<a name="l00065"></a>00065 }
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

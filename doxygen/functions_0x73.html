@@ -34,6 +34,7 @@
       <li><a href="functions_type.html"><span>Typedefs</span></a></li>
       <li><a href="functions_enum.html"><span>Enumerations</span></a></li>
       <li><a href="functions_eval.html"><span>Enumerator</span></a></li>
+      <li><a href="functions_rela.html"><span>Related&nbsp;Functions</span></a></li>
     </ul>
   </div>
   <div class="tabs">
@@ -71,9 +72,13 @@ Here is a list of all class members with links to the classes they belong to:
 <li>SetConfig()
 : <a class="el" href="structBuildLog.html#a6cd31c693b9e057d604b9ef27be2bcfa">BuildLog</a>
 </li>
+<li>SetMakefileFlavor()
+: <a class="el" href="structTokenizer.html#ae4026d95d520237cc05f00f38c513d65">Tokenizer</a>
+</li>
 <li>SetUp()
-: <a class="el" href="structBuildLogTest.html#a8035f408c9cdb4f6e51d76afcdea9ea1">BuildLogTest</a>
+: <a class="el" href="structCleanTest.html#ac95281eac4477b1a3a3a19496d21fee5">CleanTest</a>
 , <a class="el" href="classDiskInterfaceTest.html#a29bc325e0ac7792d6956b2f31270b714">DiskInterfaceTest</a>
+, <a class="el" href="structBuildLogTest.html#a8035f408c9cdb4f6e51d76afcdea9ea1">BuildLogTest</a>
 </li>
 <li>SkipWhitespace()
 : <a class="el" href="structTokenizer.html#ac8045050d22bf62444fa18c809992da8">Tokenizer</a>
@@ -81,22 +86,34 @@ Here is a list of all class members with links to the classes they belong to:
 <li>smart_terminal_
 : <a class="el" href="structBuildStatus.html#a87359432bdf6f64bacc2e1a2372dabfa">BuildStatus</a>
 </li>
+<li>SourceLocation()
+: <a class="el" href="structSourceLocation.html#a3c41be4abf8909bb0a32eeaa8c73cf75">SourceLocation</a>
+</li>
 <li>SPECIAL
 : <a class="el" href="structEvalString.html#a751fb74ca53a79057d69b0dff4d64ab8a7605297b1cf665d19e1d9c18db23e5ee">EvalString</a>
 </li>
 <li>Start()
-: <a class="el" href="structTokenizer.html#a3af7f57272890b11464c2c9d2f3aea93">Tokenizer</a>
-, <a class="el" href="structSubprocess.html#afd080048df376a18161a7e2e160517c7">Subprocess</a>
-, <a class="el" href="structGraphViz.html#a84ede9951cede05d6a708e062a29d3ea">GraphViz</a>
+: <a class="el" href="structGraphViz.html#a84ede9951cede05d6a708e062a29d3ea">GraphViz</a>
+, <a class="el" href="structTokenizer.html#a3af7f57272890b11464c2c9d2f3aea93">Tokenizer</a>
+, <a class="el" href="structSubprocess.html#a6813da0fc1567ee13661a37cba2e58d8">Subprocess</a>
 </li>
 <li>start_dir_
 : <a class="el" href="classDiskInterfaceTest.html#a5fc9a254252f0eae7e5af4087e16c095">DiskInterfaceTest</a>
+</li>
+<li>start_time
+: <a class="el" href="structBuildLog_1_1LogEntry.html#a2ba1f4c7b480857f4b54be8ff28db9fc">BuildLog::LogEntry</a>
+</li>
+<li>start_time_millis_
+: <a class="el" href="structBuildStatus.html#a148800f341d080cf65430b7369110344">BuildStatus</a>
 </li>
 <li>StartCommand()
 : <a class="el" href="structRealCommandRunner.html#a314f3738437eb416004396ac267de515">RealCommandRunner</a>
 , <a class="el" href="structDryRunCommandRunner.html#a10f70f169e7e782ea7e55fc0e8bf15db">DryRunCommandRunner</a>
 , <a class="el" href="structCommandRunner.html#a23a37c5157518ed35fd1a366b1ab3d78">CommandRunner</a>
 , <a class="el" href="structBuildTest.html#a0cc789a1cd6605b09a803ca2d55a683e">BuildTest</a>
+</li>
+<li>started_edges_
+: <a class="el" href="structBuildStatus.html#a4d456bf8d06d793d99f7a927a573ffad">BuildStatus</a>
 </li>
 <li>StartEdge()
 : <a class="el" href="structBuilder.html#a66ff07bb0a3afc4651c8cd362a90831e">Builder</a>
@@ -121,10 +138,10 @@ Here is a list of all class members with links to the classes they belong to:
 : <a class="el" href="structParserTest.html#a5246c88c6d1a741357a026b9e0bb6b17">ParserTest</a>
 </li>
 <li>state_
-: <a class="el" href="structManifestParser.html#ad7b8cc26b5900c465a38106f8d92bbe0">ManifestParser</a>
-, <a class="el" href="structBuilder.html#a2c8ce0c9427c6bdc1084d3017d72a253">Builder</a>
-, <a class="el" href="classCleaner.html#af18bfb0e6a405d23537bce721ec46fda">Cleaner</a>
+: <a class="el" href="classCleaner.html#af18bfb0e6a405d23537bce721ec46fda">Cleaner</a>
+, <a class="el" href="structManifestParser.html#ad7b8cc26b5900c465a38106f8d92bbe0">ManifestParser</a>
 , <a class="el" href="structStateTestWithBuiltinRules.html#a7fc39f179dd0a7d578690ce03ed58e87">StateTestWithBuiltinRules</a>
+, <a class="el" href="structBuilder.html#a2c8ce0c9427c6bdc1084d3017d72a253">Builder</a>
 </li>
 <li>StateTestWithBuiltinRules()
 : <a class="el" href="structStateTestWithBuiltinRules.html#a637c05490b0e84428021bfa595094063">StateTestWithBuiltinRules</a>
@@ -137,21 +154,10 @@ Here is a list of all class members with links to the classes they belong to:
 </li>
 <li>status_
 : <a class="el" href="structBuilder.html#a4a8cacc5a8241dff3ea782ee55ea721e">Builder</a>
+, <a class="el" href="classCleaner.html#ae33166af3dc8173e45d6e2dc78b1477d">Cleaner</a>
 </li>
 <li>status_known()
 : <a class="el" href="structFileStat.html#a5ee9e4da3f9f823bc2eeb96bb969d197">FileStat</a>
-</li>
-<li>stderr_
-: <a class="el" href="structSubprocess.html#a248a82a0b4f8023d749a13ae06bad1eb">Subprocess</a>
-</li>
-<li>stdout_
-: <a class="el" href="structSubprocess.html#a1f546bd8d454a95c2b6ec1b4d5a98aa5">Subprocess</a>
-</li>
-<li>Stream()
-: <a class="el" href="structSubprocess_1_1Stream.html#a2527a7f0bac41ab0dfd71f614481509c">Subprocess::Stream</a>
-</li>
-<li>SUBNINJA
-: <a class="el" href="structToken.html#acf70e9411196c602738c3ed2428c7137ad7256f02d29c7651c08293dce10b9d17">Token</a>
 </li>
 <li>subproc_to_edge_
 : <a class="el" href="structRealCommandRunner.html#a49f2391d5b878b7b2a9c97f5c7f3571a">RealCommandRunner</a>
@@ -159,12 +165,19 @@ Here is a list of all class members with links to the classes they belong to:
 <li>Subprocess()
 : <a class="el" href="structSubprocess.html#a7261c6dd5c9826ea9c72f0f79dc5ad2a">Subprocess</a>
 </li>
+<li>SubprocessSet()
+: <a class="el" href="structSubprocessSet.html#a00c1cd317ec172672fea906569f47806">SubprocessSet</a>
+, <a class="el" href="structSubprocess.html#abfdc22438d5c005a2b739a845d985005">Subprocess</a>
+</li>
 <li>subprocs_
 : <a class="el" href="structRealCommandRunner.html#a36b41da74ab4d353172f228f72f67e14">RealCommandRunner</a>
 </li>
+<li>swallow_failures
+: <a class="el" href="structBuildConfig.html#a72b55b8ea7568fdcad7e237b3dfea8c2">BuildConfig</a>
+</li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:28 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

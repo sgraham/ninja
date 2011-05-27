@@ -44,13 +44,15 @@
 <a name="l00018"></a>00018 <span class="keyword">struct </span><a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>;
 <a name="l00019"></a>00019 <span class="comment"></span>
 <a name="l00020"></a>00020 <span class="comment">/// Run in &quot;browse&quot; mode, which execs a Python webserver.</span>
-<a name="l00021"></a>00021 <span class="comment">/// |command| is the command used to invoke ninja.</span>
-<a name="l00022"></a>00022 <span class="comment">/// This function does not return if it runs successfully.</span>
-<a name="l00023"></a>00023 <span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="browse_8cc.html#aa7dd814dc6812765a6391dde6679cdb9" title="Run in &amp;quot;browse&amp;quot; mode, which execs a Python webserver.">RunBrowsePython</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <span class="keywordtype">char</span>* ninja_command);
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025 <span class="preprocessor">#endif  // NINJA_BROWSE_H_</span>
+<a name="l00021"></a>00021 <span class="comment">/// \a ninja_command is the command used to invoke ninja.</span>
+<a name="l00022"></a>00022 <span class="comment">/// \a initial_target is the first target to load.</span>
+<a name="l00023"></a>00023 <span class="comment">/// This function does not return if it runs successfully.</span>
+<a name="l00024"></a>00024 <span class="comment"></span><span class="keywordtype">void</span> <a class="code" href="browse_8cc.html#a19bfd0ee33f15bcfce46114a0bdba59a" title="Run in &amp;quot;browse&amp;quot; mode, which execs a Python webserver.">RunBrowsePython</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <span class="keywordtype">char</span>* ninja_command,
+<a name="l00025"></a>00025                      <span class="keyword">const</span> <span class="keywordtype">char</span>* initial_target);
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="preprocessor">#endif  // NINJA_BROWSE_H_</span>
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

@@ -51,11 +51,11 @@ This graph shows which files directly or indirectly include this file:</div>
 <p><a href="browse_8cc_source.html">Go to the source code of this file.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="browse_8cc.html#aa7dd814dc6812765a6391dde6679cdb9">RunBrowsePython</a> (<a class="el" href="structState.html">State</a> *state, const char *ninja_command)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Run in "browse" mode, which execs a Python webserver.  <a href="#aa7dd814dc6812765a6391dde6679cdb9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="browse_8cc.html#a19bfd0ee33f15bcfce46114a0bdba59a">RunBrowsePython</a> (<a class="el" href="structState.html">State</a> *state, const char *ninja_command, const char *initial_target)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Run in "browse" mode, which execs a Python webserver.  <a href="#a19bfd0ee33f15bcfce46114a0bdba59a"></a><br/></td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="aa7dd814dc6812765a6391dde6679cdb9"></a><!-- doxytag: member="browse.cc::RunBrowsePython" ref="aa7dd814dc6812765a6391dde6679cdb9" args="(State *state, const char *ninja_command)" -->
+<a class="anchor" id="a19bfd0ee33f15bcfce46114a0bdba59a"></a><!-- doxytag: member="browse.cc::RunBrowsePython" ref="a19bfd0ee33f15bcfce46114a0bdba59a" args="(State *state, const char *ninja_command, const char *initial_target)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -69,7 +69,13 @@ This graph shows which files directly or indirectly include this file:</div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const char *&nbsp;</td>
-          <td class="paramname"> <em>ninja_command</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>ninja_command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>initial_target</em></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -81,16 +87,14 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="memdoc">
 
 <p>Run in "browse" mode, which execs a Python webserver. </p>
-<p>|command| is the command used to invoke ninja. This function does not return if it runs successfully. </p>
+<p><em>ninja_command</em> is the command used to invoke ninja. <em>initial_target</em> is the first target to load. This function does not return if it runs successfully. </p>
 
 <p>Definition at line <a class="el" href="browse_8cc_source.html#l00023">23</a> of file <a class="el" href="browse_8cc_source.html">browse.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00170">CmdBrowse()</a>.</p>
-
 </div>
 </div>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

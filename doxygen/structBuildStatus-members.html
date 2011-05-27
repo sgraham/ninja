@@ -29,20 +29,22 @@
 </div>
 <div class="contents">
 <h1>BuildStatus Member List</h1>This is the complete list of members for <a class="el" href="structBuildStatus.html">BuildStatus</a>, including all inherited members.<table>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#abea69cd2e6d4dd5e56481386ea3f81a2">BuildEdgeFinished</a>(Edge *edge)</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#aa43abc4269585826ca8170480ff79ba3">BuildEdgeFinished</a>(Edge *edge, bool success, const string &amp;output, int *start_time, int *end_time)</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
   <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a1ed5751d12fec96d3d0fd53d0b04a162">BuildEdgeStarted</a>(Edge *edge)</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a2b98b901de380396ee8546c55baf095d">BuildStatus</a>()</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#ac552d96d99005f0ba37477f67e1c6f46">finished_edges_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#aab80b38033b643b1ec664355b83f4d4e">last_update_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#ae0ee802c831f69a934e6d2205698e600">BuildStatus</a>(const BuildConfig &amp;config)</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#accbad5074966766fd07e53117223fe35">config_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#ac552d96d99005f0ba37477f67e1c6f46">finished_edges_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a28d5b8eb8891e464f0f750c2f636f1ed">last_update_millis_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
   <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a46706e3daf217f32bd3edd90371586d9">PlanHasTotalEdges</a>(int total)</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a86a9921153c374661952003d57aff718">PrintStatus</a>(Edge *edge)</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a8f56bb2d34a27c67c647529494679bf6">running_edges_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#ae804e1843f186da19a5dac4e828bc9a0">RunningEdgeMap</a> typedef</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a87359432bdf6f64bacc2e1a2372dabfa">smart_terminal_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#af9db9889e39e2deb6d76488087b4bfe3">total_edges_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
-  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a6e3eb367a2ff3069e29274debeced575">verbosity_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a86a9921153c374661952003d57aff718">PrintStatus</a>(Edge *edge)</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a8f56bb2d34a27c67c647529494679bf6">running_edges_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#ab7b1138530a4b0d2e4c6ac9825747c69">RunningEdgeMap</a> typedef</td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a87359432bdf6f64bacc2e1a2372dabfa">smart_terminal_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a148800f341d080cf65430b7369110344">start_time_millis_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#a4d456bf8d06d793d99f7a927a573ffad">started_edges_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
+  <tr class="memlist"><td><a class="el" href="structBuildStatus.html#af9db9889e39e2deb6d76488087b4bfe3">total_edges_</a></td><td><a class="el" href="structBuildStatus.html">BuildStatus</a></td><td><code> [private]</code></td></tr>
 </table></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:29 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

@@ -40,11 +40,10 @@ Inheritance diagram for RealCommandRunner:</div>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealCommandRunner.html#a20c78ac0596d252fd92fc0697826f7f7">CanRunMore</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structEdge.html">Edge</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealCommandRunner.html#a55c3ea9aa891ed7006767049ec25f18d">NextFinishedCommand</a> (bool *success)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealCommandRunner.html#ad7815c6e2b47ff6903b3a752dd532bb9">RealCommandRunner</a> (const <a class="el" href="structBuildConfig.html">BuildConfig</a> &amp;config)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealCommandRunner.html#a314f3738437eb416004396ac267de515">StartCommand</a> (<a class="el" href="structEdge.html">Edge</a> *edge)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealCommandRunner.html#ab5dc99b6e71aee8b5ce6b8f830ae4ccd">WaitForCommands</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait for commands to make progress; return false if there is no progress to be made.  <a href="#ab5dc99b6e71aee8b5ce6b8f830ae4ccd"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structEdge.html">Edge</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealCommandRunner.html#aae52cf96131e42aeb807bf7519fbe1b9">WaitForCommand</a> (bool *success, string *output)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait for a command to complete.  <a href="#aae52cf96131e42aeb807bf7519fbe1b9"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealCommandRunner.html#a971f6ea0ec1df05e734c9aba16be6997">~RealCommandRunner</a> ()</td></tr>
 <tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structBuildConfig.html">BuildConfig</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealCommandRunner.html#aeece9d778b4cd826f377f33e9c25f53f">config_</a></td></tr>
@@ -53,7 +52,7 @@ Inheritance diagram for RealCommandRunner:</div>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00259">259</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00293">293</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ad7815c6e2b47ff6903b3a752dd532bb9"></a><!-- doxytag: member="RealCommandRunner::RealCommandRunner" ref="ad7815c6e2b47ff6903b3a752dd532bb9" args="(const BuildConfig &amp;config)" -->
 <div class="memitem">
@@ -71,7 +70,7 @@ Inheritance diagram for RealCommandRunner:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00260">260</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00294">294</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 
 </div>
 </div>
@@ -90,7 +89,7 @@ Inheritance diagram for RealCommandRunner:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00261">261</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00295">295</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 
 </div>
 </div>
@@ -112,33 +111,9 @@ Inheritance diagram for RealCommandRunner:</div>
 
 <p>Implements <a class="el" href="structCommandRunner.html#a210f0111087ec050ad9f301f9e6d98f9">CommandRunner</a>.</p>
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00272">272</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00305">305</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 
-<p>References <a class="el" href="build_8cc_source.html#l00267">config_</a>, <a class="el" href="build_8h_source.html#l00092">BuildConfig::parallelism</a>, <a class="el" href="subprocess_8h_source.html#l00057">SubprocessSet::running_</a>, and <a class="el" href="build_8cc_source.html#l00268">subprocs_</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a55c3ea9aa891ed7006767049ec25f18d"></a><!-- doxytag: member="RealCommandRunner::NextFinishedCommand" ref="a55c3ea9aa891ed7006767049ec25f18d" args="(bool *success)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structEdge.html">Edge</a> * RealCommandRunner::NextFinishedCommand </td>
-          <td>(</td>
-          <td class="paramtype">bool *&nbsp;</td>
-          <td class="paramname"> <em>success</em></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Implements <a class="el" href="structCommandRunner.html#a29549dee389df7ab92620e7fa5c547c5">CommandRunner</a>.</p>
-
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00297">297</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
-
-<p>References <a class="el" href="build_8cc_source.html#l00267">config_</a>, <a class="el" href="graph_8cc_source.html#l00119">Edge::EvaluateCommand()</a>, <a class="el" href="subprocess_8cc_source.html#l00112">Subprocess::Finish()</a>, <a class="el" href="graph_8cc_source.html#l00124">Edge::GetDescription()</a>, <a class="el" href="subprocess_8cc_source.html#l00179">SubprocessSet::NextFinished()</a>, <a class="el" href="subprocess_8h_source.html#l00045">Subprocess::stderr_</a>, <a class="el" href="subprocess_8h_source.html#l00045">Subprocess::stdout_</a>, <a class="el" href="build_8cc_source.html#l00269">subproc_to_edge_</a>, <a class="el" href="build_8cc_source.html#l00268">subprocs_</a>, <a class="el" href="build_8h_source.html#l00088">BuildConfig::VERBOSE</a>, and <a class="el" href="build_8h_source.html#l00090">BuildConfig::verbosity</a>.</p>
+<p>References <a class="el" href="build_8cc_source.html#l00300">config_</a>, <a class="el" href="build_8h_source.html#l00091">BuildConfig::parallelism</a>, <a class="el" href="subprocess_8h_source.html#l00074">SubprocessSet::running_</a>, and <a class="el" href="build_8cc_source.html#l00301">subprocs_</a>.</p>
 
 </div>
 </div>
@@ -160,34 +135,44 @@ Inheritance diagram for RealCommandRunner:</div>
 
 <p>Implements <a class="el" href="structCommandRunner.html#a23a37c5157518ed35fd1a366b1ab3d78">CommandRunner</a>.</p>
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00276">276</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00309">309</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 
-<p>References <a class="el" href="subprocess_8cc_source.html#l00127">SubprocessSet::Add()</a>, <a class="el" href="graph_8cc_source.html#l00119">Edge::EvaluateCommand()</a>, <a class="el" href="subprocess_8cc_source.html#l00043">Subprocess::Start()</a>, <a class="el" href="build_8cc_source.html#l00269">subproc_to_edge_</a>, and <a class="el" href="build_8cc_source.html#l00268">subprocs_</a>.</p>
+<p>References <a class="el" href="subprocess-win32_8cc_source.html#l00179">SubprocessSet::Add()</a>, <a class="el" href="graph_8cc_source.html#l00117">Edge::EvaluateCommand()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00091">Subprocess::Start()</a>, <a class="el" href="build_8cc_source.html#l00302">subproc_to_edge_</a>, and <a class="el" href="build_8cc_source.html#l00301">subprocs_</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab5dc99b6e71aee8b5ce6b8f830ae4ccd"></a><!-- doxytag: member="RealCommandRunner::WaitForCommands" ref="ab5dc99b6e71aee8b5ce6b8f830ae4ccd" args="()" -->
+<a class="anchor" id="aae52cf96131e42aeb807bf7519fbe1b9"></a><!-- doxytag: member="RealCommandRunner::WaitForCommand" ref="aae52cf96131e42aeb807bf7519fbe1b9" args="(bool *success, string *output)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool RealCommandRunner::WaitForCommands </td>
+          <td class="memname"><a class="el" href="structEdge.html">Edge</a> * RealCommandRunner::WaitForCommand </td>
           <td>(</td>
-          <td class="paramname"></td>
-          <td>&nbsp;)&nbsp;</td>
-          <td><code> [virtual]</code></td>
+          <td class="paramtype">bool *&nbsp;</td>
+          <td class="paramname"> <em>success</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string *&nbsp;</td>
+          <td class="paramname"> <em>output</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Wait for commands to make progress; return false if there is no progress to be made. </p>
+<p>Wait for a command to complete. </p>
 
-<p>Implements <a class="el" href="structCommandRunner.html#a6067e6e02c77fcc5685db4994a441b66">CommandRunner</a>.</p>
+<p>Implements <a class="el" href="structCommandRunner.html#a57ab30f8e96af5cfe36f816c43b69557">CommandRunner</a>.</p>
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00287">287</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00320">320</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 
-<p>References <a class="el" href="subprocess_8cc_source.html#l00131">SubprocessSet::DoWork()</a>, <a class="el" href="subprocess_8h_source.html#l00058">SubprocessSet::finished_</a>, <a class="el" href="subprocess_8h_source.html#l00057">SubprocessSet::running_</a>, and <a class="el" href="build_8cc_source.html#l00268">subprocs_</a>.</p>
+<p>References <a class="el" href="subprocess-win32_8cc_source.html#l00183">SubprocessSet::DoWork()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00148">Subprocess::Finish()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00165">Subprocess::GetOutput()</a>, <a class="el" href="subprocess-win32_8cc_source.html#l00206">SubprocessSet::NextFinished()</a>, <a class="el" href="build_8cc_source.html#l00302">subproc_to_edge_</a>, and <a class="el" href="build_8cc_source.html#l00301">subprocs_</a>.</p>
 
 </div>
 </div>
@@ -203,9 +188,9 @@ Inheritance diagram for RealCommandRunner:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00267">267</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00300">300</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="build_8cc_source.html#l00272">CanRunMore()</a>, and <a class="el" href="build_8cc_source.html#l00297">NextFinishedCommand()</a>.</p>
+<p>Referenced by <a class="el" href="build_8cc_source.html#l00305">CanRunMore()</a>.</p>
 
 </div>
 </div>
@@ -220,9 +205,9 @@ Inheritance diagram for RealCommandRunner:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00269">269</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00302">302</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="build_8cc_source.html#l00297">NextFinishedCommand()</a>, and <a class="el" href="build_8cc_source.html#l00276">StartCommand()</a>.</p>
+<p>Referenced by <a class="el" href="build_8cc_source.html#l00309">StartCommand()</a>, and <a class="el" href="build_8cc_source.html#l00320">WaitForCommand()</a>.</p>
 
 </div>
 </div>
@@ -237,9 +222,9 @@ Inheritance diagram for RealCommandRunner:</div>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="build_8cc_source.html#l00268">268</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
+<p>Definition at line <a class="el" href="build_8cc_source.html#l00301">301</a> of file <a class="el" href="build_8cc_source.html">build.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="build_8cc_source.html#l00272">CanRunMore()</a>, <a class="el" href="build_8cc_source.html#l00297">NextFinishedCommand()</a>, <a class="el" href="build_8cc_source.html#l00276">StartCommand()</a>, and <a class="el" href="build_8cc_source.html#l00287">WaitForCommands()</a>.</p>
+<p>Referenced by <a class="el" href="build_8cc_source.html#l00305">CanRunMore()</a>, <a class="el" href="build_8cc_source.html#l00309">StartCommand()</a>, and <a class="el" href="build_8cc_source.html#l00320">WaitForCommand()</a>.</p>
 
 </div>
 </div>
@@ -247,7 +232,7 @@ Inheritance diagram for RealCommandRunner:</div>
 <li><a class="el" href="build_8cc_source.html">build.cc</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:29 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

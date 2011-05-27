@@ -34,6 +34,7 @@
       <li><a href="functions_type.html"><span>Typedefs</span></a></li>
       <li><a href="functions_enum.html"><span>Enumerations</span></a></li>
       <li><a href="functions_eval.html"><span>Enumerator</span></a></li>
+      <li><a href="functions_rela.html"><span>Related&nbsp;Functions</span></a></li>
     </ul>
   </div>
   <div class="tabs">
@@ -69,7 +70,7 @@
 , <a class="el" href="structState.html#ae09e90c5524df7fd37a96751930336c9">State</a>
 </li>
 <li>buf_
-: <a class="el" href="structSubprocess_1_1Stream.html#aa7ba0c9571638ca414d045b97d512529">Subprocess::Stream</a>
+: <a class="el" href="structSubprocess.html#a8e02620076abef08210d4ffd865eccf2">Subprocess</a>
 </li>
 <li>build_log_
 : <a class="el" href="structState.html#a463348843da891ba1f7f1df149051a54">State</a>
@@ -81,6 +82,12 @@
 
 
 <h3><a class="anchor" id="index_c">- c -</a></h3><ul>
+<li>cleaned_files_count_
+: <a class="el" href="classCleaner.html#a202474ca14ab8841e0787eccce578cf9">Cleaner</a>
+</li>
+<li>column_
+: <a class="el" href="structSourceLocation.html#a4251cffa529f192b8b9153325cd17bd1">SourceLocation</a>
+</li>
 <li>command
 : <a class="el" href="structBuildLog_1_1LogEntry.html#a0cc61e0f05a2dab553b221e54356e349">BuildLog::LogEntry</a>
 </li>
@@ -97,9 +104,13 @@
 : <a class="el" href="structBuildTest.html#a2d5bad0febef5843b7bdba0a538c452c">BuildTest</a>
 </li>
 <li>config_
-: <a class="el" href="structBuildTest.html#adbf3fa7b00240708b88705af5f0eb5bb">BuildTest</a>
+: <a class="el" href="structBuildStatus.html#accbad5074966766fd07e53117223fe35">BuildStatus</a>
 , <a class="el" href="structBuildLog.html#ae84b6f83cfb8b0d7e9c49330c3c30c51">BuildLog</a>
 , <a class="el" href="structRealCommandRunner.html#aeece9d778b4cd826f377f33e9c25f53f">RealCommandRunner</a>
+, <a class="el" href="structBuilder.html#a982b2b7e9d5a7fcc3bf1082b1dfa8c7a">Builder</a>
+, <a class="el" href="classCleaner.html#adc5d99d7fb02b1686871f14bef3f85f0">Cleaner</a>
+, <a class="el" href="structCleanTest.html#a361d70919a53fecdea9123a349275f55">CleanTest</a>
+, <a class="el" href="structBuildTest.html#adbf3fa7b00240708b88705af5f0eb5bb">BuildTest</a>
 </li>
 <li>contents
 : <a class="el" href="structVirtualFileSystem_1_1Entry.html#a13ebd3f2eca71653563308338a7107bc">VirtualFileSystem::Entry</a>
@@ -134,12 +145,10 @@
 </li>
 <li>disk_interface_
 : <a class="el" href="structBuilder.html#aafffa035b2c7c6c492648f136a86082c">Builder</a>
+, <a class="el" href="classCleaner.html#af1d5636bb9e186068d73b1923f73a92b">Cleaner</a>
 </li>
 <li>dry_run
 : <a class="el" href="structBuildConfig.html#aa65c3f1fe7e0faa2b05b36ed1743da5d">BuildConfig</a>
-</li>
-<li>dry_run_
-: <a class="el" href="classCleaner.html#ae2dae177ab28b3bf9bedf4bf9847de69">Cleaner</a>
 </li>
 </ul>
 
@@ -155,16 +164,19 @@
 : <a class="el" href="structTokenizer.html#a1d8a63bae4c18cb2c95149af14c8ff25">Tokenizer</a>
 , <a class="el" href="structToken.html#ada473a0384b30570d3c9d4a5123543ed">Token</a>
 </li>
+<li>end_time
+: <a class="el" href="structBuildLog_1_1LogEntry.html#a8c9d71c8162925f8fe519543d3fb1416">BuildLog::LogEntry</a>
+</li>
 <li>env_
-: <a class="el" href="structManifestParser.html#a0dbb40eddd53ef84a018cb2de667fcb1">ManifestParser</a>
-, <a class="el" href="structEdge.html#a5ad2a0063be2eb5ce2fb05a2b82b3213">Edge</a>
+: <a class="el" href="structEdge.html#a5ad2a0063be2eb5ce2fb05a2b82b3213">Edge</a>
+, <a class="el" href="structManifestParser.html#a0dbb40eddd53ef84a018cb2de667fcb1">ManifestParser</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_f">- f -</a></h3><ul>
 <li>fd_
-: <a class="el" href="structSubprocess_1_1Stream.html#adf11842bd88700aa0b02c1df3eb5b730">Subprocess::Stream</a>
+: <a class="el" href="structSubprocess.html#aa7a359534ba9620b8968cf8237c20eb5">Subprocess</a>
 </li>
 <li>file_
 : <a class="el" href="structNode.html#a7b183cd2969fd95bbd00e4e61460d141">Node</a>
@@ -180,6 +192,9 @@
 : <a class="el" href="structParserTest.html#a40b41aa069fb3495f4e45f583f312216">ParserTest</a>
 , <a class="el" href="structVirtualFileSystem.html#af0989fe844495c2f648869a6a5074348">VirtualFileSystem</a>
 </li>
+<li>files_removed_
+: <a class="el" href="structVirtualFileSystem.html#aaca2f5b74c3ea10b4de0d5268726be98">VirtualFileSystem</a>
+</li>
 <li>finished_
 : <a class="el" href="structDryRunCommandRunner.html#aea60923606281f7443fb25991c57d293">DryRunCommandRunner</a>
 , <a class="el" href="structSubprocessSet.html#a1b3aec115bae40c9298275c126e9614b">SubprocessSet</a>
@@ -191,7 +206,8 @@
 : <a class="el" href="structGETOPT__LONG__OPTION__T.html#a9d4ff47718fe9bba8c44957fa450f4b6">GETOPT_LONG_OPTION_T</a>
 </li>
 <li>fs_
-: <a class="el" href="structGraphTest.html#a5288df1d31b827133b1a500b73d8d493">GraphTest</a>
+: <a class="el" href="structCleanTest.html#ae9d626581c2a6623ab5b55eefb2f21cf">CleanTest</a>
+, <a class="el" href="structGraphTest.html#a5288df1d31b827133b1a500b73d8d493">GraphTest</a>
 , <a class="el" href="structBuildTest.html#a9ea88eb9c32d3eb77b0df06696b2d529">BuildTest</a>
 </li>
 </ul>
@@ -234,8 +250,11 @@
 <li>last_indent_
 : <a class="el" href="structTokenizer.html#a30155c156256628594296347c89bed1b">Tokenizer</a>
 </li>
-<li>last_update_
-: <a class="el" href="structBuildStatus.html#aab80b38033b643b1ec664355b83f4d4e">BuildStatus</a>
+<li>last_update_millis_
+: <a class="el" href="structBuildStatus.html#a28d5b8eb8891e464f0f750c2f636f1ed">BuildStatus</a>
+</li>
+<li>line_
+: <a class="el" href="structSourceLocation.html#a75609c040c4aa6f780a33de9f5bd8da3">SourceLocation</a>
 </li>
 <li>line_number_
 : <a class="el" href="structTokenizer.html#a2ea32e540574c6068cddb79571a0f801">Tokenizer</a>
@@ -251,6 +270,9 @@
 
 
 <h3><a class="anchor" id="index_m">- m -</a></h3><ul>
+<li>makefile_flavor_
+: <a class="el" href="structTokenizer.html#a0e635f8b9b9546568e679a169b1a1756">Tokenizer</a>
+</li>
 <li>mtime
 : <a class="el" href="structVirtualFileSystem_1_1Entry.html#ab9e2a62f080b86a2b2fa829114787a93">VirtualFileSystem::Entry</a>
 </li>
@@ -265,7 +287,7 @@
 
 <h3><a class="anchor" id="index_n">- n -</a></h3><ul>
 <li>name
-: <a class="el" href="structGETOPT__LONG__OPTION__T.html#a5c820ed27a5917ad584c6af0f5588443">GETOPT_LONG_OPTION_T</a>
+: <a class="el" href="structGETOPT__LONG__OPTION__T.html#a0ac05c4f733caf07c92d70408d181e8f">GETOPT_LONG_OPTION_T</a>
 </li>
 <li>name_
 : <a class="el" href="structRule.html#ab78c8a835c42cf88c8344d9134432b67">Rule</a>
@@ -359,6 +381,15 @@
 <li>start_dir_
 : <a class="el" href="classDiskInterfaceTest.html#a5fc9a254252f0eae7e5af4087e16c095">DiskInterfaceTest</a>
 </li>
+<li>start_time
+: <a class="el" href="structBuildLog_1_1LogEntry.html#a2ba1f4c7b480857f4b54be8ff28db9fc">BuildLog::LogEntry</a>
+</li>
+<li>start_time_millis_
+: <a class="el" href="structBuildStatus.html#a148800f341d080cf65430b7369110344">BuildStatus</a>
+</li>
+<li>started_edges_
+: <a class="el" href="structBuildStatus.html#a4d456bf8d06d793d99f7a927a573ffad">BuildStatus</a>
+</li>
 <li>stat_cache_
 : <a class="el" href="structState.html#a65c669e396eb63e38132d51f95f43b63">State</a>
 </li>
@@ -375,13 +406,8 @@
 : <a class="el" href="structStatTest.html#aa3afddcbc6b1fa8efbeda9c260dcaf46">StatTest</a>
 </li>
 <li>status_
-: <a class="el" href="structBuilder.html#a4a8cacc5a8241dff3ea782ee55ea721e">Builder</a>
-</li>
-<li>stderr_
-: <a class="el" href="structSubprocess.html#a248a82a0b4f8023d749a13ae06bad1eb">Subprocess</a>
-</li>
-<li>stdout_
-: <a class="el" href="structSubprocess.html#a1f546bd8d454a95c2b6ec1b4d5a98aa5">Subprocess</a>
+: <a class="el" href="classCleaner.html#ae33166af3dc8173e45d6e2dc78b1477d">Cleaner</a>
+, <a class="el" href="structBuilder.html#a4a8cacc5a8241dff3ea782ee55ea721e">Builder</a>
 </li>
 <li>subproc_to_edge_
 : <a class="el" href="structRealCommandRunner.html#a49f2391d5b878b7b2a9c97f5c7f3571a">RealCommandRunner</a>
@@ -389,15 +415,15 @@
 <li>subprocs_
 : <a class="el" href="structRealCommandRunner.html#a36b41da74ab4d353172f228f72f67e14">RealCommandRunner</a>
 </li>
+<li>swallow_failures
+: <a class="el" href="structBuildConfig.html#a72b55b8ea7568fdcad7e237b3dfea8c2">BuildConfig</a>
+</li>
 </ul>
 
 
 <h3><a class="anchor" id="index_t">- t -</a></h3><ul>
 <li>temp_dir_name_
 : <a class="el" href="classDiskInterfaceTest.html#a44812427d03dd8fc1cdc030f6c031b8d">DiskInterfaceTest</a>
-</li>
-<li>time_ms
-: <a class="el" href="structBuildLog_1_1LogEntry.html#a2a51e70eb242968febe228da214a45d0">BuildLog::LogEntry</a>
 </li>
 <li>token_
 : <a class="el" href="structTokenizer.html#ab461782f59af4d0eea088d06ef898054">Tokenizer</a>
@@ -429,14 +455,8 @@
 <li>vars
 : <a class="el" href="structTestEnv.html#abbe3a2fd9f37d4058c37e949d3a25bd0">TestEnv</a>
 </li>
-<li>verbose_
-: <a class="el" href="classCleaner.html#aac44abb14081e24bbd6a92162720c4c6">Cleaner</a>
-</li>
 <li>verbosity
 : <a class="el" href="structBuildConfig.html#ae50beadfa54bab9ea78feb96f56431cf">BuildConfig</a>
-</li>
-<li>verbosity_
-: <a class="el" href="structBuildStatus.html#a6e3eb367a2ff3069e29274debeced575">BuildStatus</a>
 </li>
 <li>visited_
 : <a class="el" href="structGraphViz.html#ae10d0216d6b13d67fda2355f75e75e2c">GraphViz</a>
@@ -448,12 +468,9 @@
 <li>want_
 : <a class="el" href="structPlan.html#a1fa36aa79d161c6ec06cebeb1c2ee13f">Plan</a>
 </li>
-<li>whitespace_significant_
-: <a class="el" href="structTokenizer.html#a9b42b5fd710ba6b77b0b3e06fc7bcdf7">Tokenizer</a>
-</li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:28 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

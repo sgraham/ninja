@@ -1,5 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" href="$structManifestParser_1_1FileReader.html" title="ManifestParser::FileReader" alt="" coords="5,32,184,61"/>
-<area shape="rect" href="$structParserTest.html" title="ParserTest" alt="" coords="245,5,328,35"/>
-<area shape="rect" href="$structRealFileReader.html" title="An implementation of ManifestParser::FileReader that actually reads the file." alt="" coords="232,59,341,88"/>
+<area shape="rect" href="$structManifestParser_1_1FileReader.html" title="ManifestParser::FileReader" alt="" coords="5,5,184,35"/>
+<area shape="rect" href="$structParserTest.html" title="ParserTest" alt="" coords="233,5,316,35"/>
 </map>

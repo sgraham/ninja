@@ -34,38 +34,51 @@
 <p><a href="classCleaner-members.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#aff631d8ef2a1f602e2b5e9a8d6d94a90">CleanAll</a> ()</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean all built files.  <a href="#aff631d8ef2a1f602e2b5e9a8d6d94a90"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a9fec291790a16b513e9bae378ded12b2">CleanAll</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean all built files.  <a href="#a9fec291790a16b513e9bae378ded12b2"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#af4b0d5cb3c426f05e96c1222f724b880">cleaned_files_count</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a94b3e75dcc18d20d1fc0f075cf8d2a7a">Cleaner</a> (<a class="el" href="structState.html">State</a> *state, const <a class="el" href="structBuildConfig.html">BuildConfig</a> &amp;config, <a class="el" href="structDiskInterface.html">DiskInterface</a> *disk_interface)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Build a cleaner object with the given <em>disk_interface</em> (Useful for testing).  <a href="#a94b3e75dcc18d20d1fc0f075cf8d2a7a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#aa54754b39f27d5d566ce62bea4b814cc">Cleaner</a> (<a class="el" href="structState.html">State</a> *state, const <a class="el" href="structBuildConfig.html">BuildConfig</a> &amp;config)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Constructor.  <a href="#aa54754b39f27d5d566ce62bea4b814cc"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a5c2feccaa094c87f4382072c8fb57932">CleanRule</a> (const <a class="el" href="structRule.html">Rule</a> *rule)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean all the file built with the given rule <em>rule</em>.  <a href="#a5c2feccaa094c87f4382072c8fb57932"></a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Build a cleaner object with a real disk interface.  <a href="#aa54754b39f27d5d566ce62bea4b814cc"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#ae02b542aa069eeb2c4b86d648263c2dd">CleanRule</a> (const char *rule)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean the file produced by the given <em>rule</em>.  <a href="#ae02b542aa069eeb2c4b86d648263c2dd"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a0d7bcd7981b24ae786dd6654157b5978">CleanRule</a> (const <a class="el" href="structRule.html">Rule</a> *rule)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean all the file built with the given rule <em>rule</em>.  <a href="#a0d7bcd7981b24ae786dd6654157b5978"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a77d3abb9b7062c1e8c86fe5ac9fb44c6">CleanRules</a> (int rule_count, char *rules[])</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a1f7e7e6a7bfb21be74393dad8f3863ae">CleanTarget</a> (<a class="el" href="structNode.html">Node</a> *target)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean the given <em>target</em> and all the file built for it.  <a href="#a1f7e7e6a7bfb21be74393dad8f3863ae"></a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean the file produced by the given <em>rules</em>.  <a href="#a77d3abb9b7062c1e8c86fe5ac9fb44c6"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a9c71bc91ab523bdb54c29effe283136c">CleanTarget</a> (const char *target)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean the given target <em>target</em>.  <a href="#a9c71bc91ab523bdb54c29effe283136c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a146f242991cf962752883da58c86d77c">CleanTarget</a> (<a class="el" href="structNode.html">Node</a> *target)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean the given <em>target</em> and all the file built for it.  <a href="#a146f242991cf962752883da58c86d77c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#adac9772fff3969b8e4b53706cc4dd868">CleanTargets</a> (int target_count, char *targets[])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean the given target <em>targets</em>.  <a href="#adac9772fff3969b8e4b53706cc4dd868"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a197944f3ef71b02a07639970d45ca0f7">IsVerbose</a> () const </td></tr>
 <tr><td colspan="2"><h2>Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a980cadf4f6cea5dd6d52c4218e4e646b">DoCleanRule</a> (const <a class="el" href="structRule.html">Rule</a> *rule)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a52c3095504e05303ec7eee008197e98c">DoCleanTarget</a> (<a class="el" href="structNode.html">Node</a> *target)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper recursive method for <a class="el" href="classCleaner.html#a1f7e7e6a7bfb21be74393dad8f3863ae" title="Clean the given target and all the file built for it.">CleanTarget()</a>.  <a href="#a52c3095504e05303ec7eee008197e98c"></a><br/></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper recursive method for <a class="el" href="classCleaner.html#a146f242991cf962752883da58c86d77c" title="Clean the given target and all the file built for it.">CleanTarget()</a>.  <a href="#a52c3095504e05303ec7eee008197e98c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a90549dd5f5033f36a7620dc16609a970">FileExists</a> (const string &amp;path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a1b9ca5874a08b927ed8ed0476ccd3769">IsAlreadyRemoved</a> (const string &amp;path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a1a85c3e4741da1685692c5f6dd0ab789">PrintFooter</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#afe60abac766fe0a45ffb1553a2987068">PrintHeader</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#acd6bbb9d1e7600cec3f72d9c61a8c7cd">Remove</a> (const string &amp;path)</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove the given <em>path</em> file only if it has not been already removed.  <a href="#acd6bbb9d1e7600cec3f72d9c61a8c7cd"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#acbe848c9a07e7793a2a23297f7645409">RemoveFile</a> (const string &amp;path)</td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove the file <em>path</em>.  <a href="#acbe848c9a07e7793a2a23297f7645409"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#ae8da968f18aa9fe94f4405f3db37079b">RemoveFile</a> (const string &amp;path)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove the file <em>path</em>.  <a href="#ae8da968f18aa9fe94f4405f3db37079b"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a6ef489fdbf9b34900d6d110e7bd22444">Report</a> (const string &amp;path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a84a7c68251cfc3839ac97a90654e30b5">Reset</a> ()</td></tr>
 <tr><td colspan="2"><h2>Private Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#ae2dae177ab28b3bf9bedf4bf9847de69">dry_run_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a202474ca14ab8841e0787eccce578cf9">cleaned_files_count_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBuildConfig.html">BuildConfig</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#adc5d99d7fb02b1686871f14bef3f85f0">config_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structDiskInterface.html">DiskInterface</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#af1d5636bb9e186068d73b1923f73a92b">disk_interface_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">set&lt; string &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#a49c672178809c2ff602d56ac8a9cb1f7">removed_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structState.html">State</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#af18bfb0e6a405d23537bce721ec46fda">state_</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#aac44abb14081e24bbd6a92162720c4c6">verbose_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCleaner.html#ae33166af3dc8173e45d6e2dc78b1477d">status_</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 
-<p>Definition at line <a class="el" href="clean_8h_source.html#l00027">27</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00030">30</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aa54754b39f27d5d566ce62bea4b814cc"></a><!-- doxytag: member="Cleaner::Cleaner" ref="aa54754b39f27d5d566ce62bea4b814cc" args="(State *state, const BuildConfig &amp;config)" -->
 <div class="memitem">
@@ -92,19 +105,56 @@
 </div>
 <div class="memdoc">
 
-<p>Constructor. </p>
+<p>Build a cleaner object with a real disk interface. </p>
 
 <p>Definition at line <a class="el" href="clean_8cc_source.html#l00028">28</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
 </div>
 </div>
-<hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="aff631d8ef2a1f602e2b5e9a8d6d94a90"></a><!-- doxytag: member="Cleaner::CleanAll" ref="aff631d8ef2a1f602e2b5e9a8d6d94a90" args="()" -->
+<a class="anchor" id="a94b3e75dcc18d20d1fc0f075cf8d2a7a"></a><!-- doxytag: member="Cleaner::Cleaner" ref="a94b3e75dcc18d20d1fc0f075cf8d2a7a" args="(State *state, const BuildConfig &amp;config, DiskInterface *disk_interface)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Cleaner::CleanAll </td>
+          <td class="memname">Cleaner::Cleaner </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structState.html">State</a> *&nbsp;</td>
+          <td class="paramname"> <em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structBuildConfig.html">BuildConfig</a> &amp;&nbsp;</td>
+          <td class="paramname"> <em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structDiskInterface.html">DiskInterface</a> *&nbsp;</td>
+          <td class="paramname"> <em>disk_interface</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Build a cleaner object with the given <em>disk_interface</em> (Useful for testing). </p>
+
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00038">38</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a9fec291790a16b513e9bae378ded12b2"></a><!-- doxytag: member="Cleaner::CleanAll" ref="a9fec291790a16b513e9bae378ded12b2" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Cleaner::CleanAll </td>
           <td>(</td>
           <td class="paramname"></td>
           <td>&nbsp;)&nbsp;</td>
@@ -115,21 +165,71 @@
 <div class="memdoc">
 
 <p>Clean all built files. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>non-zero if an error occurs. </dd></dl>
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00100">100</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00101">101</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="ninja_8h_source.html#l00099">State::edges_</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>, <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>, and <a class="el" href="clean_8h_source.html#l00062">state_</a>.</p>
+<p>References <a class="el" href="ninja_8h_source.html#l00104">State::edges_</a>, <a class="el" href="clean_8cc_source.html#l00095">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00085">PrintHeader()</a>, <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>, <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>, <a class="el" href="clean_8h_source.html#l00096">state_</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00297">CmdClean()</a>.</p>
+<p>Referenced by <a class="el" href="clean__test_8cc_source.html#l00028">TEST_F()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a5c2feccaa094c87f4382072c8fb57932"></a><!-- doxytag: member="Cleaner::CleanRule" ref="a5c2feccaa094c87f4382072c8fb57932" args="(const Rule *rule)" -->
+<a class="anchor" id="af4b0d5cb3c426f05e96c1222f724b880"></a><!-- doxytag: member="Cleaner::cleaned_files_count" ref="af4b0d5cb3c426f05e96c1222f724b880" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Cleaner::CleanRule </td>
+          <td class="memname">int Cleaner::cleaned_files_count </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="return"><dt><b>Returns:</b></dt><dd>the number of file cleaned. </dd></dl>
+
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00067">67</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+
+<p>References <a class="el" href="clean_8h_source.html#l00099">cleaned_files_count_</a>.</p>
+
+<p>Referenced by <a class="el" href="clean__test_8cc_source.html#l00028">TEST_F()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae02b542aa069eeb2c4b86d648263c2dd"></a><!-- doxytag: member="Cleaner::CleanRule" ref="ae02b542aa069eeb2c4b86d648263c2dd" args="(const char *rule)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Cleaner::CleanRule </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>rule</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Clean the file produced by the given <em>rule</em>. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>non-zero if an error occurs. </dd></dl>
+
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00192">192</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="clean_8cc_source.html#l00182">CleanRule()</a>, <a class="el" href="util_8cc_source.html#l00055">Error()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00128">State::LookupRule()</a>, <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>, <a class="el" href="clean_8h_source.html#l00096">state_</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0d7bcd7981b24ae786dd6654157b5978"></a><!-- doxytag: member="Cleaner::CleanRule" ref="a0d7bcd7981b24ae786dd6654157b5978" args="(const Rule *rule)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Cleaner::CleanRule </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structRule.html">Rule</a> *&nbsp;</td>
           <td class="paramname"> <em>rule</em></td>
@@ -141,10 +241,13 @@
 <div class="memdoc">
 
 <p>Clean all the file built with the given rule <em>rule</em>. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>non-zero if an error occurs. </dd></dl>
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00163">163</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00182">182</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="clean_8cc_source.html#l00150">DoCleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, and <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>.</p>
+<p>References <a class="el" href="clean_8cc_source.html#l00169">DoCleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00095">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00085">PrintHeader()</a>, <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
+
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00192">CleanRule()</a>, and <a class="el" href="clean__test_8cc_source.html#l00150">TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -173,20 +276,46 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00171">171</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Clean the file produced by the given <em>rules</em>. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>non-zero if an error occurs. </dd></dl>
 
-<p>References <a class="el" href="clean_8cc_source.html#l00150">DoCleanRule()</a>, <a class="el" href="util_8cc_source.html#l00034">Error()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00136">State::LookupRule()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>, <a class="el" href="clean_8h_source.html#l00062">state_</a>, and <a class="el" href="clean_8h_source.html#l00063">verbose_</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00206">206</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00297">CmdClean()</a>.</p>
+<p>References <a class="el" href="clean_8cc_source.html#l00169">DoCleanRule()</a>, <a class="el" href="util_8cc_source.html#l00055">Error()</a>, <a class="el" href="clean_8h_source.html#l00072">IsVerbose()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00128">State::LookupRule()</a>, <a class="el" href="clean_8cc_source.html#l00095">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00085">PrintHeader()</a>, <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>, <a class="el" href="clean_8h_source.html#l00096">state_</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1f7e7e6a7bfb21be74393dad8f3863ae"></a><!-- doxytag: member="Cleaner::CleanTarget" ref="a1f7e7e6a7bfb21be74393dad8f3863ae" args="(Node *target)" -->
+<a class="anchor" id="a9c71bc91ab523bdb54c29effe283136c"></a><!-- doxytag: member="Cleaner::CleanTarget" ref="a9c71bc91ab523bdb54c29effe283136c" args="(const char *target)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Cleaner::CleanTarget </td>
+          <td class="memname">int Cleaner::CleanTarget </td>
+          <td>(</td>
+          <td class="paramtype">const char *&nbsp;</td>
+          <td class="paramname"> <em>target</em></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Clean the given target <em>target</em>. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>non-zero if an error occurs. </dd></dl>
+
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00136">136</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+
+<p>References <a class="el" href="clean_8cc_source.html#l00126">CleanTarget()</a>, <a class="el" href="util_8cc_source.html#l00055">Error()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00148">State::LookupNode()</a>, <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>, <a class="el" href="clean_8h_source.html#l00096">state_</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a146f242991cf962752883da58c86d77c"></a><!-- doxytag: member="Cleaner::CleanTarget" ref="a146f242991cf962752883da58c86d77c" args="(Node *target)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Cleaner::CleanTarget </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structNode.html">Node</a> *&nbsp;</td>
           <td class="paramname"> <em>target</em></td>
@@ -198,10 +327,13 @@
 <div class="memdoc">
 
 <p>Clean the given <em>target</em> and all the file built for it. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>non-zero if an error occurs. </dd></dl>
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00123">123</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00126">126</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="clean_8cc_source.html#l00112">DoCleanTarget()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, and <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>.</p>
+<p>References <a class="el" href="clean_8cc_source.html#l00115">DoCleanTarget()</a>, <a class="el" href="clean_8cc_source.html#l00095">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00085">PrintHeader()</a>, <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
+
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00136">CleanTarget()</a>, and <a class="el" href="clean__test_8cc_source.html#l00089">TEST_F()</a>.</p>
 
 </div>
 </div>
@@ -230,11 +362,12 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00131">131</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Clean the given target <em>targets</em>. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>non-zero if an error occurs. </dd></dl>
 
-<p>References <a class="el" href="clean_8cc_source.html#l00112">DoCleanTarget()</a>, <a class="el" href="util_8cc_source.html#l00034">Error()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00156">State::LookupNode()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>, <a class="el" href="clean_8h_source.html#l00062">state_</a>, and <a class="el" href="clean_8h_source.html#l00063">verbose_</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00150">150</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja_8cc_source.html#l00297">CmdClean()</a>.</p>
+<p>References <a class="el" href="clean_8cc_source.html#l00115">DoCleanTarget()</a>, <a class="el" href="util_8cc_source.html#l00055">Error()</a>, <a class="el" href="clean_8h_source.html#l00072">IsVerbose()</a>, <a class="el" href="ninja__jumble_8cc_source.html#l00148">State::LookupNode()</a>, <a class="el" href="clean_8cc_source.html#l00095">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00085">PrintHeader()</a>, <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>, <a class="el" href="clean_8h_source.html#l00096">state_</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
 
 </div>
 </div>
@@ -254,11 +387,11 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00150">150</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00169">169</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="ninja_8h_source.html#l00099">State::edges_</a>, <a class="el" href="graph_8h_source.html#l00082">Rule::name_</a>, <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>, and <a class="el" href="clean_8h_source.html#l00062">state_</a>.</p>
+<p>References <a class="el" href="ninja_8h_source.html#l00104">State::edges_</a>, <a class="el" href="graph_8h_source.html#l00082">Rule::name_</a>, <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>, and <a class="el" href="clean_8h_source.html#l00096">state_</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00163">CleanRule()</a>, and <a class="el" href="clean_8cc_source.html#l00171">CleanRules()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00182">CleanRule()</a>, and <a class="el" href="clean_8cc_source.html#l00206">CleanRules()</a>.</p>
 
 </div>
 </div>
@@ -278,13 +411,13 @@
 </div>
 <div class="memdoc">
 
-<p>Helper recursive method for <a class="el" href="classCleaner.html#a1f7e7e6a7bfb21be74393dad8f3863ae" title="Clean the given target and all the file built for it.">CleanTarget()</a>. </p>
+<p>Helper recursive method for <a class="el" href="classCleaner.html#a146f242991cf962752883da58c86d77c" title="Clean the given target and all the file built for it.">CleanTarget()</a>. </p>
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00112">112</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00115">115</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="graph_8h_source.html#l00069">Node::file_</a>, <a class="el" href="graph_8h_source.html#l00071">Node::in_edge_</a>, <a class="el" href="graph_8h_source.html#l00102">Edge::inputs_</a>, <a class="el" href="graph_8h_source.html#l00051">FileStat::path_</a>, and <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
+<p>References <a class="el" href="graph_8h_source.html#l00069">Node::file_</a>, <a class="el" href="graph_8h_source.html#l00071">Node::in_edge_</a>, <a class="el" href="graph_8h_source.html#l00102">Edge::inputs_</a>, <a class="el" href="graph_8h_source.html#l00051">FileStat::path_</a>, and <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00123">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00131">CleanTargets()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00126">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00150">CleanTargets()</a>.</p>
 
 </div>
 </div>
@@ -305,11 +438,11 @@
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>whether the file <em>path</em> exists. </dd></dl>
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00050">50</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00054">54</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="util_8cc_source.html#l00034">Error()</a>.</p>
+<p>References <a class="el" href="clean_8h_source.html#l00100">disk_interface_</a>, and <a class="el" href="structDiskInterface.html#a244784b189c39f4b91898878c3d1db65">DiskInterface::Stat()</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>.</p>
 
 </div>
 </div>
@@ -330,11 +463,35 @@
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>whether the given <em>path</em> has already been removed. </dd></dl>
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00083">83</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00080">80</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="clean_8h_source.html#l00065">removed_</a>.</p>
+<p>References <a class="el" href="clean_8h_source.html#l00098">removed_</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a197944f3ef71b02a07639970d45ca0f7"></a><!-- doxytag: member="Cleaner::IsVerbose" ref="a197944f3ef71b02a07639970d45ca0f7" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Cleaner::IsVerbose </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="return"><dt><b>Returns:</b></dt><dd>whether the cleaner is in verbose mode. </dd></dl>
+
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00072">72</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+
+<p>References <a class="el" href="clean_8h_source.html#l00097">config_</a>, <a class="el" href="build_8h_source.html#l00090">BuildConfig::dry_run</a>, <a class="el" href="build_8h_source.html#l00086">BuildConfig::QUIET</a>, <a class="el" href="build_8h_source.html#l00087">BuildConfig::VERBOSE</a>, and <a class="el" href="build_8h_source.html#l00089">BuildConfig::verbosity</a>.</p>
+
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00206">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00150">CleanTargets()</a>, <a class="el" href="clean_8cc_source.html#l00085">PrintHeader()</a>, and <a class="el" href="clean_8cc_source.html#l00058">Report()</a>.</p>
 
 </div>
 </div>
@@ -353,11 +510,11 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00096">96</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00095">95</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="clean_8h_source.html#l00065">removed_</a>.</p>
+<p>References <a class="el" href="clean_8h_source.html#l00099">cleaned_files_count_</a>, <a class="el" href="clean_8h_source.html#l00097">config_</a>, <a class="el" href="build_8h_source.html#l00086">BuildConfig::QUIET</a>, and <a class="el" href="build_8h_source.html#l00089">BuildConfig::verbosity</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00100">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00163">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00171">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00123">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00131">CleanTargets()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00101">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00182">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00206">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00126">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00150">CleanTargets()</a>.</p>
 
 </div>
 </div>
@@ -376,11 +533,11 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00088">88</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00085">85</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="clean_8h_source.html#l00063">verbose_</a>.</p>
+<p>References <a class="el" href="clean_8h_source.html#l00097">config_</a>, <a class="el" href="clean_8h_source.html#l00072">IsVerbose()</a>, <a class="el" href="build_8h_source.html#l00086">BuildConfig::QUIET</a>, and <a class="el" href="build_8h_source.html#l00089">BuildConfig::verbosity</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00100">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00163">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00171">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00123">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00131">CleanTargets()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00101">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00182">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00206">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00126">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00150">CleanTargets()</a>.</p>
 
 </div>
 </div>
@@ -402,20 +559,20 @@
 
 <p>Remove the given <em>path</em> file only if it has not been already removed. </p>
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00070">70</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00064">64</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="clean_8h_source.html#l00064">dry_run_</a>, <a class="el" href="clean_8cc_source.html#l00050">FileExists()</a>, <a class="el" href="clean_8cc_source.html#l00083">IsAlreadyRemoved()</a>, <a class="el" href="clean_8h_source.html#l00065">removed_</a>, <a class="el" href="clean_8cc_source.html#l00036">RemoveFile()</a>, and <a class="el" href="clean_8cc_source.html#l00065">Report()</a>.</p>
+<p>References <a class="el" href="clean_8h_source.html#l00097">config_</a>, <a class="el" href="build_8h_source.html#l00090">BuildConfig::dry_run</a>, <a class="el" href="clean_8cc_source.html#l00054">FileExists()</a>, <a class="el" href="clean_8cc_source.html#l00080">IsAlreadyRemoved()</a>, <a class="el" href="clean_8h_source.html#l00098">removed_</a>, <a class="el" href="clean_8cc_source.html#l00050">RemoveFile()</a>, <a class="el" href="clean_8cc_source.html#l00058">Report()</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00100">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00150">DoCleanRule()</a>, and <a class="el" href="clean_8cc_source.html#l00112">DoCleanTarget()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00101">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00169">DoCleanRule()</a>, and <a class="el" href="clean_8cc_source.html#l00115">DoCleanTarget()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="acbe848c9a07e7793a2a23297f7645409"></a><!-- doxytag: member="Cleaner::RemoveFile" ref="acbe848c9a07e7793a2a23297f7645409" args="(const string &amp;path)" -->
+<a class="anchor" id="ae8da968f18aa9fe94f4405f3db37079b"></a><!-- doxytag: member="Cleaner::RemoveFile" ref="ae8da968f18aa9fe94f4405f3db37079b" args="(const string &amp;path)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool Cleaner::RemoveFile </td>
+          <td class="memname">int Cleaner::RemoveFile </td>
           <td>(</td>
           <td class="paramtype">const string &amp;&nbsp;</td>
           <td class="paramname"> <em>path</em></td>
@@ -429,11 +586,11 @@
 <p>Remove the file <em>path</em>. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>whether the file has been removed. </dd></dl>
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00036">36</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00050">50</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="util_8cc_source.html#l00034">Error()</a>.</p>
+<p>References <a class="el" href="clean_8h_source.html#l00100">disk_interface_</a>, and <a class="el" href="structDiskInterface.html#ad7442b7e0b10e0737c56667d967e9f76">DiskInterface::RemoveFile()</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>.</p>
 
 </div>
 </div>
@@ -453,29 +610,86 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8cc_source.html#l00065">65</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00058">58</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>References <a class="el" href="clean_8h_source.html#l00063">verbose_</a>.</p>
+<p>References <a class="el" href="clean_8h_source.html#l00099">cleaned_files_count_</a>, and <a class="el" href="clean_8h_source.html#l00072">IsVerbose()</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>.</p>
 
 </div>
 </div>
-<hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="ae2dae177ab28b3bf9bedf4bf9847de69"></a><!-- doxytag: member="Cleaner::dry_run_" ref="ae2dae177ab28b3bf9bedf4bf9847de69" args="" -->
+<a class="anchor" id="a84a7c68251cfc3839ac97a90654e30b5"></a><!-- doxytag: member="Cleaner::Reset" ref="a84a7c68251cfc3839ac97a90654e30b5" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classCleaner.html#ae2dae177ab28b3bf9bedf4bf9847de69">Cleaner::dry_run_</a><code> [private]</code></td>
+          <td class="memname">void Cleaner::Reset </td>
+          <td>(</td>
+          <td class="paramname"></td>
+          <td>&nbsp;)&nbsp;</td>
+          <td><code> [private]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8h_source.html#l00064">64</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+<p>Definition at line <a class="el" href="clean_8cc_source.html#l00227">227</a> of file <a class="el" href="clean_8cc_source.html">clean.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
+<p>References <a class="el" href="clean_8h_source.html#l00099">cleaned_files_count_</a>, <a class="el" href="clean_8h_source.html#l00098">removed_</a>, and <a class="el" href="clean_8h_source.html#l00101">status_</a>.</p>
+
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00101">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00182">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00206">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00126">CleanTarget()</a>, and <a class="el" href="clean_8cc_source.html#l00150">CleanTargets()</a>.</p>
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a202474ca14ab8841e0787eccce578cf9"></a><!-- doxytag: member="Cleaner::cleaned_files_count_" ref="a202474ca14ab8841e0787eccce578cf9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classCleaner.html#a202474ca14ab8841e0787eccce578cf9">Cleaner::cleaned_files_count_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00099">99</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+
+<p>Referenced by <a class="el" href="clean_8h_source.html#l00067">cleaned_files_count()</a>, <a class="el" href="clean_8cc_source.html#l00095">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00058">Report()</a>, and <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adc5d99d7fb02b1686871f14bef3f85f0"></a><!-- doxytag: member="Cleaner::config_" ref="adc5d99d7fb02b1686871f14bef3f85f0" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBuildConfig.html">BuildConfig</a> <a class="el" href="classCleaner.html#adc5d99d7fb02b1686871f14bef3f85f0">Cleaner::config_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00097">97</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+
+<p>Referenced by <a class="el" href="clean_8h_source.html#l00072">IsVerbose()</a>, <a class="el" href="clean_8cc_source.html#l00095">PrintFooter()</a>, <a class="el" href="clean_8cc_source.html#l00085">PrintHeader()</a>, and <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af1d5636bb9e186068d73b1923f73a92b"></a><!-- doxytag: member="Cleaner::disk_interface_" ref="af1d5636bb9e186068d73b1923f73a92b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structDiskInterface.html">DiskInterface</a>* <a class="el" href="classCleaner.html#af1d5636bb9e186068d73b1923f73a92b">Cleaner::disk_interface_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00100">100</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00054">FileExists()</a>, and <a class="el" href="clean_8cc_source.html#l00050">RemoveFile()</a>.</p>
 
 </div>
 </div>
@@ -490,9 +704,9 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8h_source.html#l00065">65</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00098">98</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00083">IsAlreadyRemoved()</a>, <a class="el" href="clean_8cc_source.html#l00096">PrintFooter()</a>, and <a class="el" href="clean_8cc_source.html#l00070">Remove()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00080">IsAlreadyRemoved()</a>, <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>, and <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>.</p>
 
 </div>
 </div>
@@ -507,26 +721,26 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8h_source.html#l00062">62</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00096">96</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00100">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00171">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00131">CleanTargets()</a>, and <a class="el" href="clean_8cc_source.html#l00150">DoCleanRule()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00101">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00192">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00206">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00136">CleanTarget()</a>, <a class="el" href="clean_8cc_source.html#l00150">CleanTargets()</a>, and <a class="el" href="clean_8cc_source.html#l00169">DoCleanRule()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aac44abb14081e24bbd6a92162720c4c6"></a><!-- doxytag: member="Cleaner::verbose_" ref="aac44abb14081e24bbd6a92162720c4c6" args="" -->
+<a class="anchor" id="ae33166af3dc8173e45d6e2dc78b1477d"></a><!-- doxytag: member="Cleaner::status_" ref="ae33166af3dc8173e45d6e2dc78b1477d" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classCleaner.html#aac44abb14081e24bbd6a92162720c4c6">Cleaner::verbose_</a><code> [private]</code></td>
+          <td class="memname">int <a class="el" href="classCleaner.html#ae33166af3dc8173e45d6e2dc78b1477d">Cleaner::status_</a><code> [private]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="clean_8h_source.html#l00063">63</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
+<p>Definition at line <a class="el" href="clean_8h_source.html#l00101">101</a> of file <a class="el" href="clean_8h_source.html">clean.h</a>.</p>
 
-<p>Referenced by <a class="el" href="clean_8cc_source.html#l00171">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00131">CleanTargets()</a>, <a class="el" href="clean_8cc_source.html#l00088">PrintHeader()</a>, and <a class="el" href="clean_8cc_source.html#l00065">Report()</a>.</p>
+<p>Referenced by <a class="el" href="clean_8cc_source.html#l00101">CleanAll()</a>, <a class="el" href="clean_8cc_source.html#l00182">CleanRule()</a>, <a class="el" href="clean_8cc_source.html#l00206">CleanRules()</a>, <a class="el" href="clean_8cc_source.html#l00126">CleanTarget()</a>, <a class="el" href="clean_8cc_source.html#l00150">CleanTargets()</a>, <a class="el" href="clean_8cc_source.html#l00064">Remove()</a>, and <a class="el" href="clean_8cc_source.html#l00227">Reset()</a>.</p>
 
 </div>
 </div>
@@ -535,7 +749,7 @@
 <li><a class="el" href="clean_8cc_source.html">clean.cc</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:29 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

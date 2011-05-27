@@ -84,8 +84,22 @@
 <a name="l00058"></a>00058     <span class="keywordflow">return</span> i-&gt;second.contents;
 <a name="l00059"></a>00059   <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;
 <a name="l00060"></a>00060 }
+<a name="l00061"></a>00061 
+<a name="l00062"></a><a class="code" href="structVirtualFileSystem.html#adec99a414371927c9d5546b97c4e1cb0">00062</a> <span class="keywordtype">int</span> <a class="code" href="structVirtualFileSystem.html#adec99a414371927c9d5546b97c4e1cb0" title="Remove the file named path.">VirtualFileSystem::RemoveFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path) {
+<a name="l00063"></a>00063   <span class="keywordflow">if</span> (find(<a class="code" href="structVirtualFileSystem.html#a1f1de6e9f955aad9249b817c841a3a49">directories_made_</a>.begin(), <a class="code" href="structVirtualFileSystem.html#a1f1de6e9f955aad9249b817c841a3a49">directories_made_</a>.end(), path)
+<a name="l00064"></a>00064       != <a class="code" href="structVirtualFileSystem.html#a1f1de6e9f955aad9249b817c841a3a49">directories_made_</a>.end())
+<a name="l00065"></a>00065     <span class="keywordflow">return</span> -1;
+<a name="l00066"></a>00066   FileMap::iterator i = <a class="code" href="structVirtualFileSystem.html#a8a2223cbff33bbd954f5d69edab57650">files_</a>.find(path);
+<a name="l00067"></a>00067   <span class="keywordflow">if</span> (i != <a class="code" href="structVirtualFileSystem.html#a8a2223cbff33bbd954f5d69edab57650">files_</a>.end()) {
+<a name="l00068"></a>00068     <a class="code" href="structVirtualFileSystem.html#a8a2223cbff33bbd954f5d69edab57650">files_</a>.erase(i);
+<a name="l00069"></a>00069     <a class="code" href="structVirtualFileSystem.html#aaca2f5b74c3ea10b4de0d5268726be98">files_removed_</a>.insert(path);
+<a name="l00070"></a>00070     <span class="keywordflow">return</span> 0;
+<a name="l00071"></a>00071   } <span class="keywordflow">else</span> {
+<a name="l00072"></a>00072     <span class="keywordflow">return</span> 1;
+<a name="l00073"></a>00073   }
+<a name="l00074"></a>00074 }
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

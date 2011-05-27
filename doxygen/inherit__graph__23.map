@@ -1,3 +1,15 @@
 <map id="G" name="G">
-<area shape="rect" href="$structSubprocess.html" title="Subprocess wraps a single async subprocess." alt="" coords="5,5,96,35"/>
+<area shape="rect" href="$structCommandRunner.html" title="CommandRunner is an interface that wraps running the build subcommands." alt="" coords="32,59,152,88"/>
+<area shape="rect" href="$structBuildTest.html" title="BuildTest" alt="" coords="271,112,345,141"/>
+<area shape="rect" href="$structDryRunCommandRunner.html" title="A CommandRunner that doesn&#39;t actually run the commands." alt="" coords="227,5,389,35"/>
+<area shape="rect" href="$structRealCommandRunner.html" title="RealCommandRunner" alt="" coords="235,59,381,88"/>
+<area shape="rect" href="$structDiskInterface.html" title="Interface for accessing the disk." alt="" coords="43,432,141,461"/>
+<area shape="rect" href="$structRealDiskInterface.html" title="Implementation of DiskInterface that actually hits the disk." alt="" coords="247,432,369,461"/>
+<area shape="rect" href="$structStatTest.html" title="StatTest" alt="" coords="273,379,343,408"/>
+<area shape="rect" href="$structVirtualFileSystem.html" title="An implementation of DiskInterface that uses an in&#45;memory representation of disk..." alt="" coords="247,485,369,515"/>
+<area shape="rect" href="$structStateTestWithBuiltinRules.html" title="A base test fixture that includes a State object with a builtin &quot;cat&quot; rule..." alt="" coords="7,245,177,275"/>
+<area shape="rect" href="$structBuildLogTest.html" title="BuildLogTest" alt="" coords="260,165,356,195"/>
+<area shape="rect" href="$structCleanTest.html" title="CleanTest" alt="" coords="268,219,348,248"/>
+<area shape="rect" href="$structGraphTest.html" title="GraphTest" alt="" coords="268,272,348,301"/>
+<area shape="rect" href="$structPlanTest.html" title="Fixture for tests involving Plan." alt="" coords="272,325,344,355"/>
 </map>

@@ -41,59 +41,95 @@
 <a name="l00015"></a>00015 <span class="preprocessor">#ifndef NINJA_CLEAN_H_</span>
 <a name="l00016"></a>00016 <span class="preprocessor"></span><span class="preprocessor">#define NINJA_CLEAN_H_</span>
 <a name="l00017"></a>00017 <span class="preprocessor"></span>
-<a name="l00018"></a>00018 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00019"></a>00019 <span class="preprocessor">#include &lt;set&gt;</span>
-<a name="l00020"></a>00020 <span class="keyword">using namespace </span>std;
-<a name="l00021"></a>00021 
-<a name="l00022"></a>00022 <span class="keyword">struct </span><a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>;
-<a name="l00023"></a>00023 <span class="keyword">struct </span><a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>;
-<a name="l00024"></a>00024 <span class="keyword">struct </span><a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>;
-<a name="l00025"></a>00025 <span class="keyword">struct </span><a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>;
-<a name="l00026"></a>00026 
-<a name="l00027"></a><a class="code" href="classCleaner.html">00027</a> <span class="keyword">class </span><a class="code" href="classCleaner.html">Cleaner</a>
-<a name="l00028"></a>00028 {
-<a name="l00029"></a>00029 <span class="keyword">public</span>:<span class="comment"></span>
-<a name="l00030"></a>00030 <span class="comment">  /// Constructor.</span>
-<a name="l00031"></a>00031 <span class="comment"></span>  <a class="code" href="classCleaner.html#aa54754b39f27d5d566ce62bea4b814cc" title="Constructor.">Cleaner</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>&amp; config);
-<a name="l00032"></a>00032 <span class="comment"></span>
-<a name="l00033"></a>00033 <span class="comment">  /// Clean the given @a target and all the file built for it.</span>
-<a name="l00034"></a>00034 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a1f7e7e6a7bfb21be74393dad8f3863ae" title="Clean the given target and all the file built for it.">CleanTarget</a>(<a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* target);
-<a name="l00035"></a>00035   <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#adac9772fff3969b8e4b53706cc4dd868">CleanTargets</a>(<span class="keywordtype">int</span> target_count, <span class="keywordtype">char</span>* targets[]);
-<a name="l00036"></a>00036 <span class="comment"></span>
-<a name="l00037"></a>00037 <span class="comment">  /// Clean all built files.</span>
-<a name="l00038"></a>00038 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#aff631d8ef2a1f602e2b5e9a8d6d94a90" title="Clean all built files.">CleanAll</a>();
-<a name="l00039"></a>00039 <span class="comment"></span>
-<a name="l00040"></a>00040 <span class="comment">  /// Clean all the file built with the given rule @a rule.</span>
-<a name="l00041"></a>00041 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a5c2feccaa094c87f4382072c8fb57932" title="Clean all the file built with the given rule rule.">CleanRule</a>(<span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* rule);
-<a name="l00042"></a>00042   <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#a77d3abb9b7062c1e8c86fe5ac9fb44c6">CleanRules</a>(<span class="keywordtype">int</span> rule_count, <span class="keywordtype">char</span>* rules[]);
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 <span class="keyword">private</span>:<span class="comment"></span>
-<a name="l00045"></a>00045 <span class="comment">  /// Remove the file @a path.</span>
-<a name="l00046"></a>00046 <span class="comment">  /// @return whether the file has been removed.</span>
-<a name="l00047"></a>00047 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classCleaner.html#acbe848c9a07e7793a2a23297f7645409" title="Remove the file path.">RemoveFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
-<a name="l00048"></a>00048 <span class="comment">  /// @returns whether the file @a path exists.</span>
-<a name="l00049"></a>00049 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classCleaner.html#a90549dd5f5033f36a7620dc16609a970">FileExists</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
-<a name="l00050"></a>00050   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a6ef489fdbf9b34900d6d110e7bd22444">Report</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
-<a name="l00051"></a>00051 <span class="comment">  /// Remove the given @a path file only if it has not been already removed.</span>
-<a name="l00052"></a>00052 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#acd6bbb9d1e7600cec3f72d9c61a8c7cd" title="Remove the given path file only if it has not been already removed.">Remove</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
-<a name="l00053"></a>00053 <span class="comment">  /// @return whether the given @a path has already been removed.</span>
-<a name="l00054"></a>00054 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classCleaner.html#a1b9ca5874a08b927ed8ed0476ccd3769">IsAlreadyRemoved</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
-<a name="l00055"></a>00055 <span class="comment">  /// Helper recursive method for CleanTarget().</span>
-<a name="l00056"></a>00056 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a52c3095504e05303ec7eee008197e98c" title="Helper recursive method for CleanTarget().">DoCleanTarget</a>(<a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* target);
-<a name="l00057"></a>00057   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#afe60abac766fe0a45ffb1553a2987068">PrintHeader</a>();
-<a name="l00058"></a>00058   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a1a85c3e4741da1685692c5f6dd0ab789">PrintFooter</a>();
-<a name="l00059"></a>00059   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a980cadf4f6cea5dd6d52c4218e4e646b">DoCleanRule</a>(<span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* rule);
-<a name="l00060"></a>00060 
-<a name="l00061"></a>00061 <span class="keyword">private</span>:
-<a name="l00062"></a><a class="code" href="classCleaner.html#af18bfb0e6a405d23537bce721ec46fda">00062</a>   <a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* <a class="code" href="classCleaner.html#af18bfb0e6a405d23537bce721ec46fda">state_</a>;
-<a name="l00063"></a><a class="code" href="classCleaner.html#aac44abb14081e24bbd6a92162720c4c6">00063</a>   <span class="keywordtype">bool</span> <a class="code" href="classCleaner.html#aac44abb14081e24bbd6a92162720c4c6">verbose_</a>;
-<a name="l00064"></a><a class="code" href="classCleaner.html#ae2dae177ab28b3bf9bedf4bf9847de69">00064</a>   <span class="keywordtype">bool</span> <a class="code" href="classCleaner.html#ae2dae177ab28b3bf9bedf4bf9847de69">dry_run_</a>;
-<a name="l00065"></a><a class="code" href="classCleaner.html#a49c672178809c2ff602d56ac8a9cb1f7">00065</a>   set&lt;string&gt; <a class="code" href="classCleaner.html#a49c672178809c2ff602d56ac8a9cb1f7">removed_</a>;
-<a name="l00066"></a>00066 };
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068 <span class="preprocessor">#endif  // NINJA_CLEAN_H_</span>
+<a name="l00018"></a>00018 <span class="preprocessor">#include &quot;<a class="code" href="build_8h.html">build.h</a>&quot;</span>
+<a name="l00019"></a>00019 
+<a name="l00020"></a>00020 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00021"></a>00021 <span class="preprocessor">#include &lt;set&gt;</span>
+<a name="l00022"></a>00022 <span class="keyword">using namespace </span>std;
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024 <span class="keyword">struct </span><a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>;
+<a name="l00025"></a>00025 <span class="keyword">struct </span><a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>;
+<a name="l00026"></a>00026 <span class="keyword">struct </span><a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>;
+<a name="l00027"></a>00027 <span class="keyword">struct </span><a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>;
+<a name="l00028"></a>00028 <span class="keyword">struct </span><a class="code" href="structDiskInterface.html" title="Interface for accessing the disk.">DiskInterface</a>;
+<a name="l00029"></a>00029 
+<a name="l00030"></a><a class="code" href="classCleaner.html">00030</a> <span class="keyword">class </span><a class="code" href="classCleaner.html">Cleaner</a>
+<a name="l00031"></a>00031 {
+<a name="l00032"></a>00032 <span class="keyword">public</span>:<span class="comment"></span>
+<a name="l00033"></a>00033 <span class="comment">  /// Build a cleaner object with a real disk interface.</span>
+<a name="l00034"></a>00034 <span class="comment"></span>  <a class="code" href="classCleaner.html#aa54754b39f27d5d566ce62bea4b814cc" title="Build a cleaner object with a real disk interface.">Cleaner</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state, <span class="keyword">const</span> <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>&amp; config);
+<a name="l00035"></a>00035 <span class="comment"></span>
+<a name="l00036"></a>00036 <span class="comment">  /// Build a cleaner object with the given @a disk_interface</span>
+<a name="l00037"></a>00037 <span class="comment">  /// (Useful for testing).</span>
+<a name="l00038"></a>00038 <span class="comment"></span>  <a class="code" href="classCleaner.html#aa54754b39f27d5d566ce62bea4b814cc" title="Build a cleaner object with a real disk interface.">Cleaner</a>(<a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* state,
+<a name="l00039"></a>00039           <span class="keyword">const</span> <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a>&amp; config,
+<a name="l00040"></a>00040           <a class="code" href="structDiskInterface.html" title="Interface for accessing the disk.">DiskInterface</a>* disk_interface);
+<a name="l00041"></a>00041 <span class="comment"></span>
+<a name="l00042"></a>00042 <span class="comment">  /// Clean the given @a target and all the file built for it.</span>
+<a name="l00043"></a>00043 <span class="comment">  /// @return non-zero if an error occurs.</span>
+<a name="l00044"></a>00044 <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#a146f242991cf962752883da58c86d77c" title="Clean the given target and all the file built for it.">CleanTarget</a>(<a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* target);<span class="comment"></span>
+<a name="l00045"></a>00045 <span class="comment">  /// Clean the given target @a target.</span>
+<a name="l00046"></a>00046 <span class="comment">  /// @return non-zero if an error occurs.</span>
+<a name="l00047"></a>00047 <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#a146f242991cf962752883da58c86d77c" title="Clean the given target and all the file built for it.">CleanTarget</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* target);<span class="comment"></span>
+<a name="l00048"></a>00048 <span class="comment">  /// Clean the given target @a targets.</span>
+<a name="l00049"></a>00049 <span class="comment">  /// @return non-zero if an error occurs.</span>
+<a name="l00050"></a>00050 <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#adac9772fff3969b8e4b53706cc4dd868" title="Clean the given target targets.">CleanTargets</a>(<span class="keywordtype">int</span> target_count, <span class="keywordtype">char</span>* targets[]);
+<a name="l00051"></a>00051 <span class="comment"></span>
+<a name="l00052"></a>00052 <span class="comment">  /// Clean all built files.</span>
+<a name="l00053"></a>00053 <span class="comment">  /// @return non-zero if an error occurs.</span>
+<a name="l00054"></a>00054 <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#a9fec291790a16b513e9bae378ded12b2" title="Clean all built files.">CleanAll</a>();
+<a name="l00055"></a>00055 <span class="comment"></span>
+<a name="l00056"></a>00056 <span class="comment">  /// Clean all the file built with the given rule @a rule.</span>
+<a name="l00057"></a>00057 <span class="comment">  /// @return non-zero if an error occurs.</span>
+<a name="l00058"></a>00058 <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#a0d7bcd7981b24ae786dd6654157b5978" title="Clean all the file built with the given rule rule.">CleanRule</a>(<span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* rule);<span class="comment"></span>
+<a name="l00059"></a>00059 <span class="comment">  /// Clean the file produced by the given @a rule.</span>
+<a name="l00060"></a>00060 <span class="comment">  /// @return non-zero if an error occurs.</span>
+<a name="l00061"></a>00061 <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#a0d7bcd7981b24ae786dd6654157b5978" title="Clean all the file built with the given rule rule.">CleanRule</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* rule);<span class="comment"></span>
+<a name="l00062"></a>00062 <span class="comment">  /// Clean the file produced by the given @a rules.</span>
+<a name="l00063"></a>00063 <span class="comment">  /// @return non-zero if an error occurs.</span>
+<a name="l00064"></a>00064 <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#a77d3abb9b7062c1e8c86fe5ac9fb44c6" title="Clean the file produced by the given rules.">CleanRules</a>(<span class="keywordtype">int</span> rule_count, <span class="keywordtype">char</span>* rules[]);
+<a name="l00065"></a>00065 <span class="comment"></span>
+<a name="l00066"></a>00066 <span class="comment">  /// @return the number of file cleaned.</span>
+<a name="l00067"></a><a class="code" href="classCleaner.html#af4b0d5cb3c426f05e96c1222f724b880">00067</a> <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#af4b0d5cb3c426f05e96c1222f724b880">cleaned_files_count</a>()<span class="keyword"> const </span>{
+<a name="l00068"></a>00068     <span class="keywordflow">return</span> <a class="code" href="classCleaner.html#a202474ca14ab8841e0787eccce578cf9">cleaned_files_count_</a>;
+<a name="l00069"></a>00069   }
+<a name="l00070"></a>00070 <span class="comment"></span>
+<a name="l00071"></a>00071 <span class="comment">  /// @return whether the cleaner is in verbose mode.</span>
+<a name="l00072"></a><a class="code" href="classCleaner.html#a197944f3ef71b02a07639970d45ca0f7">00072</a> <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classCleaner.html#a197944f3ef71b02a07639970d45ca0f7">IsVerbose</a>()<span class="keyword"> const </span>{
+<a name="l00073"></a>00073     <span class="keywordflow">return</span> (<a class="code" href="classCleaner.html#adc5d99d7fb02b1686871f14bef3f85f0">config_</a>.<a class="code" href="structBuildConfig.html#ae50beadfa54bab9ea78feb96f56431cf">verbosity</a> != <a class="code" href="structBuildConfig.html#a7a6581026821b221c12ccfc9203b4fffa77a8643bf70b1759e3c27a915cc42b92">BuildConfig::QUIET</a>
+<a name="l00074"></a>00074             &amp;&amp; (<a class="code" href="classCleaner.html#adc5d99d7fb02b1686871f14bef3f85f0">config_</a>.<a class="code" href="structBuildConfig.html#ae50beadfa54bab9ea78feb96f56431cf">verbosity</a> == <a class="code" href="structBuildConfig.html#a7a6581026821b221c12ccfc9203b4fffa44ec2c4f7fd9233c06f434e56faf1874">BuildConfig::VERBOSE</a> || <a class="code" href="classCleaner.html#adc5d99d7fb02b1686871f14bef3f85f0">config_</a>.<a class="code" href="structBuildConfig.html#aa65c3f1fe7e0faa2b05b36ed1743da5d">dry_run</a>));
+<a name="l00075"></a>00075   }
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077 <span class="keyword">private</span>:<span class="comment"></span>
+<a name="l00078"></a>00078 <span class="comment">  /// Remove the file @a path.</span>
+<a name="l00079"></a>00079 <span class="comment">  /// @return whether the file has been removed.</span>
+<a name="l00080"></a>00080 <span class="comment"></span>  <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#ae8da968f18aa9fe94f4405f3db37079b" title="Remove the file path.">RemoveFile</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
+<a name="l00081"></a>00081 <span class="comment">  /// @returns whether the file @a path exists.</span>
+<a name="l00082"></a>00082 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classCleaner.html#a90549dd5f5033f36a7620dc16609a970">FileExists</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);
+<a name="l00083"></a>00083   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a6ef489fdbf9b34900d6d110e7bd22444">Report</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
+<a name="l00084"></a>00084 <span class="comment">  /// Remove the given @a path file only if it has not been already removed.</span>
+<a name="l00085"></a>00085 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#acd6bbb9d1e7600cec3f72d9c61a8c7cd" title="Remove the given path file only if it has not been already removed.">Remove</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
+<a name="l00086"></a>00086 <span class="comment">  /// @return whether the given @a path has already been removed.</span>
+<a name="l00087"></a>00087 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classCleaner.html#a1b9ca5874a08b927ed8ed0476ccd3769">IsAlreadyRemoved</a>(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; path);<span class="comment"></span>
+<a name="l00088"></a>00088 <span class="comment">  /// Helper recursive method for CleanTarget().</span>
+<a name="l00089"></a>00089 <span class="comment"></span>  <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a52c3095504e05303ec7eee008197e98c" title="Helper recursive method for CleanTarget().">DoCleanTarget</a>(<a class="code" href="structNode.html" title="Information about a node in the dependency graph: the file, whether it&amp;#39;s dirty...">Node</a>* target);
+<a name="l00090"></a>00090   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#afe60abac766fe0a45ffb1553a2987068">PrintHeader</a>();
+<a name="l00091"></a>00091   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a1a85c3e4741da1685692c5f6dd0ab789">PrintFooter</a>();
+<a name="l00092"></a>00092   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a980cadf4f6cea5dd6d52c4218e4e646b">DoCleanRule</a>(<span class="keyword">const</span> <a class="code" href="structRule.html" title="An invokable build command and associated metadata (description, etc.).">Rule</a>* rule);
+<a name="l00093"></a>00093   <span class="keywordtype">void</span> <a class="code" href="classCleaner.html#a84a7c68251cfc3839ac97a90654e30b5">Reset</a>();
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095 <span class="keyword">private</span>:
+<a name="l00096"></a><a class="code" href="classCleaner.html#af18bfb0e6a405d23537bce721ec46fda">00096</a>   <a class="code" href="structState.html" title="Global state (file status, loaded rules) for a single run.">State</a>* <a class="code" href="classCleaner.html#af18bfb0e6a405d23537bce721ec46fda">state_</a>;
+<a name="l00097"></a><a class="code" href="classCleaner.html#adc5d99d7fb02b1686871f14bef3f85f0">00097</a>   <a class="code" href="structBuildConfig.html" title="Options (e.g. verbosity, parallelism) passed to a build.">BuildConfig</a> <a class="code" href="classCleaner.html#adc5d99d7fb02b1686871f14bef3f85f0">config_</a>;
+<a name="l00098"></a><a class="code" href="classCleaner.html#a49c672178809c2ff602d56ac8a9cb1f7">00098</a>   set&lt;string&gt; <a class="code" href="classCleaner.html#a49c672178809c2ff602d56ac8a9cb1f7">removed_</a>;
+<a name="l00099"></a><a class="code" href="classCleaner.html#a202474ca14ab8841e0787eccce578cf9">00099</a>   <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#a202474ca14ab8841e0787eccce578cf9">cleaned_files_count_</a>;
+<a name="l00100"></a><a class="code" href="classCleaner.html#af1d5636bb9e186068d73b1923f73a92b">00100</a>   <a class="code" href="structDiskInterface.html" title="Interface for accessing the disk.">DiskInterface</a>* <a class="code" href="classCleaner.html#af1d5636bb9e186068d73b1923f73a92b">disk_interface_</a>;
+<a name="l00101"></a><a class="code" href="classCleaner.html#ae33166af3dc8173e45d6e2dc78b1477d">00101</a>   <span class="keywordtype">int</span> <a class="code" href="classCleaner.html#ae33166af3dc8173e45d6e2dc78b1477d">status_</a>;
+<a name="l00102"></a>00102 };
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104 <span class="preprocessor">#endif  // NINJA_CLEAN_H_</span>
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 30 18:45:26 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
