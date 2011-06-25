@@ -830,19 +830,24 @@ If you provide a variable named <tt>builddir</tt> in the outermost scope,
 </div>
 <h2 id="_generating_ninja_files">Generating Ninja files</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>A work-in-progress patch to <a href="http://gyp.googlecode.com">gyp, the system
-used to generate build files for the Chromium browser</a> to generate
-ninja files for Linux is available from
+<div class="paragraph"><p>The Ninja distribution includes a tiny (&lt;100 line) Python module to
+facilitate generating Ninja files.  It allows you to make Python calls
+like <tt>ninja.rule(name='foo', command='bar', depfile='$out.d')</tt> and
+it will generate the appropriate syntax.</p></div>
+<h3 id="_integration_with_other_build_systems">Integration with other build systems</h3><div style="clear:left"></div>
+<div class="paragraph"><p><strong>gyp</strong>  A work-in-progress patch to <a href="http://gyp.googlecode.com">gyp, the
+system used to generate build files for the Chromium browser</a> to
+generate ninja files for Linux is available from
 <a href="https://github.com/martine/gyp/tree/ninja">my "ninja" branch of the
 upstream gyp project</a>.  To use it, put that branch in place of
 Chromium&#8217;s gyp, set <tt>GYP_GENERATORS=ninja</tt> in your environment, and
 run <tt>./build/gyp_chromium</tt> to regenerate the build files.</p></div>
-<div class="paragraph"><p>I have heard from people who have been working on generating Ninja
-files from CMake, but I don&#8217;t think it&#8217;s in a working state yet.</p></div>
-<div class="paragraph"><p>Conceptually, you could coax Automake into producing ninja files as
-well, but I haven&#8217;t tried it.  It may very well be the case that most
-projects use too much Makefile syntax in their <tt>.am</tt> files for this to
-work.</p></div>
+<div class="paragraph"><p><strong>CMake</strong>.  I have heard from people who have been working on generating
+Ninja files from CMake, but I don&#8217;t think it&#8217;s in a working state yet.</p></div>
+<div class="paragraph"><p><strong>Autotools</strong>.  In theory, you could coax Automake into producing
+.ninja files as well, but I haven&#8217;t tried it.  It may very well be the
+case that most projects use too much Makefile syntax in their <tt>.am</tt>
+files for this to work.</p></div>
 </div>
 <h2 id="_extra_tools">Extra tools</h2>
 <div class="sectionbody">
@@ -1096,6 +1101,33 @@ Variables from the file that included that file using the
 </p>
 </li>
 </ol></div>
+<h3 id="_variable_expansion">Variable expansion</h3><div style="clear:left"></div>
+<div class="paragraph"><p>Variables are expanded in two cases: in the right side of a <tt>name =
+value</tt> statement and in paths in a <tt>build</tt> statement.</p></div>
+<div class="paragraph"><p>When a <tt>name = value</tt> statement is evaluated, its right-hand side is
+expanded once (according to the above scoping rules) immediately, and
+from then on <tt>$name</tt> expands to the static string as the result of the
+expansion.  It is never the case that you&#8217;ll need to "double-escape" a
+variable with some syntax like <tt>$$foo</tt>.</p></div>
+<div class="paragraph"><p>A <tt>build</tt> statement is first parsed as a space-separated list of
+filenames and then each name is expanded.  This means that spaces
+within a variable will result in spaces in the expanded filename.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>spaced = foo bar
+build $spaced/baz other: ...
+# The above build line has two outputs: "foo bar/baz" and "other".</tt></pre>
+</div></div>
+<div class="paragraph"><p>In a <tt>name = value</tt> statement, whitespace at the beginning of a value
+is always stripped.  Whitespace at the beginning of a line after a
+line continuation is also stripped.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>two_words_with_one_space = foo $
+    bar
+one_word_with_no_space = foo$
+    bar</tt></pre>
+</div></div>
 </div>
 <h2 id="_future_work">Future work</h2>
 <div class="sectionbody">
@@ -1120,7 +1152,7 @@ to build.</p></div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-05-26 20:14:47 PDT
+Last updated 2011-06-25 12:54:46 PDT
 </div>
 </div>
 </body>
