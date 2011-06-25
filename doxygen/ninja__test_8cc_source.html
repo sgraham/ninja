@@ -243,7 +243,7 @@
 <a name="l00217"></a>00217 <span class="preprocessor"></span><span class="preprocessor">#ifndef _mktemp_s</span>
 <a name="l00218"></a>00218 <span class="preprocessor"></span><span class="comment">/// mingw has no mktemp.  Implement one with the same type as the one</span>
 <a name="l00219"></a>00219 <span class="comment"></span><span class="comment">/// found in the Windows API.</span>
-<a name="l00220"></a>00220 <span class="comment"></span><span class="keywordtype">int</span> _mktemp_s(<span class="keyword">const</span> <span class="keywordtype">char</span>* templ) {
+<a name="l00220"></a>00220 <span class="comment"></span><span class="keywordtype">int</span> _mktemp_s(<span class="keywordtype">char</span>* templ) {
 <a name="l00221"></a>00221   <span class="keywordtype">char</span>* ofs = strchr(templ, <span class="charliteral">&#39;X&#39;</span>);
 <a name="l00222"></a>00222   sprintf(ofs, <span class="stringliteral">&quot;%d&quot;</span>, rand() % 1000000);
 <a name="l00223"></a>00223   <span class="keywordflow">return</span> 0;
@@ -371,7 +371,7 @@
 <a name="l00345"></a>00345   EXPECT_EQ(1, disk_.RemoveFile(<span class="stringliteral">&quot;does not exist&quot;</span>));
 <a name="l00346"></a>00346 }
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 13:22:31 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

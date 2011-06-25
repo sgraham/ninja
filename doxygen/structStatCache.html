@@ -32,38 +32,38 @@
 <p>Mapping of path -&gt; <a class="el" href="structFileStat.html" title="Information about a single on-disk file: path, mtime.">FileStat</a>.  
 <a href="#_details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="ninja_8h_source.html">ninja.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="stat__cache_8h_source.html">stat_cache.h</a>&gt;</code></p>
 
 <p><a href="structStatCache-members.html">List of all members.</a></p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td colspan="2"><h2>Public Types</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">typedef hash_map&lt; string, <br class="typebreak"/>
-<a class="el" href="structFileStat.html">FileStat</a> * &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">Paths</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef hash_map&lt; std::string, <br class="typebreak"/>
+<a class="el" href="structFileStat.html">FileStat</a> * &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html#a03ba869e7dbc1d9eb85bf69a4a2dab90">Paths</a></td></tr>
 <tr><td colspan="2"><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html#a50a77119d07713e049c2ab5e6e8c782e">Dump</a> ()</td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Dump the mapping to stdout (useful for debugging).  <a href="#a50a77119d07713e049c2ab5e6e8c782e"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structFileStat.html">FileStat</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html#ac3cfeaeef57869fe44a4e93ded962de7">GetFile</a> (const string &amp;path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structFileStat.html">FileStat</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html#a1755f5d7e9653a6edfe4974a3a217535">GetFile</a> (const std::string &amp;path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html#a32465b9fc9424bd5891b537c5d405f13">Reload</a> ()</td></tr>
 <tr><td colspan="2"><h2>Public Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">Paths</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html#acf57c421f427191a0d2d620275dade8b">paths_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structStatCache.html#a03ba869e7dbc1d9eb85bf69a4a2dab90">Paths</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html#acf57c421f427191a0d2d620275dade8b">paths_</a></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <p>Mapping of path -&gt; <a class="el" href="structFileStat.html" title="Information about a single on-disk file: path, mtime.">FileStat</a>. </p>
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00072">72</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="stat__cache_8h_source.html#l00025">25</a> of file <a class="el" href="stat__cache_8h_source.html">stat_cache.h</a>.</p>
 <hr/><h2>Member Typedef Documentation</h2>
-<a class="anchor" id="ab8b9b6a3d0f85841f5db4c1a75341a52"></a><!-- doxytag: member="StatCache::Paths" ref="ab8b9b6a3d0f85841f5db4c1a75341a52" args="" -->
+<a class="anchor" id="a03ba869e7dbc1d9eb85bf69a4a2dab90"></a><!-- doxytag: member="StatCache::Paths" ref="a03ba869e7dbc1d9eb85bf69a4a2dab90" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef hash_map&lt;string, <a class="el" href="structFileStat.html">FileStat</a>*&gt; <a class="el" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">StatCache::Paths</a></td>
+          <td class="memname">typedef hash_map&lt;std::string, <a class="el" href="structFileStat.html">FileStat</a>*&gt; <a class="el" href="structStatCache.html#a03ba869e7dbc1d9eb85bf69a4a2dab90">StatCache::Paths</a></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00073">73</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="stat__cache_8h_source.html#l00032">32</a> of file <a class="el" href="stat__cache_8h_source.html">stat_cache.h</a>.</p>
 
 </div>
 </div>
@@ -85,20 +85,20 @@
 
 <p>Dump the mapping to stdout (useful for debugging). </p>
 
-<p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00111">111</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
+<p>Definition at line <a class="el" href="stat__cache_8cc_source.html#l00030">30</a> of file <a class="el" href="stat__cache_8cc_source.html">stat_cache.cc</a>.</p>
 
-<p>References <a class="el" href="graph_8h_source.html#l00070">Node::dirty_</a>, <a class="el" href="graph_8h_source.html#l00057">FileStat::node_</a>, <a class="el" href="graph_8h_source.html#l00051">FileStat::path_</a>, <a class="el" href="ninja_8h_source.html#l00074">paths_</a>, and <a class="el" href="graph_8h_source.html#l00047">FileStat::status_known()</a>.</p>
+<p>References <a class="el" href="graph_8h_source.html#l00070">Node::dirty_</a>, <a class="el" href="graph_8h_source.html#l00057">FileStat::node_</a>, <a class="el" href="graph_8h_source.html#l00051">FileStat::path_</a>, <a class="el" href="stat__cache_8h_source.html#l00033">paths_</a>, and <a class="el" href="graph_8h_source.html#l00047">FileStat::status_known()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ac3cfeaeef57869fe44a4e93ded962de7"></a><!-- doxytag: member="StatCache::GetFile" ref="ac3cfeaeef57869fe44a4e93ded962de7" args="(const string &amp;path)" -->
+<a class="anchor" id="a1755f5d7e9653a6edfe4974a3a217535"></a><!-- doxytag: member="StatCache::GetFile" ref="a1755f5d7e9653a6edfe4974a3a217535" args="(const std::string &amp;path)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structFileStat.html">FileStat</a> * StatCache::GetFile </td>
           <td>(</td>
-          <td class="paramtype">const string &amp;&nbsp;</td>
+          <td class="paramtype">const std::string &amp;&nbsp;</td>
           <td class="paramname"> <em>path</em></td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
@@ -107,11 +107,11 @@
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="ninja__jumble_8cc_source.html#l00102">102</a> of file <a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a>.</p>
+<p>Definition at line <a class="el" href="stat__cache_8cc_source.html#l00021">21</a> of file <a class="el" href="stat__cache_8cc_source.html">stat_cache.cc</a>.</p>
 
-<p>References <a class="el" href="ninja_8h_source.html#l00074">paths_</a>.</p>
+<p>References <a class="el" href="stat__cache_8h_source.html#l00033">paths_</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00155">State::GetNode()</a>, and <a class="el" href="ninja__jumble_8cc_source.html#l00148">State::LookupNode()</a>.</p>
+<p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00142">State::GetNode()</a>, and <a class="el" href="ninja__jumble_8cc_source.html#l00135">State::LookupNode()</a>.</p>
 
 </div>
 </div>
@@ -138,24 +138,24 @@
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structStatCache.html#ab8b9b6a3d0f85841f5db4c1a75341a52">Paths</a> <a class="el" href="structStatCache.html#acf57c421f427191a0d2d620275dade8b">StatCache::paths_</a></td>
+          <td class="memname"><a class="el" href="structStatCache.html#a03ba869e7dbc1d9eb85bf69a4a2dab90">Paths</a> <a class="el" href="structStatCache.html#acf57c421f427191a0d2d620275dade8b">StatCache::paths_</a></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Definition at line <a class="el" href="ninja_8h_source.html#l00074">74</a> of file <a class="el" href="ninja_8h_source.html">ninja.h</a>.</p>
+<p>Definition at line <a class="el" href="stat__cache_8h_source.html#l00033">33</a> of file <a class="el" href="stat__cache_8h_source.html">stat_cache.h</a>.</p>
 
-<p>Referenced by <a class="el" href="ninja__jumble_8cc_source.html#l00111">Dump()</a>, and <a class="el" href="ninja__jumble_8cc_source.html#l00102">GetFile()</a>.</p>
+<p>Referenced by <a class="el" href="stat__cache_8cc_source.html#l00030">Dump()</a>, and <a class="el" href="stat__cache_8cc_source.html#l00021">GetFile()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li><a class="el" href="ninja_8h_source.html">ninja.h</a></li>
-<li><a class="el" href="ninja__jumble_8cc_source.html">ninja_jumble.cc</a></li>
+<li><a class="el" href="stat__cache_8h_source.html">stat_cache.h</a></li>
+<li><a class="el" href="stat__cache_8cc_source.html">stat_cache.cc</a></li>
 </ul>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 13:22:35 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

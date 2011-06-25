@@ -42,6 +42,8 @@ parser__perftest_8cc_source.html
 parsers_8cc_source.html
 parsers_8h_source.html
 parsers__test_8cc_source.html
+stat__cache_8cc_source.html
+stat__cache_8h_source.html
 subprocess-win32_8cc_source.html
 subprocess_8cc_source.html
 subprocess_8h_source.html
@@ -80,6 +82,8 @@ parser__perftest_8cc.html
 parsers_8cc.html
 parsers_8h.html
 parsers__test_8cc.html
+stat__cache_8cc.html
+stat__cache_8h.html
 subprocess-win32_8cc.html
 subprocess_8cc.html
 subprocess_8h.html

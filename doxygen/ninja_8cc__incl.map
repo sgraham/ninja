@@ -1,14 +1,15 @@
 <map id="G" name="G">
-<area shape="rect" href="$ninja_8h.html" title="ninja.h" alt="" coords="564,83,623,112"/>
-<area shape="rect" href="$getopt_8h.html" title="getopt.h" alt="" coords="1593,83,1660,112"/>
-<area shape="rect" href="$browse_8h.html" title="browse.h" alt="" coords="1684,83,1756,112"/>
-<area shape="rect" href="$build_8h.html" title="build.h" alt="" coords="211,160,269,189"/>
-<area shape="rect" href="$build__log_8h.html" title="build_log.h" alt="" coords="1245,160,1328,189"/>
-<area shape="rect" href="$graph_8h.html" title="graph.h" alt="" coords="860,83,924,112"/>
+<area shape="rect" href="$ninja_8h.html" title="ninja.h" alt="" coords="384,83,443,112"/>
+<area shape="rect" href="$getopt_8h.html" title="getopt.h" alt="" coords="1599,83,1665,112"/>
+<area shape="rect" href="$browse_8h.html" title="browse.h" alt="" coords="1689,83,1761,112"/>
+<area shape="rect" href="$build_8h.html" title="build.h" alt="" coords="501,160,560,189"/>
+<area shape="rect" href="$build__log_8h.html" title="build_log.h" alt="" coords="1251,160,1333,189"/>
+<area shape="rect" href="$graph_8h.html" title="graph.h" alt="" coords="865,83,929,112"/>
 <area shape="rect" href="$graphviz_8h.html" title="graphviz.h" alt="" coords="5,160,85,189"/>
-<area shape="rect" href="$parsers_8h.html" title="parsers.h" alt="" coords="1008,160,1083,189"/>
-<area shape="rect" href="$util_8h.html" title="util.h" alt="" coords="999,83,1047,112"/>
-<area shape="rect" href="$clean_8h.html" title="clean.h" alt="" coords="263,83,327,112"/>
-<area shape="rect" href="$eval__env_8h.html" title="eval_env.h" alt="" coords="851,160,933,189"/>
-<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="344,160,435,189"/>
+<area shape="rect" href="$parsers_8h.html" title="parsers.h" alt="" coords="1013,160,1088,189"/>
+<area shape="rect" href="$util_8h.html" title="util.h" alt="" coords="1004,83,1052,112"/>
+<area shape="rect" href="$clean_8h.html" title="clean.h" alt="" coords="725,83,789,112"/>
+<area shape="rect" href="$eval__env_8h.html" title="eval_env.h" alt="" coords="856,160,939,189"/>
+<area shape="rect" href="$stat__cache_8h.html" title="stat_cache.h" alt="" coords="584,160,680,189"/>
+<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="587,237,677,267"/>
 </map>

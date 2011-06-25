@@ -26,20 +26,20 @@
   </div>
 </div>
 <div class="contents">
-<h1>ninja.h File Reference</h1><code>#include &lt;algorithm&gt;</code><br/>
+<h1>ninja.h File Reference</h1><code>#include &lt;assert.h&gt;</code><br/>
+<code>#include &lt;algorithm&gt;</code><br/>
 <code>#include &lt;queue&gt;</code><br/>
 <code>#include &lt;set&gt;</code><br/>
 <code>#include &lt;string&gt;</code><br/>
 <code>#include &lt;vector&gt;</code><br/>
-<code>#include &lt;assert.h&gt;</code><br/>
 <code>#include &quot;<a class="el" href="eval__env_8h_source.html">eval_env.h</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="hash__map_8h_source.html">hash_map.h</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="stat__cache_8h_source.html">stat_cache.h</a>&quot;</code><br/>
 <div class="dynheader">
 Include dependency graph for ninja.h:</div>
 <div class="dynsection">
 <div class="center"><img src="ninja_8h__incl.png" border="0" usemap="#ninja_8h_map" alt=""/></div>
 <map name="ninja_8h_map" id="ninja_8h">
-<area shape="rect" href="eval__env_8h.html" title="eval_env.h" alt="" coords="299,83,381,112"/><area shape="rect" href="hash__map_8h.html" title="hash_map.h" alt="" coords="547,83,637,112"/></map>
+<area shape="rect" href="eval__env_8h.html" title="eval_env.h" alt="" coords="389,83,472,112"/><area shape="rect" href="stat__cache_8h.html" title="stat_cache.h" alt="" coords="547,83,643,112"/><area shape="rect" href="hash__map_8h.html" title="hash_map.h" alt="" coords="557,160,648,189"/></map>
 </div>
 <div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -56,13 +56,11 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Interface for accessing the disk.  <a href="structDiskInterface.html#_details">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structRealDiskInterface.html">RealDiskInterface</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Implementation of <a class="el" href="structDiskInterface.html" title="Interface for accessing the disk.">DiskInterface</a> that actually hits the disk.  <a href="structRealDiskInterface.html#_details">More...</a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structStatCache.html">StatCache</a></td></tr>
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mapping of path -&gt; <a class="el" href="structFileStat.html" title="Information about a single on-disk file: path, mtime.">FileStat</a>.  <a href="structStatCache.html#_details">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structState.html">State</a></td></tr>
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Global state (file status, loaded rules) for a single run.  <a href="structState.html#_details">More...</a><br/></td></tr>
 </table>
 </div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 13:22:33 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

@@ -1,8 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" href="$clean_8h.html" title="clean.h" alt="" coords="17,83,81,112"/>
-<area shape="rect" href="$build_8h.html" title="build.h" alt="" coords="88,160,147,189"/>
-<area shape="rect" href="$test_8h.html" title="test.h" alt="" coords="340,83,393,112"/>
-<area shape="rect" href="$ninja_8h.html" title="ninja.h" alt="" coords="337,160,396,189"/>
-<area shape="rect" href="$eval__env_8h.html" title="eval_env.h" alt="" coords="325,237,408,267"/>
-<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="672,237,763,267"/>
+<area shape="rect" href="$clean_8h.html" title="clean.h" alt="" coords="21,83,85,112"/>
+<area shape="rect" href="$build_8h.html" title="build.h" alt="" coords="92,160,151,189"/>
+<area shape="rect" href="$test_8h.html" title="test.h" alt="" coords="300,83,353,112"/>
+<area shape="rect" href="$ninja_8h.html" title="ninja.h" alt="" coords="297,160,356,189"/>
+<area shape="rect" href="$eval__env_8h.html" title="eval_env.h" alt="" coords="399,237,481,267"/>
+<area shape="rect" href="$stat__cache_8h.html" title="stat_cache.h" alt="" coords="279,237,375,267"/>
+<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="287,315,377,344"/>
 </map>

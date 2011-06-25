@@ -150,6 +150,8 @@
   <LI><OBJECT type="text/sitemap"><param name="Name" value="parsers.cc"><param name="Local" value="parsers_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="parsers.h"><param name="Local" value="parsers_8h.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="parsers_test.cc"><param name="Local" value="parsers__test_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="stat_cache.cc"><param name="Local" value="stat__cache_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="stat_cache.h"><param name="Local" value="stat__cache_8h.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="subprocess-win32.cc"><param name="Local" value="subprocess-win32_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="subprocess.cc"><param name="Local" value="subprocess_8cc.html"><param name="ImageNumber" value="11"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="subprocess.h"><param name="Local" value="subprocess_8h.html"><param name="ImageNumber" value="11"></OBJECT>

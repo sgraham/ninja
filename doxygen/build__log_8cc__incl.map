@@ -4,5 +4,6 @@
 <area shape="rect" href="$graph_8h.html" title="graph.h" alt="" coords="263,83,327,112"/>
 <area shape="rect" href="$ninja_8h.html" title="ninja.h" alt="" coords="489,83,548,112"/>
 <area shape="rect" href="$eval__env_8h.html" title="eval_env.h" alt="" coords="213,160,296,189"/>
-<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="856,160,947,189"/>
+<area shape="rect" href="$stat__cache_8h.html" title="stat_cache.h" alt="" coords="856,160,952,189"/>
+<area shape="rect" href="$hash__map_8h.html" title="hash_map.h" alt="" coords="859,237,949,267"/>
 </map>

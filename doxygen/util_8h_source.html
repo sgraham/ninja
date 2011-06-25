@@ -72,9 +72,13 @@
 <a name="l00046"></a>00046 <span class="comment">/// time.</span>
 <a name="l00047"></a>00047 <span class="comment"></span>int64_t <a class="code" href="util_8cc.html#a139d0fe6387b9e230a9b8bb12d9b43b9" title="Get the current time as relative to some epoch.">GetTimeMillis</a>();
 <a name="l00048"></a>00048 
-<a name="l00049"></a>00049 <span class="preprocessor">#endif  // NINJA_UTIL_H_</span>
+<a name="l00049"></a>00049 <span class="preprocessor">#ifdef _WIN32</span>
+<a name="l00050"></a>00050 <span class="preprocessor"></span><span class="preprocessor">#define snprintf _snprintf</span>
+<a name="l00051"></a>00051 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00052"></a>00052 <span class="preprocessor"></span>
+<a name="l00053"></a>00053 <span class="preprocessor">#endif  // NINJA_UTIL_H_</span>
 </pre></div></div>
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu May 26 22:03:53 2011 for Ninja by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Jun 25 13:22:31 2011 for Ninja by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

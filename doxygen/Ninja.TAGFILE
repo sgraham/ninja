@@ -208,6 +208,13 @@
       <type></type>
       <name>TEST_F</name>
       <anchorfile>build__test_8cc.html</anchorfile>
+      <anchor>a680193f2c77e198ea6a9ad054cbfe2e9</anchor>
+      <arglist>(BuildTest, TwoOutputs)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>TEST_F</name>
+      <anchorfile>build__test_8cc.html</anchorfile>
       <anchor>ace3ece4b39c0b4f31fc95f04ff8c4a6b</anchor>
       <arglist>(BuildTest, TwoStep)</arglist>
     </member>
@@ -565,10 +572,9 @@
     <path>/home/evanm/projects/ninja/src/</path>
     <filename>ninja_8h</filename>
     <includes id="eval__env_8h" name="eval_env.h" local="yes" imported="no">eval_env.h</includes>
-    <includes id="hash__map_8h" name="hash_map.h" local="yes" imported="no">hash_map.h</includes>
+    <includes id="stat__cache_8h" name="stat_cache.h" local="yes" imported="no">stat_cache.h</includes>
     <class kind="struct">DiskInterface</class>
     <class kind="struct">RealDiskInterface</class>
-    <class kind="struct">StatCache</class>
     <class kind="struct">State</class>
   </compound>
   <compound kind="file">
@@ -910,6 +916,20 @@
     </member>
   </compound>
   <compound kind="file">
+    <name>stat_cache.cc</name>
+    <path>/home/evanm/projects/ninja/src/</path>
+    <filename>stat__cache_8cc</filename>
+    <includes id="stat__cache_8h" name="stat_cache.h" local="yes" imported="no">stat_cache.h</includes>
+    <includes id="graph_8h" name="graph.h" local="yes" imported="no">graph.h</includes>
+  </compound>
+  <compound kind="file">
+    <name>stat_cache.h</name>
+    <path>/home/evanm/projects/ninja/src/</path>
+    <filename>stat__cache_8h</filename>
+    <includes id="hash__map_8h" name="hash_map.h" local="yes" imported="no">hash_map.h</includes>
+    <class kind="struct">StatCache</class>
+  </compound>
+  <compound kind="file">
     <name>subprocess-win32.cc</name>
     <path>/home/evanm/projects/ninja/src/</path>
     <filename>subprocess-win32_8cc</filename>
@@ -956,13 +976,6 @@
       <anchorfile>subprocess__test_8cc.html</anchorfile>
       <anchor>a775f99b7e07e1594fca350359ab00a1b</anchor>
       <arglist>(SubprocessTest, BadCommandStderr)</arglist>
-    </member>
-    <member kind="function">
-      <type></type>
-      <name>TEST_F</name>
-      <anchorfile>subprocess__test_8cc.html</anchorfile>
-      <anchor>a8d37f9c7b6b190135bcbd15f89d8f310</anchor>
-      <arglist>(SubprocessTest, GoodCommandStdout)</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -3039,10 +3052,10 @@
     <name>StatCache</name>
     <filename>structStatCache.html</filename>
     <member kind="typedef">
-      <type>hash_map&lt; string, FileStat * &gt;</type>
+      <type>hash_map&lt; std::string, FileStat * &gt;</type>
       <name>Paths</name>
       <anchorfile>structStatCache.html</anchorfile>
-      <anchor>ab8b9b6a3d0f85841f5db4c1a75341a52</anchor>
+      <anchor>a03ba869e7dbc1d9eb85bf69a4a2dab90</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
@@ -3056,8 +3069,8 @@
       <type>FileStat *</type>
       <name>GetFile</name>
       <anchorfile>structStatCache.html</anchorfile>
-      <anchor>ac3cfeaeef57869fe44a4e93ded962de7</anchor>
-      <arglist>(const string &amp;path)</arglist>
+      <anchor>a1755f5d7e9653a6edfe4974a3a217535</anchor>
+      <arglist>(const std::string &amp;path)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
