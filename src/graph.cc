@@ -304,8 +304,10 @@ bool Edge::LoadDepFile(State* state, DiskInterface* disk_interface,
   METRIC_RECORD("depfile load");
   string path = EvaluateDepFile();
   string content = disk_interface->ReadFile(path, err);
-  if (!err->empty())
+  if (!err->empty()) {
+    *err = "loading '" + path + "': " + *err;
     return false;
+  }
   if (content.empty())
     return true;
 
