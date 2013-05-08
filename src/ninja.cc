@@ -38,6 +38,7 @@
 #include "explain.h"
 #include "graph.h"
 #include "graphviz.h"
+#include "keep_rsp.h"
 #include "manifest_parser.h"
 #include "metrics.h"
 #include "state.h"
@@ -620,6 +621,7 @@ bool DebugEnable(const string& name, Globals* globals) {
     printf("debugging modes:\n"
 "  stats    print operation counts/timing info\n"
 "  explain  explain what caused a command to execute\n"
+"  keeprsp  don't delete @response files on success\n"
 "multiple modes can be enabled via -d FOO -d BAR\n");
     return false;
   } else if (name == "stats") {
@@ -627,6 +629,9 @@ bool DebugEnable(const string& name, Globals* globals) {
     return true;
   } else if (name == "explain") {
     g_explaining = true;
+    return true;
+  } else if (name == "keeprsp") {
+    g_keep_rsp = true;
     return true;
   } else {
     const char* suggestion =

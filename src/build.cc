@@ -34,6 +34,7 @@
 #include "build_log.h"
 #include "disk_interface.h"
 #include "graph.h"
+#include "keep_rsp.h"
 #include "state.h"
 #include "subprocess.h"
 #include "util.h"
@@ -846,7 +847,7 @@ void Builder::FinishEdge(Edge* edge, bool success, const string& output) {
 
     // Delete the response file on success (if exists)
     string rspfile = edge->GetBinding("rspfile");
-    if (!rspfile.empty())
+    if (!rspfile.empty() && !g_keep_rsp)
       disk_interface_->RemoveFile(rspfile);
 
     plan_.EdgeFinished(edge);
