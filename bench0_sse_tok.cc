@@ -249,6 +249,7 @@ Continue:
         case '$':
         case ' ':
         case ':':
+          ++CurPtr;
           NeedsCleanup = true;
           goto Continue;
 
@@ -263,6 +264,7 @@ Continue:
         case 'v': case 'w': case 'x': case 'y': case 'z':
         case '-':
         case '_':
+          ++CurPtr;
           HasVariables = true;
           // FIXME: set NeedsCleanup too?
           goto Continue;
@@ -291,6 +293,7 @@ Continue:
       if (is_path) {
         // Just fall through.
       } else {
+        ++CurPtr;
         goto Continue;
       }
       break;
@@ -307,6 +310,9 @@ Continue:
   T.info = II;
   II->NeedsCleanup = NeedsCleanup;
   II->HasVariables = HasVariables;
+
+  if (*B.cur == '\n')
+    ++B.cur;
 
   // FIXME: probably don't want to do this for paths:
   //T.kind = II->kind;  // XXX?
@@ -365,7 +371,7 @@ void SkipLineComment(Buffer &B, Token &T, const char *CurPtr) {
   B.cur = CurPtr;
 }
 
-void SkipWhitespace(Buffer& B, Token& Result, const char *CurPtr) {
+void SkipWhitespace(Buffer& B, const char *CurPtr) {
   unsigned char Char = *CurPtr;
   while (1) {
     // Skip horizontal whitespace very aggressively.
@@ -373,24 +379,13 @@ void SkipWhitespace(Buffer& B, Token& Result, const char *CurPtr) {
       Char = *++CurPtr;
 
     // Otherwise if we have something other than whitespace, we're done.
-    if (Char != '\n' && Char != '\r')
+    if (Char != '$')
       break;
-
-    //Result.setFlag(Token::StartOfLine);
-    //Result.clearFlag(Token::LeadingSpace);
-    Char = *++CurPtr;
+    Char = *(CurPtr + 1);
+    if (Char != '\n')
+      break;
+    CurPtr += 2;
   }
-
-  // If this isn't immediately after a newline, there is leading space.
-  //char PrevChar = CurPtr[-1];
-  //if (PrevChar != '\n' && PrevChar != '\r')
-    //Result.setFlag(Token::LeadingSpace);
-
-  // If the client wants us to return whitespace, return it now.
-  //if (isKeepWhitespaceMode()) {
-    //FormTokenWithChars(Result, CurPtr, tok::unknown);
-    //return true;
-  //}
 
   B.cur = CurPtr;
 }
@@ -463,7 +458,7 @@ LexNextToken:
     case ' ':
     SkipHorizontalWhitespace:
       //Result.setFlag(Token::LeadingSpace);
-      SkipWhitespace(B, T, CurPtr);
+      SkipWhitespace(B, CurPtr);
 
     SkipIgnoredUnits:
       CurPtr = B.cur;
@@ -558,21 +553,32 @@ void parseRule(Buffer& B, Token& T) {
   T.info->rule = new Rule;  // FIXME: bumpptrallocate?
 
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
-  //while (1) {
-  //  Lex(B, T);
-  //  if (T.kind != kIdentifier) {
-  //    // Backtrack. FIXME could get away without this with threaded code.
-  //    B.cur = T.pos;
-  //    return;
-  //  }
-  //  // FIXME: call parseLet instead.
-  //  Lex(B, T);
-  //  if (T.kind != kEquals) {
-  //    fprintf(stderr, "expected '='\n");
-  //    exit(1);
-  //  }
+  while (1) {
+    Lex(B, T);
+    if (T.kind != kIdentifier) {
+      // Backtrack. FIXME could get away without this with threaded code.
+      B.cur = T.pos;
+      return;
+    }
+    IdentifierInfo* key = T.info;
 
-  //}
+    // FIXME: call parseLet instead.
+    Lex(B, T);
+    if (T.kind != kEquals) {
+      fprintf(stderr, "expected '='\n");
+      exit(1);
+    }
+
+    SkipWhitespace(B, B.cur);
+    LexEvalString(B, T, B.cur, false);
+
+    if (key->IsReservedBinding) {
+      // FIXME: rule->AddBinding(key, T.info);
+    } else {
+      fprintf(stderr, "unexpected variable '%s'\n", key->Entry->getKeyData());
+      exit(1);
+    }
+  }
   // Check has_rspfile == has_rspfile_contents. Check has_commands.
 }
 
