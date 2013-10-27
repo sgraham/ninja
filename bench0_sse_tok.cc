@@ -136,10 +136,21 @@ enum TokenKind {
 
 class IdentifierInfo {
 public:
-  IdentifierInfo() : kind(kIdentifier) {
+  IdentifierInfo() : kind(kIdentifier), IsReservedBinding(false) {
   }
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
+
+  // FIXME: consider bitfielding all these:
+  // The token's kind. kIdentifier in most cases.
   TokenKind kind;
+
+  // If the token is a variable that can be set on a rule, for example "command"
+  bool IsReservedBinding;
+
+  // These could maybe be in a union.
+  // Pointer to rule with this name. Only for kIdentifiers that don't need
+  // cleanups and don't contian variables.
+  // Rule *rule;
 };
 
 class IdentifierTable {
@@ -432,6 +443,26 @@ printf("%d\n", Char);
   FillToken(B, T, CurPtr, Kind);
 }
 
+void parseEdge(Buffer& B, Token& T) {
+  // Read output paths.
+  // Expect colon.
+  // Read ident, look up rule.
+  // Peek for |, read all implicit deps.
+  // Peek for ||, read all order-only deps.
+  // Expect newline.
+  // While idents, parse let statements, add bindings for those.
+  // If there's a "pool" binding, look up pool and set that.
+  // Evaluate and canonicalize all inputs and outputs, set them.
+}
+
+void parseRule(Buffer& B, Token& T) {
+  // Read ident.
+  // Read newline.
+  // Look up name, find dupes. (rule namespace is global, nice.)
+  // While idents, parse let statements. Reject non-IsReservedBinding ones.
+  // Check has_rspfile == has_rspfile_contents. Check has_commands.
+}
+
 size_t g_total = 0;
 size_t g_count = 0;
 void process(const char* fname) {
@@ -466,26 +497,27 @@ void process(const char* fname) {
 
 //if (g_count > 1) printf("%d\n", t.kind);
 
-    // FIXME: skips variable references in filenames, doesn't do escaping
     switch (t.kind) {
       case kPool:
         // FIXME: parse pool
         break;
       case kBuild:
-        // FIXME: parse build
+        parseEdge(b, t);
         break;
       case kRule:
-        // FIXME: parse rule
+        parseRule(b, t);
         break;
       case kDefault:
-        // FIXME: parse default
+        // FIXME: parse default (eval, canon, LexPath)
         break;
       case kIdentifier:
         // FIXME: parse let
         break;
       case kSubninja:
       case kInclude:
-        b.cur++;  // skip space
+        b.cur++;  // skip space (FIXME: nicer)
+
+        // FIXME: skips variable references in filenames, doesn't do escaping
         LexPath(b, t, b.cur);
         if (t.kind == kIdentifier) {
           //char* n = strndup(t.ident, t.length);
@@ -517,12 +549,24 @@ int main(int argc, const char* argv[]) {
   char* s = strrchr(d, '/');
   *s++ = '\0';
 
+  // Initialize keywords.
   kw_subninja = &Identifiers.get("subninja", kSubninja);
   kw_include = &Identifiers.get("include", kInclude);
   kw_build = &Identifiers.get("build", kBuild);
   kw_rule = &Identifiers.get("rule", kRule);
   kw_pool = &Identifiers.get("pool", kPool);
   kw_default = &Identifiers.get("default", kDefault);
+
+  // Initialize reserved bindings.
+  Identifiers.get("command").IsReservedBinding = true;
+  Identifiers.get("depfile").IsReservedBinding = true;
+  Identifiers.get("description").IsReservedBinding = true;
+  Identifiers.get("deps").IsReservedBinding = true;
+  Identifiers.get("generator").IsReservedBinding = true;
+  Identifiers.get("pool").IsReservedBinding = true;
+  Identifiers.get("restat").IsReservedBinding = true;
+  Identifiers.get("rspfile").IsReservedBinding = true;
+  Identifiers.get("rspfile_content").IsReservedBinding = true;
 
   chdir(d);
   process(s);
