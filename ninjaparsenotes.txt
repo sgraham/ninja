@@ -1,0 +1,83 @@
+ninja with a "return 1" after manifest parsing:
+0.26s
+
+ninja with a "return 1" after manifest parsing, with llvm's StringMap:
+0.248s
+
+ninja with a "return 1" after manifest parsing and ParseEdge() and other code
+that builds DOM commented out (same with llvm's StringMap):
+0.091s
+
+bench0.py:
+0.168s (subninja)
+0.128s (scope file)
+
+bench0.c
+0.023s (subninja)
+
+bench0_sse.c
+0.015s (subninja)
+
+bench0_sse_tok.cc
+0.027s (subninja) (static 2.4MiB buf)
+0.024s (scope file) (dynamic 15 MB buf)
+
+malloc'd 15 MB buf, all freed:
+0.206s (subninja)
+
+malloc'd 3 MB buf, all freed:
+0.026s (subninja)
+
+calloc'd 3 MB buf, all freed:
+0.130s (subninja)
+
+calloc'd 15 MB buf, all freed:
+3.614s (subninja)  (!!)
+
+malloc'd correctly-sized buffers:
+0.027s
+
+ReadFile() with appending string:
+0.029s
+
+ReadFile() with appending string, reserve() with right size
+0.030s
+
+
+(perf issue: forgot to 0-terminate input, and parser looked for 0. not an
+issue with just one file, but subninjas were reusing the stack-allocated buffer
+so that ended being 0.)
+
+
+With StringMap for every Identifer:
+0.058s
+
+With StringMap and Identifer-based "subninja" / "include" detection:
+0.56s
+
+With MallocAllocator instead of BumpPtrAllocator:
+0.71s
+
+(changing the BumpPtrAllocator from 2k to 64k doesn't affect things)
+
+
+Plan for lexing:
+- LexIdentifier() slurps everything non-whitespace non-$
+- On $, goes down special path, writes 'needs cleanup', 'has var' flags
+- Token has an IdentifierInfo, which is an entry in the Identifiers hash table
+- hash table owns the storage of IdentifierInfos (i.e. strings are copied from
+  file buffer to hash table once)
+- IdentifierInfo has flags if they contain variables, if not they are
+  canonicalized only once -- hopefully cuts down on CanonPath calls a lot
+- Hash table maps canonicalized and regular path to same IdentifierInfo (?)
+- non-variable-$ cleanups are done when copying string into the hash table,
+  maybe as part of canonicalizing? (but then the hash table won't save any
+  CanonPath() calls)
+
+
+StringMap:
+- array of pointers to entries, followed by array of hash values
+- entry is strlen, value data, key data (allocated from a bumpptr allocator,
+  optionally)
+- due to bumpptr allocator, most hash entries will be next to each other
+- quadratic probing
