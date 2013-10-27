@@ -99,6 +99,7 @@ static inline bool isHorizontalWhitespace(unsigned char c) {
 }
 
 static inline bool isIdentifierBody(unsigned char c) {
+  // FIXME: '.'?
   return (CharInfo[c] & (CHAR_LETTER|CHAR_NUMBER|CHAR_UNDER)) ? true : false;
 }
 
@@ -134,9 +135,11 @@ enum TokenKind {
 
 #include "StringMap.h"
 
+class Rule {};
+
 class IdentifierInfo {
 public:
-  IdentifierInfo() : kind(kIdentifier), IsReservedBinding(false) {
+  IdentifierInfo() : kind(kIdentifier), IsReservedBinding(false), rule(0) {
   }
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
@@ -150,7 +153,7 @@ public:
   // These could maybe be in a union.
   // Pointer to rule with this name. Only for kIdentifiers that don't need
   // cleanups and don't contian variables.
-  // Rule *rule;
+  Rule *rule;
 };
 
 class IdentifierTable {
@@ -249,7 +252,7 @@ void LexIdentifier(Buffer& B, Token& T, const char* CurPtr) {
   //if (C >= 128)
     //return LexUtfIdentifier(Result, CurPtr);
 
-  // FIXME: '$' handling
+  // FIXME: '$' handling? Idents can't contain cleanups it seems?
 
   const char *IdStart = B.cur;
 
@@ -456,9 +459,24 @@ void parseEdge(Buffer& B, Token& T) {
 }
 
 void parseRule(Buffer& B, Token& T) {
+  Lex(B, T);
+
   // Read ident.
+  if (T.kind != kIdentifier) {
+    fprintf(stderr, "expected ident, got %c\n", *B.cur);
+    exit(1);
+  }
+
   // Read newline.
+  //FIXME
+
   // Look up name, find dupes. (rule namespace is global, nice.)
+  if (T.info->rule) {
+    fprintf(stderr, "duplicate rule '%s'\n", T.info->Entry->getKeyData());
+    exit(1);
+  }
+  T.info->rule = new Rule;  // FIXME: bumpptrallocate?
+
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
   // Check has_rspfile == has_rspfile_contents. Check has_commands.
 }
