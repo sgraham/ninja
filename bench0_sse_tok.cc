@@ -1,3 +1,12 @@
+/*
+clang -O2 -c Allocator.cpp  -stdlib=libstdc++
+clang -O2 -c StringMap.cpp  -stdlib=libstdc++
+clang -o bench StringMap.o Allocator.o bench0_sse_tok.cc -O2 -stdlib=libstdc++
+
+time ./bench ~/src/chrome/src/out_bench/Release/build.ninja
+  vs
+time ./ninja -C ~/src/chrome/src/out_bench/Release chrome
+ */
 #include <emmintrin.h>
 #include <stdio.h>
 #include <stdlib.h>

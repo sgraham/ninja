@@ -141,7 +141,7 @@ else:
               '-fno-rtti',
               '-fno-exceptions',
               '-fvisibility=hidden', '-pipe',
-              '-Wno-missing-field-initializers',
+              '-Wno-missing-field-initializers', '-stdlib=libstdc++',
               '-DNINJA_PYTHON="%s"' % options.with_python]
     if options.debug:
         cflags += ['-D_GLIBCXX_DEBUG', '-D_GLIBCXX_DEBUG_PEDANTIC']
@@ -152,7 +152,7 @@ else:
         cflags += ['-fcolor-diagnostics']
     if platform.is_mingw():
         cflags += ['-D_WIN32_WINNT=0x0501']
-    ldflags = ['-L$builddir']
+    ldflags = ['-L$builddir', '-stdlib=libstdc++']
 libs = []
 
 if platform.is_mingw():
