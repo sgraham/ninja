@@ -458,27 +458,54 @@ void process(const char* fname) {
   Buffer b = { buf, buf, buf + size };
   Token t = { kUnknown };
 
-  while (t.kind != kEof) {
+  while (1) {
 //fprintf(stderr, "loop\n");
     Lex(b, t);
     ++count;
     //printf("kind %d\n", t.kind);
 
 //if (g_count > 1) printf("%d\n", t.kind);
-    if (t.kind == kSubninja || t.kind == kInclude) {
-      // FIXME: skips variable references in filenames, doesn't do escaping
-      //if (strncmp(t.ident, "include ", strlen("include ")) == 0 ||
-      //    strncmp(t.ident, "subninja ", strlen("subninja ")) == 0) {
-      b.cur++;  // skip space
-      LexPath(b, t, b.cur);
-      if (t.kind == kIdentifier) {
-        //char* n = strndup(t.ident, t.length);
-        const char* n = t.info->Entry->getKeyData();
-        process(n);
-        //free(n);
-      }
+
+    // FIXME: skips variable references in filenames, doesn't do escaping
+    switch (t.kind) {
+      case kPool:
+        // FIXME: parse pool
+        break;
+      case kBuild:
+        // FIXME: parse build
+        break;
+      case kRule:
+        // FIXME: parse rule
+        break;
+      case kDefault:
+        // FIXME: parse default
+        break;
+      case kIdentifier:
+        // FIXME: parse let
+        break;
+      case kSubninja:
+      case kInclude:
+        b.cur++;  // skip space
+        LexPath(b, t, b.cur);
+        if (t.kind == kIdentifier) {
+          //char* n = strndup(t.ident, t.length);
+          const char* n = t.info->Entry->getKeyData();
+          process(n);
+          //free(n);
+        }
+        break;
+      case kEquals:
+      case kPipe:
+      case kPipePipe:
+      case kColon:
+      case kUnknown:
+        // FIXME: error
+        break;
+      case kEof:
+        goto done;
     }
   }
+done:
   free(buf);  // Adds 0.1s for 3MB bufs, 3.5s (!) for 15 MB bufs
               // (but only if allocated via calloc)
               // (for malloc, free for 3MB, adds 0.18s for 15 MB bufs)
@@ -494,8 +521,8 @@ int main(int argc, const char* argv[]) {
   kw_include = &Identifiers.get("include", kInclude);
   kw_build = &Identifiers.get("build", kBuild);
   kw_rule = &Identifiers.get("rule", kRule);
-  kw_pool = &Identifiers.get("pool", kRule);
-  kw_default = &Identifiers.get("default", kRule);
+  kw_pool = &Identifiers.get("pool", kPool);
+  kw_default = &Identifiers.get("default", kDefault);
 
   chdir(d);
   process(s);
