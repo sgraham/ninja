@@ -1,7 +1,7 @@
 /*
 clang -O2 -c Allocator.cpp  -stdlib=libstdc++
 clang -O2 -c StringMap.cpp  -stdlib=libstdc++
-clang -o bench StringMap.o Allocator.o bench0_sse_tok.cc -O2 -stdlib=libstdc++
+clang++ -o bench StringMap.o Allocator.o bench0_sse_tok.cc -O2 -stdlib=libstdc++
 
 time ./bench ~/src/chrome/src/out_bench/Release/build.ninja
   vs
@@ -121,6 +121,7 @@ enum TokenKind {
   kPipe,
   kPipePipe,
   kIdentifier,
+  kNewline,
   kEof,
 
   kSubninja,
@@ -202,6 +203,8 @@ struct Token {
   TokenKind kind;
   unsigned length;
 
+  const char* pos;
+
   IdentifierInfo* info;
 };
 
@@ -210,6 +213,7 @@ void FillToken(Buffer& B, Token& T, const char* TokEnd, TokenKind kind) {
   //T.setLength(TokLen);
   T.length = TokLen;
   //T.setLocation(getSourceLocation(BufferPtr));
+  T.pos = B.cur;
   //T.setKind(Kind);
   T.kind = kind;
   B.cur = TokEnd;
@@ -351,11 +355,11 @@ LexNextToken:
   const char *CurPtr = B.cur;
 
   // Small amounts of horizontal whitespace is very common between tokens.
-  //if ((*CurPtr == ' ') || (*CurPtr == '\t')) {
-  if ((*CurPtr == ' ')) {
+  //if (*CurPtr == ' ' || *CurPtr == '\t') {
+  if (*CurPtr == ' ') {
     ++CurPtr;
-    //while ((*CurPtr == ' ') || (*CurPtr == '\t'))
-    while ((*CurPtr == ' '))
+    //while (*CurPtr == ' ' || *CurPtr == '\t')
+    while (*CurPtr == ' ')
       ++CurPtr;
 
     B.cur = CurPtr;
@@ -385,14 +389,10 @@ LexNextToken:
       return LexIdentifier(B, T, CurPtr);
 
     case '\n':
-    case '\r':
-      //Result.setFlag(Token::StartOfLine);
-      //Result.clearFlag(Token::LeadingSpace);
-      SkipWhitespace(B, T, CurPtr);
-      goto LexNextToken;
+      Kind = kNewline;
+      break;
 
     case ' ':
-    //case '\t':
     SkipHorizontalWhitespace:
       //Result.setFlag(Token::LeadingSpace);
       SkipWhitespace(B, T, CurPtr);
@@ -427,7 +427,12 @@ LexNextToken:
       }
       break;
 
-    case '$':  // FIXME
+    case '$':
+      Char = *CurPtr;
+      if (Char == '\n') {  // $ followed by a newline is whitespace.
+        B.cur = CurPtr + 1;
+        goto LexNextToken;
+      }
 
     case '0': case '1': case '2': case '3': case '4':  // even more FIXME
     case '5': case '6': case '7': case '8': case '9': 
@@ -437,6 +442,9 @@ LexNextToken:
     case '(': case ')': case '?': case '*':
       B.cur = CurPtr;
       goto LexNextToken;   // GCC isn't tail call eliminating.
+
+    case '\t':
+    case '\r':  // FIXME: '\t' and '\r' should be an error
 
     default:
 printf("%d\n", Char);
@@ -478,6 +486,21 @@ void parseRule(Buffer& B, Token& T) {
   T.info->rule = new Rule;  // FIXME: bumpptrallocate?
 
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
+  //while (1) {
+  //  Lex(B, T);
+  //  if (T.kind != kIdentifier) {
+  //    // Backtrack. FIXME could get away without this with threaded code.
+  //    B.cur = T.pos;
+  //    return;
+  //  }
+  //  // FIXME: call parseLet instead.
+  //  Lex(B, T);
+  //  if (T.kind != kEquals) {
+  //    fprintf(stderr, "expected '='\n");
+  //    exit(1);
+  //  }
+
+  //}
   // Check has_rspfile == has_rspfile_contents. Check has_commands.
 }
 
@@ -545,6 +568,7 @@ void process(const char* fname) {
         }
         break;
       case kEquals:
+      case kNewline:
       case kPipe:
       case kPipePipe:
       case kColon:
