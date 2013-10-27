@@ -21,7 +21,8 @@ enum {
   CHAR_VERT_WS  = 0x02,  // '\r', '\n'
   CHAR_LETTER   = 0x04,  // a-z,A-Z
   CHAR_NUMBER   = 0x08,  // 0-9
-  CHAR_UNDER    = 0x10   // _
+  CHAR_UNDER    = 0x10,  // _
+  CHAR_FILEPATHSEP = 0x20,
 };
 
 // Statically initialize CharInfo table based on ASCII character set
@@ -30,12 +31,12 @@ static const unsigned char CharInfo[256] =
 {
 // 0 NUL         1 SOH         2 STX         3 ETX
 // 4 EOT         5 ENQ         6 ACK         7 BEL
-   0           , 0           , 0           , 0           ,
+   CHAR_FILEPATHSEP           , 0           , 0           , 0           ,
    0           , 0           , 0           , 0           ,
 // 8 BS          9 HT         10 NL         11 VT
 //12 NP         13 CR         14 SO         15 SI
-   0           , CHAR_HORZ_WS, CHAR_VERT_WS, 0           ,
-   0           , CHAR_VERT_WS, 0           , 0           ,
+   0           , CHAR_HORZ_WS, CHAR_VERT_WS | CHAR_FILEPATHSEP, 0           ,
+   0           , CHAR_VERT_WS | CHAR_FILEPATHSEP, 0           , 0           ,
 //16 DLE        17 DC1        18 DC2        19 DC3
 //20 DC4        21 NAK        22 SYN        23 ETB
    0           , 0           , 0           , 0           ,
@@ -47,7 +48,7 @@ static const unsigned char CharInfo[256] =
 //32 SP         33  !         34  "         35  #
 //36  $         37  %         38  &         39  '
    CHAR_HORZ_WS, 0           , 0           , 0           ,
-   CHAR_UNDER/*XXX*/           , 0           , 0           , 0           ,
+   CHAR_UNDER | CHAR_FILEPATHSEP , 0           , 0           , 0           ,
 //40  (         41  )         42  *         43  +
 //44  ,         45  -         46  .         47  /
    0           , 0           , 0           , 0           ,
@@ -58,7 +59,7 @@ static const unsigned char CharInfo[256] =
    CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER ,
 //56  8         57  9         58  :         59  ;
 //60  <         61  =         62  >         63  ?
-   CHAR_NUMBER , CHAR_NUMBER , 0           , 0           ,
+   CHAR_NUMBER , CHAR_NUMBER , CHAR_FILEPATHSEP           , 0           ,
    0           , 0           , 0           , 0           ,
 //64  @         65  A         66  B         67  C
 //68  D         69  E         70  F         71  G
@@ -91,7 +92,7 @@ static const unsigned char CharInfo[256] =
 //120  x       121  y        122  z        123  {
 //124  |       125  }        126  ~        127 DEL
    CHAR_LETTER , CHAR_LETTER , CHAR_LETTER , 0           ,
-   0           , 0           , 0           , 0
+   CHAR_FILEPATHSEP           , 0           , 0           , 0
 };
 
 static inline bool isHorizontalWhitespace(unsigned char c) {
@@ -107,6 +108,9 @@ static inline unsigned char isWhitespace(unsigned char c) {
   return (CharInfo[c] & (CHAR_HORZ_WS|CHAR_VERT_WS));
 }
 
+static inline unsigned char isFilePathSep(unsigned char c) {
+  return (CharInfo[c] & CHAR_FILEPATHSEP);
+}
 
 
 struct Buffer {
@@ -140,8 +144,9 @@ class Rule {};
 
 class IdentifierInfo {
 public:
-  IdentifierInfo() : kind(kIdentifier), IsReservedBinding(false), rule(0) {
-  }
+  IdentifierInfo()
+      : kind(kIdentifier), IsReservedBinding(false), NeedsCleanup(false),
+        HasVariables(false), rule(0) {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
   // FIXME: consider bitfielding all these:
@@ -150,6 +155,12 @@ public:
 
   // If the token is a variable that can be set on a rule, for example "command"
   bool IsReservedBinding;
+
+  // If this contains $-escaped chars like $$, $:, etc.
+  bool NeedsCleanup;
+
+  // If this contains references to variables.
+  bool HasVariables;
 
   // These could maybe be in a union.
   // Pointer to rule with this name. Only for kIdentifiers that don't need
@@ -219,26 +230,83 @@ void FillToken(Buffer& B, Token& T, const char* TokEnd, TokenKind kind) {
   B.cur = TokEnd;
 }
 
-void LexPath(Buffer& B, Token& T, const char* CurPtr) {
+void LexEvalString(Buffer& B, Token& T, const char* CurPtr, bool is_path) {
+  bool NeedsCleanup = false;
+  bool HasVariables = false;
+
+Continue:
   unsigned char C = *CurPtr++;
-  while (!isWhitespace(C))  // FIXME: not quite right
+  while (!isFilePathSep(C))
     C = *CurPtr++;
 
   --CurPtr;   // Back up over the skipped character.
+  C = *CurPtr;
+  switch (C) {
+    case '$':
+      ++CurPtr;
+      C = *CurPtr;
+      switch (C) {
+        case '$':
+        case ' ':
+        case ':':
+          NeedsCleanup = true;
+          goto Continue;
 
-  // FIXME: lame hack for handling $\n continuation:
-  //if (*CurPtr == '$' && CurPtr[1] == '\n') {
-    //B.cur = CurPtr + 2;
-    //return LexPath(B, T, CurPtr + 2);
-  //}
+        case '{':
+        case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
+        case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
+        case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
+        case 'V': case 'W': case 'X': case 'Y': case 'Z':
+        case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
+        case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
+        case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
+        case 'v': case 'w': case 'x': case 'y': case 'z':
+        case '-':
+        case '_':
+          HasVariables = true;
+          // FIXME: set NeedsCleanup too?
+          goto Continue;
 
-  // FIXME: '$' handling
+        case '\n':
+          ++CurPtr;
+          C = *CurPtr;
+          while (C == ' ')
+            C = *CurPtr++;
+          NeedsCleanup = true;
+          goto Continue;
+        default:
+          fprintf(stderr, "base $-escape\n");
+          exit(1);
+      }
+
+    case '\0':
+      fprintf(stderr, "unexpected eof\n");
+      exit(1);
+      break;
+    case '\n':
+      break;
+    case ' ':
+    case ':':
+    case '|':
+      if (is_path) {
+        // Just fall through.
+      } else {
+        goto Continue;
+      }
+      break;
+    case '\r':
+      fprintf(stderr, "carriage returns not allowed\n");
+      exit(1);
+      break;
+  }
 
   const char *IdStart = B.cur;
   FillToken(B, T, CurPtr, kIdentifier);
 
   IdentifierInfo *II = &Identifiers.get(StringPiece(IdStart, T.length));
   T.info = II;
+  II->NeedsCleanup = NeedsCleanup;
+  II->HasVariables = HasVariables;
 
   // FIXME: probably don't want to do this for paths:
   //T.kind = II->kind;  // XXX?
@@ -471,12 +539,16 @@ void parseRule(Buffer& B, Token& T) {
 
   // Read ident.
   if (T.kind != kIdentifier) {
-    fprintf(stderr, "expected ident, got %c\n", *B.cur);
+    fprintf(stderr, "expected ident, got %c\n", *T.pos);
     exit(1);
   }
 
   // Read newline.
-  //FIXME
+  Lex(B, T);
+  if (T.kind != kNewline) {
+    fprintf(stderr, "expected newline, got %c\n", *T.pos);
+    exit(1);
+  }
 
   // Look up name, find dupes. (rule namespace is global, nice.)
   if (T.info->rule) {
@@ -549,7 +621,7 @@ void process(const char* fname) {
         parseRule(b, t);
         break;
       case kDefault:
-        // FIXME: parse default (eval, canon, LexPath)
+        // FIXME: parse default (eval, canon, LexEvalString)
         break;
       case kIdentifier:
         // FIXME: parse let
@@ -559,7 +631,7 @@ void process(const char* fname) {
         b.cur++;  // skip space (FIXME: nicer)
 
         // FIXME: skips variable references in filenames, doesn't do escaping
-        LexPath(b, t, b.cur);
+        LexEvalString(b, t, b.cur, true);
         if (t.kind == kIdentifier) {
           //char* n = strndup(t.ident, t.length);
           const char* n = t.info->Entry->getKeyData();
@@ -615,4 +687,3 @@ int main(int argc, const char* argv[]) {
 
   free(d);
 }
-
