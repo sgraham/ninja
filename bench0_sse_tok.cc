@@ -449,6 +449,8 @@ LexNextToken:
     case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
     case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
     case 'v': case 'w': case 'x': case 'y': case 'z':
+    case '0': case '1': case '2': case '3': case '4':
+    case '5': case '6': case '7': case '8': case '9': 
     case '.':
     case '-':
     case '_':
@@ -499,15 +501,6 @@ LexNextToken:
         B.cur = CurPtr + 1;
         goto LexNextToken;
       }
-
-    case '0': case '1': case '2': case '3': case '4':  // even more FIXME
-    case '5': case '6': case '7': case '8': case '9': 
-    case '+': case '&': case '[': case ']': case '{': case '}':
-    case ',': case '!': case ';': case '<': case '>':
-    case '/': case '\\': case '"': case '\'': case '@':
-    case '(': case ')': case '?': case '*':
-      B.cur = CurPtr;
-      goto LexNextToken;   // GCC isn't tail call eliminating.
 
     case '\t':
     case '\r':  // FIXME: '\t' and '\r' should be an error
