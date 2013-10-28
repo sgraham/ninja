@@ -18,11 +18,10 @@ using std::string;
 
 enum {
   CHAR_HORZ_WS  = 0x01,  // ' ', '\t'.  Note, no '\0'
-  CHAR_VERT_WS  = 0x02,  // '\r', '\n'
-  CHAR_LETTER   = 0x04,  // a-z,A-Z
-  CHAR_NUMBER   = 0x08,  // 0-9
-  CHAR_OTHERIDENT    = 0x10,  // _
-  CHAR_FILEPATHSEP = 0x20,
+  CHAR_LETTER   = 0x02,  // a-z,A-Z
+  CHAR_NUMBER   = 0x04,  // 0-9
+  CHAR_OTHERIDENT    = 0x08,  // _
+  CHAR_FILEPATHSEP = 0x10,
 };
 
 // Statically initialize CharInfo table based on ASCII character set
@@ -35,8 +34,8 @@ static const unsigned char CharInfo[256] =
    0           , 0           , 0           , 0           ,
 // 8 BS          9 HT         10 NL         11 VT
 //12 NP         13 CR         14 SO         15 SI
-   0           , CHAR_HORZ_WS, CHAR_VERT_WS | CHAR_FILEPATHSEP, 0           ,
-   0           , CHAR_VERT_WS | CHAR_FILEPATHSEP, 0           , 0           ,
+   0           , 0           , CHAR_FILEPATHSEP, 0           ,
+   0           , 0           , 0           , 0           ,
 //16 DLE        17 DC1        18 DC2        19 DC3
 //20 DC4        21 NAK        22 SYN        23 ETB
    0           , 0           , 0           , 0           ,
@@ -102,10 +101,6 @@ static inline bool isHorizontalWhitespace(unsigned char c) {
 static inline bool isIdentifierBody(unsigned char c) {
   return (CharInfo[c] & (CHAR_LETTER | CHAR_NUMBER | CHAR_OTHERIDENT)) ? true
                                                                        : false;
-}
-
-static inline unsigned char isWhitespace(unsigned char c) {
-  return (CharInfo[c] & (CHAR_HORZ_WS|CHAR_VERT_WS));
 }
 
 static inline unsigned char isFilePathSep(unsigned char c) {
