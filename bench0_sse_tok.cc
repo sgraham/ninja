@@ -209,6 +209,7 @@ IdentifierInfo* kw_build;
 IdentifierInfo* kw_rule;
 IdentifierInfo* kw_pool;
 IdentifierInfo* kw_default;
+IdentifierInfo* attrib_depth;
 
 struct Token {
   TokenKind kind;
@@ -709,6 +710,53 @@ void parseDefault(Buffer& B, Token& T) {
   }
 }
 
+void parsePool(Buffer& B, Token& T) {
+  Lex(B, T);
+
+  // Read ident.
+  if (T.kind != kIdentifier) {
+    fprintf(stderr, "expected pool name, got '%c'\n", *T.pos);
+    exit(1);
+  }
+
+  // Read newline.
+  Lex(B, T);
+  if (T.kind != kNewline) {
+    fprintf(stderr, "expected newline, got '%c'\n", *T.pos);
+    exit(1);
+  }
+
+  // Look up name, find dupes. (rule namespace is global, nice.)
+  //if (T.info->pool) {
+  //  fprintf(stderr, "duplicate pool '%s'\n", T.info->Entry->getKeyData());
+  //  exit(1);
+  //}
+//fprintf(stderr, "pool %s\n", T.info->Entry->getKeyData());
+  //T.info->pool = new Pool;  // FIXME: bumpptrallocate?
+
+// FIXME: do this only for indented lines!
+  // While idents, parse let statements. Reject non-IsReservedBinding ones.
+  while (1) {
+    Lex(B, T);
+    if (T.kind != kIdentifier) {
+      // Simulate peek via backtracking.
+      // FIXME could get away without this with threaded code.
+      B.cur = T.pos;
+      return;
+    }
+
+    IdentifierInfo *Key, *Val;
+    parseLet(B, T, Key, Val);
+
+    if (Key == attrib_depth) {
+      // FIXME: eval, convert to number
+    } else {
+      fprintf(stderr, "unexpected variable '%s'\n", Key->Entry->getKeyData());
+      exit(1);
+    }
+  }
+}
+
 size_t g_total = 0;
 size_t g_count = 0;
 void process(const char* fname) {
@@ -745,7 +793,7 @@ void process(const char* fname) {
 
     switch (t.kind) {
       case kPool:
-        // FIXME: parse pool
+        parsePool(b, t);
         break;
       case kBuild:
         parseEdge(b, t);
@@ -809,6 +857,7 @@ int main(int argc, const char* argv[]) {
   kw_rule = &Identifiers.get("rule", kRule);
   kw_pool = &Identifiers.get("pool", kPool);
   kw_default = &Identifiers.get("default", kDefault);
+  attrib_depth = &Identifiers.get("depth");
 
   // Initialize reserved bindings.
   Identifiers.get("command").IsReservedBinding = true;
