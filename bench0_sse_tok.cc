@@ -271,9 +271,10 @@ Continue:
 
         case '\n':
           ++CurPtr;
-          C = *CurPtr;
+          C = *CurPtr++;
           while (C == ' ')
             C = *CurPtr++;
+          --CurPtr;   // Back up over the skipped ' '.
           NeedsCleanup = true;
           goto Continue;
         default:
@@ -294,6 +295,7 @@ Continue:
         // Just fall through.
       } else {
         ++CurPtr;
+//fprintf(stderr, "%c\n", *CurPtr);
         goto Continue;
       }
       break;
@@ -311,7 +313,7 @@ Continue:
   II->NeedsCleanup = NeedsCleanup;
   II->HasVariables = HasVariables;
 
-  if (*B.cur == '\n')
+  if (!is_path && *B.cur == '\n')
     ++B.cur;
 
   // FIXME: probably don't want to do this for paths:
@@ -526,6 +528,7 @@ void parseEdge(Buffer& B, Token& T) {
       fprintf(stderr, "expected filename\n");
       exit(1);
     }
+//fprintf(stderr, "got input '%s'\n", T.info->Entry->getKeyData());
 
     do {
       SkipWhitespace(B, B.cur);
@@ -536,14 +539,14 @@ void parseEdge(Buffer& B, Token& T) {
   // Expect colon.
   Lex(B, T);
   if (T.kind != kColon) {
-    fprintf(stderr, "expected :, got %c\n", *T.pos);
+    fprintf(stderr, "expected :, got '%c'\n", *T.pos);
     exit(1);
   }
 
   // Read ident, look up rule.
   Lex(B, T);
   if (T.kind != kIdentifier) {
-    fprintf(stderr, "expected identifier, got %c\n", *T.pos);
+    fprintf(stderr, "expected identifier, got '%c.\n", *T.pos);
     exit(1);
   }
 
@@ -553,9 +556,53 @@ void parseEdge(Buffer& B, Token& T) {
     exit(1);
   }
 
+  // Read all regular inputs.
+  while (1) {
+    SkipWhitespace(B, B.cur);
+    LexEvalString(B, T, B.cur, true);
+    if (!T.length)
+      break;
+  }
+
   // Peek for |, read all implicit deps.
+  Lex(B, T);
+  if (T.kind == kPipe) {
+    while (1) {
+      SkipWhitespace(B, B.cur);
+      LexEvalString(B, T, B.cur, true);
+      if (!T.length)
+        break;
+//fprintf(stderr, "got implicit '%s'\n", T.info->Entry->getKeyData());
+    }
+  } else {
+    // Simulate peek via backtracking.
+    // FIXME could get away without this with threaded code (?)
+    B.cur = T.pos;
+  }
+
   // Peek for ||, read all order-only deps.
+  Lex(B, T);
+  if (T.kind == kPipePipe) {
+    while (1) {
+      SkipWhitespace(B, B.cur);
+      LexEvalString(B, T, B.cur, true);
+      if (!T.length)
+        break;
+//fprintf(stderr, "got orderonly '%s'\n", T.info->Entry->getKeyData());
+    }
+  } else {
+    // Simulate peek via backtracking.
+    // FIXME could get away without this with threaded code (?)
+    B.cur = T.pos;
+  }
+
   // Expect newline.
+  Lex(B, T);
+  if (T.kind != kNewline) {
+    fprintf(stderr, "Expected newline, got '%c'\n", *T.pos);
+    exit(1);
+  }
+
   // While idents, parse let statements, add bindings for those.
   // If there's a "pool" binding, look up pool and set that.
   // Evaluate and canonicalize all inputs and outputs, set them.
@@ -566,14 +613,14 @@ void parseRule(Buffer& B, Token& T) {
 
   // Read ident.
   if (T.kind != kIdentifier) {
-    fprintf(stderr, "expected ident, got %c\n", *T.pos);
+    fprintf(stderr, "expected ident, got '%c'\n", *T.pos);
     exit(1);
   }
 
   // Read newline.
   Lex(B, T);
   if (T.kind != kNewline) {
-    fprintf(stderr, "expected newline, got %c\n", *T.pos);
+    fprintf(stderr, "expected newline, got '%c'\n", *T.pos);
     exit(1);
   }
 
@@ -585,11 +632,13 @@ void parseRule(Buffer& B, Token& T) {
 //fprintf(stderr, "rule %s\n", T.info->Entry->getKeyData());
   T.info->rule = new Rule;  // FIXME: bumpptrallocate?
 
+// FIXME: do this only for indented lines!
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
   while (1) {
     Lex(B, T);
     if (T.kind != kIdentifier) {
-      // Backtrack. FIXME could get away without this with threaded code.
+      // Simulate peek via backtracking.
+      // FIXME could get away without this with threaded code.
       B.cur = T.pos;
       return;
     }
