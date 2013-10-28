@@ -159,7 +159,7 @@ public:
 
   // These could maybe be in a union.
   // Pointer to rule with this name. Only for kIdentifiers that don't need
-  // cleanups and don't contian variables.
+  // cleanups and don't contain variables.
   Rule *rule;
 };
 
@@ -409,15 +409,12 @@ LexNextToken:
   const char *CurPtr = B.cur;
 
   // Small amounts of horizontal whitespace is very common between tokens.
-  //if (*CurPtr == ' ' || *CurPtr == '\t') {
   if (*CurPtr == ' ') {
     ++CurPtr;
-    //while (*CurPtr == ' ' || *CurPtr == '\t')
     while (*CurPtr == ' ')
       ++CurPtr;
 
     B.cur = CurPtr;
-    //Result.setFlag(Token::LeadingSpace);
   }
 
   unsigned char Char = *CurPtr++;
@@ -709,7 +706,7 @@ void parsePool(Buffer& B, Token& T) {
 //fprintf(stderr, "pool %s\n", T.info->Entry->getKeyData());
   //T.info->pool = new Pool;  // FIXME: bumpptrallocate?
 
-  // While idents, parse let statements. Reject non-IsReservedBinding ones.
+  // While idents, parse let statements. Reject non-depth ones.
   while (*B.cur == ' ') {
     Lex(B, T);
     if (!T.info) {
