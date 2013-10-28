@@ -21,7 +21,7 @@ enum {
   CHAR_VERT_WS  = 0x02,  // '\r', '\n'
   CHAR_LETTER   = 0x04,  // a-z,A-Z
   CHAR_NUMBER   = 0x08,  // 0-9
-  CHAR_UNDER    = 0x10,  // _
+  CHAR_OTHERIDENT    = 0x10,  // _
   CHAR_FILEPATHSEP = 0x20,
 };
 
@@ -52,7 +52,7 @@ static const unsigned char CharInfo[256] =
 //40  (         41  )         42  *         43  +
 //44  ,         45  -         46  .         47  /
    0           , 0           , 0           , 0           ,
-   0           , CHAR_UNDER  , CHAR_UNDER  , 0           ,
+   0           , CHAR_OTHERIDENT  , CHAR_OTHERIDENT  , 0           ,
 //48  0         49  1         50  2         51  3
 //52  4         53  5         54  6         55  7
    CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER ,
@@ -76,7 +76,7 @@ static const unsigned char CharInfo[256] =
 //88  X         89  Y         90  Z         91  [
 //92  \         93  ]         94  ^         95  _
    CHAR_LETTER , CHAR_LETTER , CHAR_LETTER , 0           ,
-   0           , 0           , 0           , CHAR_UNDER  ,
+   0           , 0           , 0           , CHAR_OTHERIDENT  ,
 //96  `         97  a         98  b         99  c
 //100  d       101  e        102  f        103  g
    0           , CHAR_LETTER , CHAR_LETTER , CHAR_LETTER ,
@@ -100,8 +100,8 @@ static inline bool isHorizontalWhitespace(unsigned char c) {
 }
 
 static inline bool isIdentifierBody(unsigned char c) {
-  // FIXME: '.'?
-  return (CharInfo[c] & (CHAR_LETTER|CHAR_NUMBER|CHAR_UNDER)) ? true : false;
+  return (CharInfo[c] & (CHAR_LETTER | CHAR_NUMBER | CHAR_OTHERIDENT)) ? true
+                                                                       : false;
 }
 
 static inline unsigned char isWhitespace(unsigned char c) {
@@ -316,9 +316,6 @@ Continue:
 
   if (!is_path && *B.cur == '\n')
     ++B.cur;
-
-  // FIXME: probably don't want to do this for paths:
-  //T.kind = II->kind;  // XXX?
 }
 
 void LexIdentifier(Buffer& B, Token& T, const char* CurPtr) {
@@ -332,14 +329,10 @@ void LexIdentifier(Buffer& B, Token& T, const char* CurPtr) {
   //if (C >= 128)
     //return LexUtfIdentifier(Result, CurPtr);
 
-  // FIXME: '$' handling? Idents can't contain cleanups it seems?
-
   const char *IdStart = B.cur;
 
   //FormTokenWithChars(Result, CurPtr, tok::identifier);
   FillToken(B, T, CurPtr, kIdentifier);
-
-  // FIXME: Early return here if LexingRawMode() is set?
 
   // Update the token info (identifier info and appropriate token kind).
   // This converts e.g. "subninja" from tok::identifier to kSubninja.
@@ -501,9 +494,6 @@ LexNextToken:
         B.cur = CurPtr + 1;
         goto LexNextToken;
       }
-
-    case '\t':
-    case '\r':  // FIXME: '\t' and '\r' should be an error
 
     default:
 printf("%d\n", Char);
