@@ -519,8 +519,40 @@ printf("%d\n", Char);
 
 void parseEdge(Buffer& B, Token& T) {
   // Read output paths.
+  {
+    SkipWhitespace(B, B.cur);
+    LexEvalString(B, T, B.cur, true);
+    if (!T.length) {
+      fprintf(stderr, "expected filename\n");
+      exit(1);
+    }
+
+    do {
+      SkipWhitespace(B, B.cur);
+      LexEvalString(B, T, B.cur, true);
+    } while (T.length);
+  }
+
   // Expect colon.
+  Lex(B, T);
+  if (T.kind != kColon) {
+    fprintf(stderr, "expected :, got %c\n", *T.pos);
+    exit(1);
+  }
+
   // Read ident, look up rule.
+  Lex(B, T);
+  if (T.kind != kIdentifier) {
+    fprintf(stderr, "expected identifier, got %c\n", *T.pos);
+    exit(1);
+  }
+
+  const Rule* rule = T.info->rule;
+  if (!rule) {
+    fprintf(stderr, "unknown build rule '%s'\n", T.info->Entry->getKeyData());
+    exit(1);
+  }
+
   // Peek for |, read all implicit deps.
   // Peek for ||, read all order-only deps.
   // Expect newline.
@@ -550,6 +582,7 @@ void parseRule(Buffer& B, Token& T) {
     fprintf(stderr, "duplicate rule '%s'\n", T.info->Entry->getKeyData());
     exit(1);
   }
+//fprintf(stderr, "rule %s\n", T.info->Entry->getKeyData());
   T.info->rule = new Rule;  // FIXME: bumpptrallocate?
 
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
@@ -574,6 +607,7 @@ void parseRule(Buffer& B, Token& T) {
 
     if (key->IsReservedBinding) {
       // FIXME: rule->AddBinding(key, T.info);
+//fprintf(stderr, "binding %s -> %s\n", key->Entry->getKeyData(), T.info->Entry->getKeyData());
     } else {
       fprintf(stderr, "unexpected variable '%s'\n", key->Entry->getKeyData());
       exit(1);
@@ -630,21 +664,24 @@ void process(const char* fname) {
         // FIXME: parse default (eval, canon, LexEvalString)
         break;
       case kIdentifier:
-        // FIXME: parse let
+        // FIXME: parse global let
         break;
       case kSubninja:
-      case kInclude:
-        b.cur++;  // skip space (FIXME: nicer)
-
-        // FIXME: skips variable references in filenames, doesn't do escaping
+      case kInclude: {
+        SkipWhitespace(b, b.cur);
         LexEvalString(b, t, b.cur, true);
-        if (t.kind == kIdentifier) {
-          //char* n = strndup(t.ident, t.length);
-          const char* n = t.info->Entry->getKeyData();
-          process(n);
-          //free(n);
+        if (!t.length) {
+          fprintf(stderr, "expected filename\n");
+          exit(1);
         }
+
+        // FIXME: eval, canonicalize
+        //char* n = strndup(t.ident, t.length);
+        const char* n = t.info->Entry->getKeyData();
+        process(n);
+        //free(n);
         break;
+      }
       case kEquals:
       case kNewline:
       case kPipe:
@@ -687,6 +724,9 @@ int main(int argc, const char* argv[]) {
   Identifiers.get("restat").IsReservedBinding = true;
   Identifiers.get("rspfile").IsReservedBinding = true;
   Identifiers.get("rspfile_content").IsReservedBinding = true;
+
+  Rule phonyRule;
+  Identifiers.get("phony").rule = &phonyRule;
 
   chdir(d);
   process(s);
