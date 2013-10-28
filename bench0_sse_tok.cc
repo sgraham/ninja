@@ -623,9 +623,9 @@ void parseEdge(Buffer& B, Token& T) {
   // While idents, parse let statements, add bindings for those.
 // FIXME: do this only for indented lines!
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
-  while (1) {
+  while (*B.cur == ' ') {
     Lex(B, T);
-    if (T.kind != kIdentifier) {
+    if (!T.info) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
       B.cur = T.pos;
@@ -666,9 +666,9 @@ void parseRule(Buffer& B, Token& T) {
 
 // FIXME: do this only for indented lines!
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
-  while (1) {
+  while (*B.cur == ' ') {
     Lex(B, T);
-    if (T.kind != kIdentifier) {
+    if (!T.info) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
       B.cur = T.pos;
@@ -736,9 +736,9 @@ void parsePool(Buffer& B, Token& T) {
 
 // FIXME: do this only for indented lines!
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
-  while (1) {
+  while (*B.cur == ' ') {
     Lex(B, T);
-    if (T.kind != kIdentifier) {
+    if (!T.info) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
       B.cur = T.pos;
@@ -805,9 +805,8 @@ void process(const char* fname) {
         parseDefault(b, t);
         break;
       case kIdentifier: {
-        // FIXME: parse global let
-        //IdentifierInfo *Key, *Val;
-        //parseLet(b, t, Key, Val);
+        IdentifierInfo *Key, *Val;
+        parseLet(b, t, Key, Val);
         break;
       }
       case kSubninja:
@@ -827,12 +826,14 @@ void process(const char* fname) {
         break;
       }
       case kEquals:
-      case kNewline:
       case kPipe:
       case kPipePipe:
       case kColon:
       case kUnknown:
-        // FIXME: error
+        fprintf(stderr, "unexpected token '%c'\n", *t.pos);
+        exit(1);
+        break;
+      case kNewline:
         break;
       case kEof:
         goto done;
