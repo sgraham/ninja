@@ -387,6 +387,7 @@ void SkipWhitespace(Buffer& B, const char *CurPtr) {
     if (Char != '\n')
       break;
     CurPtr += 2;
+    Char = *CurPtr;
   }
 
   B.cur = CurPtr;
@@ -519,6 +520,21 @@ printf("%d\n", Char);
   FillToken(B, T, CurPtr, Kind);
 }
 
+void parseLet(Buffer& B, Token& T, IdentifierInfo*& Key, IdentifierInfo*& Val) {
+  Key = T.info;
+
+  Lex(B, T);
+  if (T.kind != kEquals) {
+    fprintf(stderr, "expected '='\n");
+    exit(1);
+  }
+
+  SkipWhitespace(B, B.cur);
+  LexEvalString(B, T, B.cur, false);
+  Val = T.info;
+//fprintf(stderr, "let '%s' = '%s'\n", Key->Entry->getKeyData(), Val->Entry->getKeyData());
+}
+
 void parseEdge(Buffer& B, Token& T) {
   // Read output paths.
   {
@@ -604,6 +620,21 @@ void parseEdge(Buffer& B, Token& T) {
   }
 
   // While idents, parse let statements, add bindings for those.
+// FIXME: do this only for indented lines!
+  // While idents, parse let statements. Reject non-IsReservedBinding ones.
+  while (1) {
+    Lex(B, T);
+    if (T.kind != kIdentifier) {
+      // Simulate peek via backtracking.
+      // FIXME could get away without this with threaded code.
+      B.cur = T.pos;
+      return;
+    }
+
+    IdentifierInfo *Key, *Val;
+    parseLet(B, T, Key, Val);
+  }
+
   // If there's a "pool" binding, look up pool and set that.
   // Evaluate and canonicalize all inputs and outputs, set them.
 }
@@ -642,23 +673,15 @@ void parseRule(Buffer& B, Token& T) {
       B.cur = T.pos;
       return;
     }
-    IdentifierInfo* key = T.info;
 
-    // FIXME: call parseLet instead.
-    Lex(B, T);
-    if (T.kind != kEquals) {
-      fprintf(stderr, "expected '='\n");
-      exit(1);
-    }
+    IdentifierInfo *Key, *Val;
+    parseLet(B, T, Key, Val);
 
-    SkipWhitespace(B, B.cur);
-    LexEvalString(B, T, B.cur, false);
-
-    if (key->IsReservedBinding) {
+    if (Key->IsReservedBinding) {
       // FIXME: rule->AddBinding(key, T.info);
-//fprintf(stderr, "binding %s -> %s\n", key->Entry->getKeyData(), T.info->Entry->getKeyData());
+  //fprintf(stderr, "binding %s -> %s\n", Key->Entry->getKeyData(), Val->Entry->getKeyData());
     } else {
-      fprintf(stderr, "unexpected variable '%s'\n", key->Entry->getKeyData());
+      fprintf(stderr, "unexpected variable '%s'\n", Key->Entry->getKeyData());
       exit(1);
     }
   }
@@ -712,9 +735,12 @@ void process(const char* fname) {
       case kDefault:
         // FIXME: parse default (eval, canon, LexEvalString)
         break;
-      case kIdentifier:
+      case kIdentifier: {
         // FIXME: parse global let
+        //IdentifierInfo *Key, *Val;
+        //parseLet(b, t, Key, Val);
         break;
+      }
       case kSubninja:
       case kInclude: {
         SkipWhitespace(b, b.cur);
