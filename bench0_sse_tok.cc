@@ -688,6 +688,27 @@ void parseRule(Buffer& B, Token& T) {
   // Check has_rspfile == has_rspfile_contents. Check has_commands.
 }
 
+void parseDefault(Buffer& B, Token& T) {
+  SkipWhitespace(B, B.cur);
+  LexEvalString(B, T, B.cur, true);
+  if (!T.length) {
+    fprintf(stderr, "expected target name\n");
+    exit(1);
+  }
+  // FIXME: eval, canonicalize
+  do {
+    SkipWhitespace(B, B.cur);
+    LexEvalString(B, T, B.cur, true);
+  } while (T.length);
+
+  // Expect newline.
+  Lex(B, T);
+  if (T.kind != kNewline) {
+    fprintf(stderr, "Expected newline, got '%c'\n", *T.pos);
+    exit(1);
+  }
+}
+
 size_t g_total = 0;
 size_t g_count = 0;
 void process(const char* fname) {
@@ -733,7 +754,7 @@ void process(const char* fname) {
         parseRule(b, t);
         break;
       case kDefault:
-        // FIXME: parse default (eval, canon, LexEvalString)
+        parseDefault(b, t);
         break;
       case kIdentifier: {
         // FIXME: parse global let
