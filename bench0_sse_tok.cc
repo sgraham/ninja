@@ -20,7 +20,7 @@ enum {
   CHAR_HORZ_WS  = 0x01,  // ' ', '\t'.  Note, no '\0'
   CHAR_LETTER   = 0x02,  // a-z,A-Z
   CHAR_NUMBER   = 0x04,  // 0-9
-  CHAR_OTHERIDENT    = 0x08,  // _
+  CHAR_OTHERIDENT    = 0x08,  // -_.
   CHAR_FILEPATHSEP = 0x10,
 };
 
