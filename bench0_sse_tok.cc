@@ -48,11 +48,11 @@ static const unsigned char CharInfo[256] =
 //32 SP         33  !         34  "         35  #
 //36  $         37  %         38  &         39  '
    CHAR_HORZ_WS, 0           , 0           , 0           ,
-   CHAR_UNDER | CHAR_FILEPATHSEP , 0           , 0           , 0           ,
+   CHAR_FILEPATHSEP , 0           , 0           , 0           ,
 //40  (         41  )         42  *         43  +
 //44  ,         45  -         46  .         47  /
    0           , 0           , 0           , 0           ,
-   0           , CHAR_UNDER  , CHAR_UNDER  , CHAR_UNDER/*XXX*/  ,
+   0           , CHAR_UNDER  , CHAR_UNDER  , 0           ,
 //48  0         49  1         50  2         51  3
 //52  4         53  5         54  6         55  7
    CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER ,
@@ -323,8 +323,7 @@ Continue:
 
 void LexIdentifier(Buffer& B, Token& T, const char* CurPtr) {
   unsigned char C = *CurPtr++;
-  //while (isIdentifierBody(C))
-  while (!isWhitespace(C))  // FIXME
+  while (isIdentifierBody(C))
     C = *CurPtr++;
 
   --CurPtr;   // Back up over the skipped character.
@@ -621,7 +620,6 @@ void parseEdge(Buffer& B, Token& T) {
   }
 
   // While idents, parse let statements, add bindings for those.
-// FIXME: do this only for indented lines!
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
   while (*B.cur == ' ') {
     Lex(B, T);
@@ -664,7 +662,6 @@ void parseRule(Buffer& B, Token& T) {
 //fprintf(stderr, "rule %s\n", T.info->Entry->getKeyData());
   T.info->rule = new Rule;  // FIXME: bumpptrallocate?
 
-// FIXME: do this only for indented lines!
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
   while (*B.cur == ' ') {
     Lex(B, T);
@@ -734,7 +731,6 @@ void parsePool(Buffer& B, Token& T) {
 //fprintf(stderr, "pool %s\n", T.info->Entry->getKeyData());
   //T.info->pool = new Pool;  // FIXME: bumpptrallocate?
 
-// FIXME: do this only for indented lines!
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
   while (*B.cur == ' ') {
     Lex(B, T);
