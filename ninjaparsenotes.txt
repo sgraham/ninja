@@ -53,10 +53,10 @@ With StringMap for every Identifer:
 0.058s
 
 With StringMap and Identifer-based "subninja" / "include" detection:
-0.56s
+0.056s
 
 With MallocAllocator instead of BumpPtrAllocator:
-0.71s
+0.068s
 
 (changing the BumpPtrAllocator from 2k to 64k doesn't affect things)
 
@@ -73,6 +73,16 @@ Plan for lexing:
 - non-variable-$ cleanups are done when copying string into the hash table,
   maybe as part of canonicalizing? (but then the hash table won't save any
   CanonPath() calls)
+
+Stuff left:
+- implement $-deescaping
+- measure if sharing $-deescaping is worth it
+- implement variable substitution
+- measure win from doing this only when needed
+- implement canonicalization
+- measure win from only doing this once per identifierinfo
+- build graph (rules, edges, nodes)
+- measure win from bumpptrallocating graph
 
 
 StringMap:
