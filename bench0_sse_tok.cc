@@ -161,6 +161,10 @@ public:
   // Pointer to rule with this name. Only for kIdentifiers that don't need
   // cleanups and don't contain variables.
   Rule *rule;
+
+  // Pointer to variable info for this name. Only set if HasVariables is true.
+  // - starts and ends of variables in string, IdentifierInfos of variable names
+  // (ninja doesn't support repeated variable evaluation such as ${foo$bar}
 };
 
 class IdentifierTable {
@@ -276,7 +280,7 @@ Continue:
           NeedsCleanup = true;
           goto Continue;
         default:
-          fprintf(stderr, "base $-escape\n");
+          fprintf(stderr, "bad $-escape\n");
           exit(1);
       }
 
@@ -670,8 +674,9 @@ void parseDefault(Buffer& B, Token& T) {
     fprintf(stderr, "expected target name\n");
     exit(1);
   }
-  // FIXME: eval, canonicalize
   do {
+    // FIXME: eval, canonicalize
+    //string path = eval.Evaluate(env_);
     SkipWhitespace(B, B.cur);
     LexEvalString(B, T, B.cur, kPath);
   } while (T.length);
@@ -723,6 +728,7 @@ void parsePool(Buffer& B, Token& T) {
 
     if (Key == attrib_depth) {
       // FIXME: eval, convert to number
+      //string depth_string = value.Evaluate(env_);
     } else {
       fprintf(stderr, "unexpected variable '%s'\n", Key->Entry->getKeyData());
       exit(1);
@@ -780,6 +786,8 @@ void process(const char* fname) {
       case kIdentifier: {
         IdentifierInfo *Key, *Val;
         parseLet(b, t, Key, Val);
+        // FIXME: string value = let_value.Evaluate(env_);
+        // env_->AddBinding(name, value);
         break;
       }
       case kSubninja:
