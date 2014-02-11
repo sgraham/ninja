@@ -734,7 +734,7 @@ void parseEdge(Buffer& B, Token& T) {
 
     IdentifierInfo *Key, *Val;
     parseLet(B, T, Key, Val);
-    env->AddBinding(Key, Val);
+    env->AddBinding(Key, Val->Evaluate(fileEnvStack.back()));
   }
 
   edges.back()->env_ = env;
@@ -802,8 +802,9 @@ void parseDefault(Buffer& B, Token& T) {
     exit(1);
   }
   do {
-    // FIXME: eval, canonicalize
-    //string path = eval.Evaluate(env_);
+    IdentifierInfo* path = T.info->Evaluate(fileEnvStack.back());
+    // FIXME: CanonicalizePath(path)
+    // FIXME:add path to state defaults.
     SkipWhitespace(B, B.cur);
     LexEvalString(B, T, B.cur, kPath);
   } while (T.length);
@@ -928,7 +929,7 @@ void process(const char* fname) {
       case kIdentifier: {
         IdentifierInfo *Key, *Val;
         parseLet(b, t, Key, Val);
-        // FIXME: string value = let_value.Evaluate(env_);
+        Val = Val->Evaluate(fileEnvStack.back());
         fileEnvStack.back()->AddBinding(Key, Val);
         break;
       }
@@ -941,11 +942,8 @@ void process(const char* fname) {
           exit(1);
         }
 
-        // FIXME: eval, canonicalize
-        //char* n = strndup(t.ident, t.length);
-        const char* n = t.info->Entry->getKeyData();
-        process(n);
-        //free(n);
+        IdentifierInfo* path = t.info->Evaluate(fileEnvStack.back());
+        process(path->Entry->getKeyData());
         break;
       }
       case kEquals:
