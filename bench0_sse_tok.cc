@@ -730,8 +730,9 @@ void parseEdge(Buffer& B, Token& T) {
     exit(1);
   }
 
-  edges.push_back(new Edge);
-  edges.back()->rule_ = rule;
+  Edge* edge = new Edge;
+  edges.push_back(edge);
+  edge->rule_ = rule;
   BindingEnv* env = fileEnvStack.back();
 
   // While idents, parse let statements, add bindings for those.
@@ -754,10 +755,33 @@ void parseEdge(Buffer& B, Token& T) {
     env->AddBinding(Key, Val->Evaluate(fileEnvStack.back()));
   }
 
-  edges.back()->env_ = env;
+  edge->env_ = env;
 
-  // If there's a "pool" binding, look up pool and set that.
-  // Evaluate and canonicalize all inputs and outputs, set them.
+  IdentifierInfo* pool_name = edge->GetBinding(kw_pool);
+  if (pool_name->Entry->getKeyLength()) {
+    // FIXME: implement pool stuff
+    // FIXME: consider returning NULL IdentifierInfos?
+    //if (pool_name->pool == NULL) {
+    //  fprintf(stderr, "unknown pool name '%s'\n",
+    //          pool_name->Entry->getKeyData());
+    //  exit(1);
+    //}
+  }
+
+  for (std::vector<IdentifierInfo*>::iterator i = ins.begin(); i != ins.end();
+       ++i) {
+    IdentifierInfo* path = (*i)->Evaluate(env);
+    //if (!CanonicalizePath(&path, &path_err))  FIXME
+    //  return lexer_.Error(path_err, err);
+    //state_->AddIn(edge, path);
+  }
+  for (std::vector<IdentifierInfo*>::iterator i = outs.begin(); i != outs.end();
+       ++i) {
+    IdentifierInfo* path = (*i)->Evaluate(env);
+    //if (!CanonicalizePath(&path, &path_err))  FIXME
+    //  return lexer_.Error(path_err, err);
+    //state_->AddOut(edge, path);
+  }
 }
 
 void parseRule(Buffer& B, Token& T) {
@@ -850,7 +874,7 @@ void parsePool(Buffer& B, Token& T) {
     exit(1);
   }
 
-  // Look up name, find dupes. (rule namespace is global, nice.)
+  // Look up name, find dupes. (pool namespace is global, nice.)
   //if (T.info->pool) {
   //  fprintf(stderr, "duplicate pool '%s'\n", T.info->Entry->getKeyData());
   //  exit(1);
