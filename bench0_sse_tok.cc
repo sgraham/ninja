@@ -140,6 +140,9 @@ enum TokenKind {
 class IdentifierInfo;
 
 struct Rule {
+  void AddBinding(IdentifierInfo* Key, IdentifierInfo* Val) {
+    bindings_[Key] = Val;
+  }
   std::map<IdentifierInfo*, IdentifierInfo*> bindings_;
 };
 std::vector<Rule*> rules;  // XXX bumpptrallocate?
@@ -151,7 +154,9 @@ struct BindingEnv : public Env {
 
   virtual IdentifierInfo* LookupVariable(IdentifierInfo* II);
 
-  void AddBinding(IdentifierInfo*, IdentifierInfo*);
+  void AddBinding(IdentifierInfo* Key, IdentifierInfo* Val) {
+    bindings_[Key] = Val;
+  }
 
   /// This is tricky.  Edges want lookup scope to go in this order:
   /// 1) value set on edge itself (edge_->env_)
@@ -212,30 +217,32 @@ public:
   // Do this eagerly?
   // FIXME: make sure that if there are two "$$" strings, they share the
   // cleaned up ident info (?)
-  // IdentifierInfo* CleanedUp() {
-  //   assert(!HasVariables &&
-  //          "can't clean up string with var refs, Eval instead");
-  //  if (!NeedsCleanup)
-  //    return this;
-  //  if (!CleanedUpIdent) { 
-  //    // compute cleaned up version
-  //  }
-  //  return CleanedUpIdent;
-  // }
+  IdentifierInfo* CleanedUp() {
+    assert(!HasVariables &&
+           "can't clean up string with var refs, Eval instead");
+   if (!NeedsCleanup)
+     return this;
+   //if (!CleanedUpIdent) { 
+     // XXX compute cleaned up version
+   //}
+   //return CleanedUpIdent;
+   return this;
+  }
 
-  // IdentifierInfo* Eval(Scope* s) {
-  //   if (!HasVariables)
-  //     return CleanedUp();
-  //   FIXME: If |s| is where this was last eval'd, return previous eval info?
-  //   CollectPieces();
-  //   string result;
-  //   for (piece : pieces)
-  //     if (piece.IsStr())
-  //       result += piece;
-  //     else
-  //       result += piece.Eval(s);
-  //   return Identifiers.get(result);
-  // }
+  IdentifierInfo* Evaluate(Env* s) {
+    if (!HasVariables)
+      return CleanedUp();
+    // FIXME: If |s| is where this was last eval'd, return previous eval info?
+    //CollectPieces();
+    //string result;
+    //for (piece : pieces)
+    //  if (piece.IsStr())
+    //    result += piece;
+    //  else
+    //    result += piece.Eval(s);
+    //return Identifiers.get(result);
+    return this; // XXX
+  }
 };
 
 class IdentifierTable {
@@ -308,7 +315,7 @@ IdentifierInfo* Edge::GetBinding(IdentifierInfo* var) {
   //const IdentifierInfo* eval = rule_->GetBinding(var);
   i = rule_->bindings_.find(var);
   if (i != rule_->bindings_.end())
-    return i->second; // XXX ->Evaluate(edge env);
+    return i->second->Evaluate(env_);  // XXX pass edge env instead
 
   if (env_->parent_)
     return env_->parent_->LookupVariable(var);
@@ -727,7 +734,7 @@ void parseEdge(Buffer& B, Token& T) {
 
     IdentifierInfo *Key, *Val;
     parseLet(B, T, Key, Val);
-    env->bindings_[Key] = Val;
+    env->AddBinding(Key, Val);
   }
 
   edges.back()->env_ = env;
@@ -776,9 +783,9 @@ void parseRule(Buffer& B, Token& T) {
     parseLet(B, T, Key, Val);
 
     if (Key->IsReservedBinding) {
-      // FIXME: rule->AddBinding(key, T.info);
   //fprintf(stderr, "binding %s -> %s\n", Key->Entry->getKeyData(), Val->Entry->getKeyData());
-      rules.back()->bindings_[Key] = Val;
+      // Note: For rules, |Val| is intentionally not Evaluat()ed at parse time.
+      rules.back()->AddBinding(Key, Val);
     } else {
       fprintf(stderr, "unexpected variable '%s'\n", Key->Entry->getKeyData());
       exit(1);
@@ -833,6 +840,8 @@ void parsePool(Buffer& B, Token& T) {
 //fprintf(stderr, "pool %s\n", T.info->Entry->getKeyData());
   //T.info->pool = new Pool;  // FIXME: bumpptrallocate?
 
+  int depth = -1;
+
   // While idents, parse let statements. Reject non-depth ones.
   while (*B.cur == ' ') {
     Lex(B, T);
@@ -847,12 +856,21 @@ void parsePool(Buffer& B, Token& T) {
     parseLet(B, T, Key, Val);
 
     if (Key == attrib_depth) {
-      // FIXME: eval, convert to number
-      //string depth_string = value.Evaluate(env_);
+      IdentifierInfo* depth_string = Val->Evaluate(fileEnvStack.back());
+      depth = atol(depth_string->Entry->getKeyData());
+      if (depth < 0) {
+        fprintf(stderr, "invalid pool depth %d\n", depth);
+        exit(1);
+      }
     } else {
       fprintf(stderr, "unexpected variable '%s'\n", Key->Entry->getKeyData());
       exit(1);
     }
+  }
+
+  if (depth < 0) {
+    fprintf(stderr, "expected depth for pool\n");
+    exit(1);
   }
 }
 
@@ -911,8 +929,7 @@ void process(const char* fname) {
         IdentifierInfo *Key, *Val;
         parseLet(b, t, Key, Val);
         // FIXME: string value = let_value.Evaluate(env_);
-        // env_->AddBinding(name, value);
-        fileEnvStack.back()->bindings_[Key] = Val;
+        fileEnvStack.back()->AddBinding(Key, Val);
         break;
       }
       case kSubninja:
