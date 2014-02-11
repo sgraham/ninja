@@ -165,14 +165,17 @@ struct BindingEnv : public Env {
   std::map<IdentifierInfo*, IdentifierInfo*> bindings_;
   Env* parent_;
 };
-IdentifierInfo* BindingEnv::LookupVariable(IdentifierInfo*) { return 0; }
 
 std::vector<BindingEnv*> fileEnvStack;
 //std::vector<Env*> envs;
 
 
 struct Edge {
-  Env* env_;
+  BindingEnv* env_;
+  Rule* rule_;
+
+  IdentifierInfo* EvaluateCommand();
+  IdentifierInfo* GetBinding(IdentifierInfo*);
 };
 std::vector<Edge*> edges;  // XXX bumpptrallocate?
 
@@ -270,13 +273,48 @@ public:
 
 IdentifierTable Identifiers;
 
+
 IdentifierInfo* kw_subninja;
 IdentifierInfo* kw_include;
 IdentifierInfo* kw_build;
 IdentifierInfo* kw_rule;
 IdentifierInfo* kw_pool;
 IdentifierInfo* kw_default;
+
 IdentifierInfo* attrib_depth;
+IdentifierInfo* attrib_command;
+
+IdentifierInfo* BindingEnv::LookupVariable(IdentifierInfo* var) {
+  std::map<IdentifierInfo*, IdentifierInfo*>::iterator i = bindings_.find(var);
+  if (i != bindings_.end())
+    return i->second;
+  if (parent_)
+    return parent_->LookupVariable(var);
+  return &Identifiers.get("");
+}
+
+IdentifierInfo* Edge::EvaluateCommand() {
+  return GetBinding(attrib_command);
+}
+
+IdentifierInfo* Edge::GetBinding(IdentifierInfo* var) {
+  // XXX build edge env for $in / $out handling
+  // See notes on BindingEnv::LookupWithFallback.
+  std::map<IdentifierInfo*, IdentifierInfo*>::iterator i =
+      env_->bindings_.find(var);
+  if (i != env_->bindings_.end())
+    return i->second;
+
+  //const IdentifierInfo* eval = rule_->GetBinding(var);
+  i = rule_->bindings_.find(var);
+  if (i != rule_->bindings_.end())
+    return i->second; // XXX ->Evaluate(edge env);
+
+  if (env_->parent_)
+    return env_->parent_->LookupVariable(var);
+
+  return &Identifiers.get("");
+}
 
 struct Token {
   TokenKind kind;
@@ -615,7 +653,7 @@ void parseEdge(Buffer& B, Token& T) {
     exit(1);
   }
 
-  const Rule* rule = T.info->rule;
+  Rule* rule = T.info->rule;
   if (!rule) {
     fprintf(stderr, "unknown build rule '%s'\n", T.info->Entry->getKeyData());
     exit(1);
@@ -669,6 +707,7 @@ void parseEdge(Buffer& B, Token& T) {
   }
 
   edges.push_back(new Edge);
+  edges.back()->rule_ = rule;
   BindingEnv* env = fileEnvStack.back();
 
   // While idents, parse let statements, add bindings for those.
@@ -926,10 +965,12 @@ int main(int argc, const char* argv[]) {
   kw_rule = &Identifiers.get("rule", kRule);
   kw_pool = &Identifiers.get("pool", kPool);
   kw_default = &Identifiers.get("default", kDefault);
+
   attrib_depth = &Identifiers.get("depth");
+  attrib_command = &Identifiers.get("command");
 
   // Initialize reserved bindings.
-  Identifiers.get("command").IsReservedBinding = true;
+  attrib_command->IsReservedBinding = true;
   Identifiers.get("depfile").IsReservedBinding = true;
   Identifiers.get("description").IsReservedBinding = true;
   Identifiers.get("deps").IsReservedBinding = true;
@@ -944,6 +985,9 @@ int main(int argc, const char* argv[]) {
 
   chdir(d);
   process(s);
+
+  //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
+  printf("%s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
 
   free(d);
 }
