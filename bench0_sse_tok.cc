@@ -144,8 +144,35 @@ struct Rule {
 };
 std::vector<Rule*> rules;  // XXX bumpptrallocate?
 
-struct Edge {
+struct Env { virtual IdentifierInfo* LookupVariable(IdentifierInfo*) = 0; };
+struct BindingEnv : public Env {
+  BindingEnv() : parent_(NULL) {}
+  explicit BindingEnv(Env* parent) : parent_(parent) {}
+
+  virtual IdentifierInfo* LookupVariable(IdentifierInfo* II);
+
+  void AddBinding(IdentifierInfo*, IdentifierInfo*);
+
+  /// This is tricky.  Edges want lookup scope to go in this order:
+  /// 1) value set on edge itself (edge_->env_)
+  /// 2) value set on rule, with expansion in the edge's scope
+  /// 3) value set on enclosing scope of edge (edge_->env_->parent_)
+  /// This function takes as parameters the necessary info to do (2).
+  IdentifierInfo* LookupWithFallback(IdentifierInfo* var, IdentifierInfo* eval,
+                                     Env* env);
+
+//private:
   std::map<IdentifierInfo*, IdentifierInfo*> bindings_;
+  Env* parent_;
+};
+IdentifierInfo* BindingEnv::LookupVariable(IdentifierInfo*) { return 0; }
+
+std::vector<BindingEnv*> fileEnvStack;
+//std::vector<Env*> envs;
+
+
+struct Edge {
+  Env* env_;
 };
 std::vector<Edge*> edges;  // XXX bumpptrallocate?
 
@@ -642,6 +669,7 @@ void parseEdge(Buffer& B, Token& T) {
   }
 
   edges.push_back(new Edge);
+  BindingEnv* env = fileEnvStack.back();
 
   // While idents, parse let statements, add bindings for those.
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
@@ -651,13 +679,19 @@ void parseEdge(Buffer& B, Token& T) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
       B.cur = T.pos;
-      return;
+      break;
     }
+
+    // We found a binding, so need a real env for this edge.
+    if (env == fileEnvStack.back())
+      env = new BindingEnv;
 
     IdentifierInfo *Key, *Val;
     parseLet(B, T, Key, Val);
-    edges.back()->bindings_[Key] = Val;
+    env->bindings_[Key] = Val;
   }
+
+  edges.back()->env_ = env;
 
   // If there's a "pool" binding, look up pool and set that.
   // Evaluate and canonicalize all inputs and outputs, set them.
@@ -696,7 +730,7 @@ void parseRule(Buffer& B, Token& T) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
       B.cur = T.pos;
-      return;
+      break;
     }
 
     IdentifierInfo *Key, *Val;
@@ -767,7 +801,7 @@ void parsePool(Buffer& B, Token& T) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
       B.cur = T.pos;
-      return;
+      break;
     }
 
     IdentifierInfo *Key, *Val;
@@ -786,6 +820,10 @@ void parsePool(Buffer& B, Token& T) {
 size_t g_total = 0;
 size_t g_count = 0;
 void process(const char* fname) {
+  Env* parent = NULL;
+  if (!fileEnvStack.empty())
+    parent = fileEnvStack.back();
+  fileEnvStack.push_back(new BindingEnv(parent));
 //fprintf(stderr, "%s\n", fname);
 
   FILE* f = fopen(fname, "rb");
@@ -835,6 +873,7 @@ void process(const char* fname) {
         parseLet(b, t, Key, Val);
         // FIXME: string value = let_value.Evaluate(env_);
         // env_->AddBinding(name, value);
+        fileEnvStack.back()->bindings_[Key] = Val;
         break;
       }
       case kSubninja:
@@ -871,6 +910,7 @@ done:
   free(buf);  // Adds 0.1s for 3MB bufs, 3.5s (!) for 15 MB bufs
               // (but only if allocated via calloc)
               // (for malloc, free for 3MB, adds 0.18s for 15 MB bufs)
+  fileEnvStack.pop_back();
 //fprintf(stderr, "%s: %d tokens\n", fname, count);
 }
 

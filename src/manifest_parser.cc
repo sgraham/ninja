@@ -29,6 +29,7 @@ ManifestParser::ManifestParser(State* state, FileReader* file_reader)
   env_ = &state->bindings_;
 }
 
+int indent, noindent;
 bool ManifestParser::Load(const string& filename, string* err, Lexer* parent) {
   METRIC_RECORD(".ninja parse");
   string contents;
@@ -47,7 +48,10 @@ bool ManifestParser::Load(const string& filename, string* err, Lexer* parent) {
   // it is, and C++11 demands that too), so add an explicit nul byte.
   contents.resize(contents.size() + 1);
 
-  return Parse(filename, contents, err);
+  bool r = Parse(filename, contents, err);
+  if (!parent)
+    printf("%d with, %d without; %zu\n", indent, noindent, sizeof(BindingEnv));
+  return r;
 }
 
 bool ManifestParser::Parse(const string& filename, const string& input,
@@ -297,15 +301,21 @@ bool ManifestParser::ParseEdge(string* err) {
     return false;
 
   // XXX scoped_ptr to handle error case.
-  BindingEnv* env = new BindingEnv(env_);
+  bool hasIndent = lexer_.PeekToken(Lexer::INDENT);
+  BindingEnv* env = hasIndent ? new BindingEnv(env_) : env_;
+  if (hasIndent)
+    ++indent;
+  else
+    ++noindent;
 
-  while (lexer_.PeekToken(Lexer::INDENT)) {
+  while (hasIndent) {
     string key;
     EvalString val;
     if (!ParseLet(&key, &val, err))
       return false;
 
     env->AddBinding(key, val.Evaluate(env_));
+    hasIndent = lexer_.PeekToken(Lexer::INDENT);
   }
 
   Edge* edge = state_->AddEdge(rule);
