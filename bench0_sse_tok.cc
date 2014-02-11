@@ -629,10 +629,14 @@ void parseLet(Buffer& B, Token& T, IdentifierInfo*& Key, IdentifierInfo*& Val) {
 //fprintf(stderr, "let '%s' = '%s'\n", Key->Entry->getKeyData(), Val->Entry->getKeyData());
 }
 
+// keeping these global and reusing them makes the push_back()s in parseEdge()
+// have 0 slowdown instead of 5-6ms / 10%.
+std::vector<IdentifierInfo*> ins, outs;
 void parseEdge(Buffer& B, Token& T) {
   // FIXME: Check if reading ins/outs can be done with fewer copies
   // (by eagerly calling CleanUp or similar).
-  std::vector<IdentifierInfo*> ins, outs;
+  //std::vector<IdentifierInfo*> ins, outs;
+  ins.clear(); outs.clear();
 
   // Read output paths.
   {
@@ -645,7 +649,7 @@ void parseEdge(Buffer& B, Token& T) {
 //fprintf(stderr, "got input '%s'\n", T.info->Entry->getKeyData());
 
     do {
-      //outs.push_back(T.info);
+      outs.push_back(T.info);
 
       SkipWhitespace(B, B.cur);
       LexEvalString(B, T, B.cur, kPath);
@@ -678,7 +682,7 @@ void parseEdge(Buffer& B, Token& T) {
     LexEvalString(B, T, B.cur, kPath);
     if (!T.length)
       break;
-    //ins.push_back(T.info);
+    ins.push_back(T.info);
   }
 
   // Peek for |, read all implicit deps.
@@ -691,7 +695,7 @@ void parseEdge(Buffer& B, Token& T) {
       if (!T.length)
         break;
 //fprintf(stderr, "got implicit '%s'\n", T.info->Entry->getKeyData());
-      //ins.push_back(T.info);
+      ins.push_back(T.info);
       ++implicit;
     }
   } else {
@@ -710,7 +714,7 @@ void parseEdge(Buffer& B, Token& T) {
       if (!T.length)
         break;
 //fprintf(stderr, "got orderonly '%s'\n", T.info->Entry->getKeyData());
-      //ins.push_back(T.info);
+      ins.push_back(T.info);
       ++order_only;
     }
   } else {
