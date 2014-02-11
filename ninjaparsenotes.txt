@@ -61,6 +61,12 @@ With MallocAllocator instead of BumpPtrAllocator:
 (changing the BumpPtrAllocator from 2k to 64k doesn't affect things)
 
 
+
+With map<II*, II*> for every edge and rule:
+0.058s (compared to 0.055s without it). Can probably be more efficient; maybe
+not needed though.
+
+
 Plan for lexing:
 - LexIdentifier() slurps everything non-whitespace non-$
 - On $, goes down special path, writes 'needs cleanup', 'has var' flags

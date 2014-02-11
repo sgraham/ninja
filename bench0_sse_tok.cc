@@ -13,7 +13,9 @@ time ./ninja -C ~/src/chrome/src/out_bench/Release chrome
 #include <string.h>
 #include <unistd.h>
 
+#include <map>
 #include <string>
+#include <vector>
 using std::string;
 
 enum {
@@ -135,7 +137,17 @@ enum TokenKind {
 
 #include "StringMap.h"
 
-class Rule {};
+class IdentifierInfo;
+
+struct Rule {
+  std::map<IdentifierInfo*, IdentifierInfo*> bindings_;
+};
+std::vector<Rule*> rules;  // XXX bumpptrallocate?
+
+struct Edge {
+  std::map<IdentifierInfo*, IdentifierInfo*> bindings_;
+};
+std::vector<Edge*> edges;  // XXX bumpptrallocate?
 
 class IdentifierInfo {
 public:
@@ -165,6 +177,35 @@ public:
   // Pointer to variable info for this name. Only set if HasVariables is true.
   // - starts and ends of variables in string, IdentifierInfos of variable names
   // (ninja doesn't support repeated variable evaluation such as ${foo$bar}
+
+  // Use something like this for de-escaping?
+  // Do this eagerly?
+  // FIXME: make sure that if there are two "$$" strings, they share the
+  // cleaned up ident info (?)
+  // IdentifierInfo* CleanedUp() {
+  //   assert(!HasVariables &&
+  //          "can't clean up string with var refs, Eval instead");
+  //  if (!NeedsCleanup)
+  //    return this;
+  //  if (!CleanedUpIdent) { 
+  //    // compute cleaned up version
+  //  }
+  //  return CleanedUpIdent;
+  // }
+
+  // IdentifierInfo* Eval(Scope* s) {
+  //   if (!HasVariables)
+  //     return CleanedUp();
+  //   FIXME: If |s| is where this was last eval'd, return previous eval info?
+  //   CollectPieces();
+  //   string result;
+  //   for (piece : pieces)
+  //     if (piece.IsStr())
+  //       result += piece;
+  //     else
+  //       result += piece.Eval(s);
+  //   return Identifiers.get(result);
+  // }
 };
 
 class IdentifierTable {
@@ -600,6 +641,8 @@ void parseEdge(Buffer& B, Token& T) {
     exit(1);
   }
 
+  edges.push_back(new Edge);
+
   // While idents, parse let statements, add bindings for those.
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
   while (*B.cur == ' ') {
@@ -613,6 +656,7 @@ void parseEdge(Buffer& B, Token& T) {
 
     IdentifierInfo *Key, *Val;
     parseLet(B, T, Key, Val);
+    edges.back()->bindings_[Key] = Val;
   }
 
   // If there's a "pool" binding, look up pool and set that.
@@ -641,7 +685,9 @@ void parseRule(Buffer& B, Token& T) {
     exit(1);
   }
 //fprintf(stderr, "rule %s\n", T.info->Entry->getKeyData());
-  T.info->rule = new Rule;  // FIXME: bumpptrallocate?
+  rules.push_back(new Rule);
+  T.info->rule = rules.back();
+  //T.info->rule = new Rule;
 
   // While idents, parse let statements. Reject non-IsReservedBinding ones.
   while (*B.cur == ' ') {
@@ -659,6 +705,7 @@ void parseRule(Buffer& B, Token& T) {
     if (Key->IsReservedBinding) {
       // FIXME: rule->AddBinding(key, T.info);
   //fprintf(stderr, "binding %s -> %s\n", Key->Entry->getKeyData(), Val->Entry->getKeyData());
+      rules.back()->bindings_[Key] = Val;
     } else {
       fprintf(stderr, "unexpected variable '%s'\n", Key->Entry->getKeyData());
       exit(1);
