@@ -630,6 +630,10 @@ void parseLet(Buffer& B, Token& T, IdentifierInfo*& Key, IdentifierInfo*& Val) {
 }
 
 void parseEdge(Buffer& B, Token& T) {
+  // FIXME: Check if reading ins/outs can be done with fewer copies
+  // (by eagerly calling CleanUp or similar).
+  std::vector<IdentifierInfo*> ins, outs;
+
   // Read output paths.
   {
     SkipWhitespace(B, B.cur);
@@ -641,6 +645,8 @@ void parseEdge(Buffer& B, Token& T) {
 //fprintf(stderr, "got input '%s'\n", T.info->Entry->getKeyData());
 
     do {
+      //outs.push_back(T.info);
+
       SkipWhitespace(B, B.cur);
       LexEvalString(B, T, B.cur, kPath);
     } while (T.length);
@@ -672,10 +678,12 @@ void parseEdge(Buffer& B, Token& T) {
     LexEvalString(B, T, B.cur, kPath);
     if (!T.length)
       break;
+    //ins.push_back(T.info);
   }
 
   // Peek for |, read all implicit deps.
   Lex(B, T);
+  int implicit = 0;
   if (T.kind == kPipe) {
     while (1) {
       SkipWhitespace(B, B.cur);
@@ -683,6 +691,8 @@ void parseEdge(Buffer& B, Token& T) {
       if (!T.length)
         break;
 //fprintf(stderr, "got implicit '%s'\n", T.info->Entry->getKeyData());
+      //ins.push_back(T.info);
+      ++implicit;
     }
   } else {
     // Simulate peek via backtracking.
@@ -692,6 +702,7 @@ void parseEdge(Buffer& B, Token& T) {
 
   // Peek for ||, read all order-only deps.
   Lex(B, T);
+  int order_only = 0;
   if (T.kind == kPipePipe) {
     while (1) {
       SkipWhitespace(B, B.cur);
@@ -699,6 +710,8 @@ void parseEdge(Buffer& B, Token& T) {
       if (!T.length)
         break;
 //fprintf(stderr, "got orderonly '%s'\n", T.info->Entry->getKeyData());
+      //ins.push_back(T.info);
+      ++order_only;
     }
   } else {
     // Simulate peek via backtracking.
