@@ -76,6 +76,10 @@ chrome evalstring stats:
 56833 clean (just strings)
 13064 cleaned (contain $$, etc), 7510 of those are unique
 1521 vars (contain var refs)
+  only 8 of those are unique! (because I don't eval commands atm)
+                              (most of them in different scopes though)
+With counting in LexEvalString:
+1662 vars (111 computed) So only 10% have unique parse structure at least.
 
 133780 read in total, so there are a bunch Evaluate() isn't called on yet :-/
 (with forced eager CleanedUp in LexEvalString:
@@ -91,6 +95,10 @@ So most of the missed ones are clean, so doesn't matter much either way.)
 llvm evalstring stats:
 16847 clean, 2 cleaned (1 computed), 0 vars
   The 1 computed is for an escaped space. long string, around twice.
+
+LexEvalString for counting vars:
+42 vars (28 computed)
+
 
 
 chrome: read 13233 kB, 785 files

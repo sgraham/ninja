@@ -202,7 +202,8 @@ std::vector<Edge*> edges;  // XXX bumpptrallocate?
 // lazy cleaning: 0.074s
 #define EAGER_CLEANING
 
-//int clean, cleaned, cleaned_computed, vars;
+//int clean, cleaned, cleaned_computed;
+//int vars, vars_computed;
 class IdentifierInfo {
 public:
  IdentifierInfo()
@@ -211,6 +212,7 @@ public:
 #ifndef EAGER_CLEANING
        , CleanedUpIdent(NULL)
 #endif
+         //, HasPieces(false)
        {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
@@ -226,6 +228,8 @@ public:
 
   // If this contains references to variables.
   bool HasVariables;
+
+  //bool HasPieces;
 
   // These could maybe be in a union.
   // Pointer to rule with this name. Only for kIdentifiers that don't need
@@ -274,6 +278,13 @@ public:
   IdentifierInfo* Evaluate(Env* s) {
     if (!HasVariables)
       return CleanedUp();
+    //if (!HasPieces) {
+     // HasPieces = true;
+      //vars_computed++;
+      //printf("uncached var %s\n", Entry->getKeyData());
+    //} else {
+      //printf("cached var %s\n", Entry->getKeyData());
+    //}
     // FIXME: If |s| is where this was last eval'd, return previous eval info?
     //CollectPieces();
     //string result;
@@ -577,8 +588,13 @@ Continue:
 
   //if (!HasVariables)
   //  II->CleanedUp();
-  //if (HasVariables)
+  //if (HasVariables) {
   //  ++vars;
+  //  if (!II->HasPieces) {
+  //    II->HasPieces = true;
+  //    vars_computed++;
+  //  }
+  //}
 
   if (kind != kPath && *B.cur == '\n')
     ++B.cur;
@@ -759,7 +775,7 @@ LexNextToken:
       }
 
     default:
-printf("%d\n", Char);
+printf("what: %d\n", Char);
       Kind = kUnknown;
       break;
   }
@@ -1200,10 +1216,10 @@ int main(int argc, const char* argv[]) {
   //printf("read %ld kB, %ld files\n", g_total / 1000, g_count);
   //printf("%zu edges, %d with vars\n", edges.size(), edgeswithvars);
   //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
-  printf("%s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
+  printf("cmd: %s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
 
-  //printf("%d clean, %d cleaned (%d computed), %d vars\n", clean, cleaned,
-  //       cleaned_computed, vars);
+  //printf("%d clean, %d cleaned (%d computed)\n", clean, cleaned, cleaned_computed);
+  //printf("%d vars (%d computed)\n", vars, vars_computed);
 
   //g_metrics->Report();
 
