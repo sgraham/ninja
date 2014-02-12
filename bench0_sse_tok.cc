@@ -449,6 +449,9 @@ void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
   bool NeedsCleanup = false;
   bool HasVariables = false;
 
+  // pointer so that no destrucor is called in the common no-vars case.
+  std::vector<int>* varranges = 0;
+
 #ifdef EAGER_CLEANING
   char* buf = 0;
   int bufc = 0;
@@ -486,12 +489,20 @@ Continue:
           goto Continue;
 
         case '{':
+          if (!varranges) varranges = new std::vector<int>;
+
           ++CurPtr;
           HasVariables = true;
+          // FIXME: This is incorrect for strings containing cleanup:
+          varranges->push_back(CurPtr - B.cur);  // Don't include {
 
           C = *CurPtr++;
           while (isIdentifierBody(C))  // identifier == varname in ninja lex
             C = *CurPtr++;
+
+          // FIXME: This is incorrect for strings containing cleanup:
+          varranges->push_back(CurPtr - B.cur - 1);  // Don't include }
+
           // Don't back up, want to skip '}'
           if (C != '}') {
             fprintf(stderr, "bad $-escape in var\n");
@@ -510,13 +521,21 @@ Continue:
         case 'v': case 'w': case 'x': case 'y': case 'z':
         case '-':
         case '_':
+          if (!varranges) varranges = new std::vector<int>;
+          // FIXME: This is incorrect for strings containing cleanup:
+          varranges->push_back(CurPtr - B.cur);
+
           ++CurPtr;
           HasVariables = true;
 
           C = *CurPtr++;
           while (isSimpleVarName(C))
             C = *CurPtr++;
-          --CurPtr;  // Back u pover the skipped non-var char.
+          --CurPtr;  // Back up over the skipped non-var char.
+
+          // FIXME: This is incorrect for strings containing cleanup:
+          varranges->push_back(CurPtr - B.cur);
+
           // FIXME: set NeedsCleanup too?
           goto Continue;
 
@@ -586,15 +605,14 @@ Continue:
   II->NeedsCleanup = NeedsCleanup;
   II->HasVariables = HasVariables;
 
-  //if (!HasVariables)
-  //  II->CleanedUp();
-  //if (HasVariables) {
+  if (HasVariables) {
+    delete varranges;  // 2ms :-( XXX: use something better, like SmallVector
   //  ++vars;
   //  if (!II->HasPieces) {
   //    II->HasPieces = true;
   //    vars_computed++;
   //  }
-  //}
+  }
 
   if (kind != kPath && *B.cur == '\n')
     ++B.cur;
