@@ -115,7 +115,7 @@ static inline bool isSimpleVarName(unsigned char c) {
 }
 
 static inline unsigned char isFilePathSep(unsigned char c) {
-  return (CharInfo[c] & CHAR_FILEPATHSEP);
+  return (CharInfo[c] & (CHAR_FILEPATHSEP | CHAR_HORZ_WS));
 }
 
 
@@ -144,7 +144,7 @@ enum TokenKind {
   kUnknown,
 };
 
-bool CanonicalizePath(char* path, size_t* len, string* err) {
+bool CanonicalizePath(char* path, size_t* len) {
   // WARNING: this function is performance-critical; please benchmark
   // any changes you make to it.
   //METRIC_RECORD("canonicalize path");
@@ -275,11 +275,12 @@ std::vector<Edge*> edges;  // XXX bumpptrallocate?
 
 //int clean, cleaned, cleaned_computed;
 //int vars, vars_computed;
+enum CanonState { kCSUnknown, kCSCanon };
 class IdentifierInfo {
 public:
  IdentifierInfo()
      : kind(kIdentifier), IsReservedBinding(false),
-       HasVariables(false), rule(0), VarInfo(0)
+       HasVariables(false), IsCanon(kCSUnknown), rule(0), VarInfo(0)
        {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
@@ -292,6 +293,8 @@ public:
 
   // If this contains references to variables.
   bool HasVariables;
+
+  CanonState IsCanon;
 
   //bool HasPieces;
   std::vector<int>* VarInfo;
@@ -324,12 +327,15 @@ public:
   IdentifierInfo* EvaluateSlow(Env* e);  // Out-of-line version of Evaluate.
 
   IdentifierInfo* Canonicalize() {
+    return this; // FIXME
+    if (IsCanon == kCSCanon)
+      return this;
     // FIXME: check canon state
-    // if canonicalized: return this
     // if unknown: check for "./" in string, if so set to canonicalized
     // do real canonicalization.
-    return this;  // FIXME
+    return CanonicalizeSlow();
   }
+  IdentifierInfo* CanonicalizeSlow();
 };
 
 class IdentifierTable {
@@ -446,6 +452,14 @@ IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
   return &Identifiers.get(buf.c_str());
 
   // FIXME: If |e| is where this was last eval'd, return previous eval info?
+}
+
+IdentifierInfo* IdentifierInfo::CanonicalizeSlow() {
+  string buf(Entry->getKeyData());
+  size_t len = buf.size();
+  CanonicalizePath(&buf[0], &len);
+  buf.resize(len);
+  return &Identifiers.get(buf.c_str());
 }
 
 IdentifierInfo* kw_subninja;
@@ -1078,12 +1092,14 @@ void parseEdge(Buffer& B, Token& T) {
   for (std::vector<IdentifierInfo*>::iterator i = ins.begin(); i != ins.end();
        ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
+//fprintf(stderr, "input: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
     //state_->AddIn(edge, path);  // FIXME
   }
   for (std::vector<IdentifierInfo*>::iterator i = outs.begin(); i != outs.end();
        ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
+//fprintf(stderr, "output: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
     //state_->AddOut(edge, path);  // FIXME
   }
