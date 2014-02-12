@@ -388,10 +388,7 @@ IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
 //printf("%s %d %d\n", s, varl, varr);
     IdentifierInfo* varII =
         &Identifiers.get(StringPiece(s + varl, varr - varl));
-    IdentifierInfo* val =
-        //.Evaluate(e);
-        e->LookupVariable(varII);
-    // FIXME: need to val->Evaluate() too?
+    IdentifierInfo* val = e->LookupVariable(varII);
 //printf("var %s (%p) -> %s (%zu)\n", varII->Entry->getKeyData(), varII, val->Entry->getKeyData(), static_cast<BindingEnv*>(e)->bindings_.size());
     buf += val->Entry->getKeyData();
   }
