@@ -26,6 +26,7 @@ enum {
   CHAR_NUMBER   = 0x04,  // 0-9
   CHAR_OTHERIDENT    = 0x08,  // -_.
   CHAR_FILEPATHSEP = 0x10,
+  CHAR_DOT = 0x20,
 };
 
 // Statically initialize CharInfo table based on ASCII character set
@@ -55,7 +56,7 @@ static const unsigned char CharInfo[256] =
 //40  (         41  )         42  *         43  +
 //44  ,         45  -         46  .         47  /
    0           , 0           , 0           , 0           ,
-   0           , CHAR_OTHERIDENT  , CHAR_OTHERIDENT  , 0           ,
+   0           , CHAR_DOT  , CHAR_OTHERIDENT  , 0           ,
 //48  0         49  1         50  2         51  3
 //52  4         53  5         54  6         55  7
    CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER ,
@@ -103,8 +104,14 @@ static inline bool isHorizontalWhitespace(unsigned char c) {
 }
 
 static inline bool isIdentifierBody(unsigned char c) {
-  return (CharInfo[c] & (CHAR_LETTER | CHAR_NUMBER | CHAR_OTHERIDENT)) ? true
-                                                                       : false;
+  return
+    (CharInfo[c] & (CHAR_LETTER | CHAR_NUMBER | CHAR_OTHERIDENT | CHAR_DOT))
+    ? true : false;
+}
+
+static inline bool isSimpleVarName(unsigned char c) {
+  return (CharInfo[c] & (CHAR_LETTER | CHAR_NUMBER | CHAR_OTHERIDENT))
+    ? true : false;
 }
 
 static inline unsigned char isFilePathSep(unsigned char c) {
@@ -468,6 +475,20 @@ Continue:
           goto Continue;
 
         case '{':
+          ++CurPtr;
+          HasVariables = true;
+
+          C = *CurPtr++;
+          while (isIdentifierBody(C))  // identifier == varname in ninja lex
+            C = *CurPtr++;
+          // Don't back up, want to skip '}'
+          if (C != '}') {
+            fprintf(stderr, "bad $-escape in var\n");
+            exit(1);
+          }
+
+          goto Continue;
+
         case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
         case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
         case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
@@ -480,6 +501,11 @@ Continue:
         case '_':
           ++CurPtr;
           HasVariables = true;
+
+          C = *CurPtr++;
+          while (isSimpleVarName(C))
+            C = *CurPtr++;
+          --CurPtr;  // Back u pover the skipped non-var char.
           // FIXME: set NeedsCleanup too?
           goto Continue;
 
