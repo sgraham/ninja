@@ -60,6 +60,11 @@ With MallocAllocator instead of BumpPtrAllocator:
 
 (changing the BumpPtrAllocator from 2k to 64k doesn't affect things)
 
+With on-demand shared cleaning:
+0.075s D:
+
+With during-parsing non-shared cleaning (makes variables trickier?):
+0.065s
 
 
 With map<II*, II*> for every edge and rule:
@@ -71,6 +76,11 @@ chrome evalstring stats:
 56833 clean (just strings)
 13064 cleaned (contain $$, etc), 7510 of those are unique
 1521 vars (contain var refs)
+
+133780 read in total, so there are a bunch Evaluate() isn't called on yet :-/
+(with forced eager CleanedUp in LexEvalString:
+175140 clean, 26875 cleaned (8257 computed), 1662 vars
+So most of the missed ones are clean, so doesn't matter much either way.)
 
 #cached @size
 0      16kB
@@ -87,6 +97,7 @@ chrome: read 13233 kB, 785 files
   just reading: 0.015s -> 882 MB/s
   bench: 0.058s -> 228.15 MB/s
   bench/clean: 0.074s -> 178.8 MB/s
+  bench/inlineclean: 0.064s -> 206.76 MB/s
   ninja: 0.265s -> 49.93 MB/s
 llvm: read 3543 kB, 2 files
   bench: 0.015s -> 236.2 MB/s
@@ -111,8 +122,6 @@ Plan for lexing:
   CanonPath() calls)
 
 Stuff left:
-- implement $-deescaping
-- measure if sharing $-deescaping is worth it
 - implement variable substitution
 - measure win from doing this only when needed
 - implement canonicalization

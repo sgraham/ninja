@@ -18,6 +18,8 @@ time ./ninja -C ~/src/chrome/src/out_bench/Release chrome
 #include <vector>
 using std::string;
 
+//#include "src/metrics.h"
+
 enum {
   CHAR_HORZ_WS  = 0x01,  // ' '
   CHAR_LETTER   = 0x02,  // a-z,A-Z
@@ -218,9 +220,9 @@ public:
   // (ninja doesn't support repeated variable evaluation such as ${foo$bar}
 
   // Use something like this for de-escaping?
-  // Do this eagerly?
-  // FIXME: make sure that if there are two "$$" strings, they share the
-  // cleaned up ident info (?)
+  // Do this eagerly? -> Turns out doing this in LevEvalString without sharing
+  // is much faster, 0.065s instead of 0.075s (compared to 0.058s without any
+  // cleaning)
   IdentifierInfo* CleanedUp() {
     assert(!HasVariables &&
            "can't clean up string with var refs, Eval instead");
@@ -231,8 +233,8 @@ public:
     //++cleaned;
     if (!CleanedUpIdent) {
       //++cleaned_computed;
-      //CleanedUpIdent = CleanedUpSlow();
-      CleanedUpIdent = this;
+      CleanedUpIdent = CleanedUpSlow();
+      //CleanedUpIdent = this;
     } /*else {
       // for example, huge "defines" blocks with $-newline continuations.
       printf("cached: %s\n", Entry->getKeyData());
@@ -296,6 +298,7 @@ public:
 IdentifierTable Identifiers;
 
 IdentifierInfo* IdentifierInfo::CleanedUpSlow() {
+  //METRIC_RECORD("CleanedUpSlow");
   int l = Entry->getKeyLength();
   const char* s = Entry->getKeyData();
   // string buf: 0.089s
@@ -405,8 +408,13 @@ void FillToken(Buffer& B, Token& T, const char* TokEnd, TokenKind kind) {
 enum EvalStringKind { kPath, kLet };
 void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
                    EvalStringKind kind) {
+  //METRIC_RECORD("LexEvalString");
   bool NeedsCleanup = false;
   bool HasVariables = false;
+
+  char* buf = 0;
+  int bufc = 0;
+  const char* start = CurPtr;
 
 Continue:
   unsigned char C = *CurPtr++;
@@ -423,7 +431,14 @@ Continue:
         case '$':
         case ' ':
         case ':':
+          if (!buf) {
+            buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
+          }
+          memcpy(buf + bufc, start, CurPtr - start - 1);
+          bufc += CurPtr - start - 1;
+          buf[bufc++] = C;
           ++CurPtr;
+          start = CurPtr;
           NeedsCleanup = true;
           goto Continue;
 
@@ -444,11 +459,17 @@ Continue:
           goto Continue;
 
         case '\n':
+          if (!buf) {
+            buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
+          }
+          memcpy(buf + bufc, start, CurPtr - start - 1);
+          bufc += CurPtr - start - 1;
           ++CurPtr;
           C = *CurPtr++;
           while (C == ' ')
             C = *CurPtr++;
           --CurPtr;   // Back up over the skipped ' '.
+          start = CurPtr;
           NeedsCleanup = true;
           goto Continue;
         default:
@@ -482,10 +503,26 @@ Continue:
   const char *IdStart = B.cur;
   FillToken(B, T, CurPtr, kIdentifier);
 
-  IdentifierInfo *II = &Identifiers.get(StringPiece(IdStart, T.length));
+  IdentifierInfo *II;
+  if (buf) {
+    memcpy(buf + bufc, start, CurPtr - start);
+    bufc += CurPtr - start;
+    buf[bufc++] = '\0';
+    //printf("got '%s'\n", buf);
+    II = &Identifiers.get(StringPiece(buf, bufc));
+    free(buf);
+    NeedsCleanup = false;
+  } else {
+    II = &Identifiers.get(StringPiece(IdStart, T.length));
+  }
   T.info = II;
   II->NeedsCleanup = NeedsCleanup;
   II->HasVariables = HasVariables;
+
+  //if (!HasVariables)
+  //  II->CleanedUp();
+  //if (HasVariables)
+  //  ++vars;
 
   if (kind != kPath && *B.cur == '\n')
     ++B.cur;
@@ -1070,6 +1107,8 @@ done:
 }
 
 int main(int argc, const char* argv[]) {
+  //g_metrics = new Metrics;
+
   char* d = strdup(argv[1]);
   char* s = strrchr(d, '/');
   *s++ = '\0';
@@ -1105,10 +1144,12 @@ int main(int argc, const char* argv[]) {
   //printf("read %ld kB, %ld files\n", g_total / 1000, g_count);
   //printf("%zu edges, %d with vars\n", edges.size(), edgeswithvars);
   //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
-  //printf("%s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
+  printf("%s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
 
   //printf("%d clean, %d cleaned (%d computed), %d vars\n", clean, cleaned,
   //       cleaned_computed, vars);
+
+  //g_metrics->Report();
 
   free(d);
 }
