@@ -56,7 +56,7 @@ static const unsigned char CharInfo[256] =
 //40  (         41  )         42  *         43  +
 //44  ,         45  -         46  .         47  /
    0           , 0           , 0           , 0           ,
-   0           , CHAR_DOT  , CHAR_OTHERIDENT  , 0           ,
+   0           , CHAR_OTHERIDENT  , CHAR_DOT  , 0           ,
 //48  0         49  1         50  2         51  3
 //52  4         53  5         54  6         55  7
    CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER , CHAR_NUMBER ,
@@ -212,6 +212,7 @@ public:
 #ifndef EAGER_CLEANING
        , CleanedUpIdent(NULL)
 #endif
+       , VarInfo(0)
          //, HasPieces(false)
        {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
@@ -230,6 +231,7 @@ public:
   bool HasVariables;
 
   //bool HasPieces;
+  std::vector<int>* VarInfo;
 
   // These could maybe be in a union.
   // Pointer to rule with this name. Only for kIdentifiers that don't need
@@ -275,28 +277,12 @@ public:
   }
   IdentifierInfo* CleanedUpSlow();  // Out-of-line version of CleanedUp().
 
-  IdentifierInfo* Evaluate(Env* s) {
+  IdentifierInfo* Evaluate(Env* e) {
     if (!HasVariables)
       return CleanedUp();
-    //if (!HasPieces) {
-     // HasPieces = true;
-      //vars_computed++;
-      //printf("uncached var %s\n", Entry->getKeyData());
-    //} else {
-      //printf("cached var %s\n", Entry->getKeyData());
-    //}
-    // FIXME: If |s| is where this was last eval'd, return previous eval info?
-    //CollectPieces();
-    //string result;
-    //for (piece : pieces)
-    //  if (piece.IsStr())
-    //    result += piece;
-    //  else
-    //    result += piece.Eval(s);
-    //return Identifiers.get(result);
-    //++vars;
-    return this; // XXX
+    return EvaluateSlow(e);
   }
+  IdentifierInfo* EvaluateSlow(Env* e);  // Out-of-line version of Evaluate.
 };
 
 class IdentifierTable {
@@ -378,6 +364,44 @@ Continue:
   IdentifierInfo* I = &Identifiers.get(buf);
   free(buf);
   return I;
+}
+
+IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
+  //return this;
+  string buf;
+  size_t left = 0;
+  const char* s = Entry->getKeyData();
+//printf("eval %s\n", s);
+  for (size_t i = 0; i < VarInfo->size(); i += 2) {
+    int varl = (*VarInfo)[i], varr = (*VarInfo)[i + 1];
+    bool isSimple = s[varl - 1] == '$';  // Else, '{'
+    int ovarl = varl - (isSimple ? 1 : 2);
+    int ovarr = varr + (isSimple ? 0 : 1);
+
+    // String in front of var
+//printf("%lu - %lu (%d %d)\n", left, ovarl - left, varl, ovarl);
+    if (ovarl - left)
+      buf.append(s + left, ovarl - left);
+    left = ovarr;
+
+    // Var
+//printf("%s %d %d\n", s, varl, varr);
+    IdentifierInfo* varII =
+        &Identifiers.get(StringPiece(s + varl, varr - varl));
+    IdentifierInfo* val =
+        //.Evaluate(e);
+        e->LookupVariable(varII);
+    // FIXME: need to val->Evaluate() too?
+//printf("var %s (%p) -> %s (%zu)\n", varII->Entry->getKeyData(), varII, val->Entry->getKeyData(), static_cast<BindingEnv*>(e)->bindings_.size());
+    buf += val->Entry->getKeyData();
+  }
+
+  // Last bit of text
+  buf.append(s + left, Entry->getKeyLength() - left);
+
+  return &Identifiers.get(buf.c_str());
+
+  // FIXME: If |e| is where this was last eval'd, return previous eval info?
 }
 
 IdentifierInfo* kw_subninja;
@@ -606,7 +630,10 @@ Continue:
   II->HasVariables = HasVariables;
 
   if (HasVariables) {
-    delete varranges;  // 2ms :-( XXX: use something better, like SmallVector
+    if (!II->VarInfo)
+      II->VarInfo = varranges;
+    else
+      delete varranges;  // 2ms :-( XXX: use something better, like SmallVector
   //  ++vars;
   //  if (!II->HasPieces) {
   //    II->HasPieces = true;
@@ -1158,6 +1185,7 @@ void process(const char* fname) {
         IdentifierInfo *Key, *Val;
         parseLet(b, t, Key, Val);
         Val = Val->Evaluate(fileEnvStack.back());
+//printf("adding binding for %s (%p) -> %s\n", Key->Entry->getKeyData(), Key, Val->Entry->getKeyData());
         fileEnvStack.back()->AddBinding(Key, Val);
         break;
       }
