@@ -144,6 +144,77 @@ enum TokenKind {
   kUnknown,
 };
 
+bool CanonicalizePath(char* path, size_t* len, string* err) {
+  // WARNING: this function is performance-critical; please benchmark
+  // any changes you make to it.
+  //METRIC_RECORD("canonicalize path");
+  if (*len == 0) {
+    fprintf(stderr, "empty path");
+    exit(1);
+  }
+
+  const int kMaxPathComponents = 30;
+  char* components[kMaxPathComponents];
+  int component_count = 0;
+
+  char* start = path;
+  char* dst = start;
+  const char* src = start;
+  const char* end = start + *len;
+
+  if (*src == '/') {
+    ++src;
+    ++dst;
+  }
+
+  while (src < end) {
+    if (*src == '.') {
+      if (src + 1 == end || src[1] == '/') {
+        // '.' component; eliminate.
+        src += 2;
+        continue;
+      } else if (src[1] == '.' && (src + 2 == end || src[2] == '/')) {
+        // '..' component.  Back up if possible.
+        if (component_count > 0) {
+          dst = components[component_count - 1];
+          src += 3;
+          --component_count;
+        } else {
+          *dst++ = *src++;
+          *dst++ = *src++;
+          *dst++ = *src++;
+        }
+        continue;
+      }
+    }
+
+    if (*src == '/') {
+      src++;
+      continue;
+    }
+
+    if (component_count == kMaxPathComponents) {
+      fprintf(stderr, "path has too many components : %s", path);
+      exit(1);
+    }
+    components[component_count] = dst;
+    ++component_count;
+
+    while (*src != '/' && src != end)
+      *dst++ = *src++;
+    *dst++ = *src++;  // Copy '/' or final \0 character as well.
+  }
+
+  if (dst == start) {
+    fprintf(stderr, "path canonicalizes to the empty path");
+    exit(1);
+  }
+
+  *len = dst - start - 1;
+  return true;
+}
+
+
 #include "StringMap.h"
 
 class IdentifierInfo;
@@ -251,6 +322,14 @@ public:
     return EvaluateSlow(e);
   }
   IdentifierInfo* EvaluateSlow(Env* e);  // Out-of-line version of Evaluate.
+
+  IdentifierInfo* Canonicalize() {
+    // FIXME: check canon state
+    // if canonicalized: return this
+    // if unknown: check for "./" in string, if so set to canonicalized
+    // do real canonicalization.
+    return this;  // FIXME
+  }
 };
 
 class IdentifierTable {
@@ -999,16 +1078,14 @@ void parseEdge(Buffer& B, Token& T) {
   for (std::vector<IdentifierInfo*>::iterator i = ins.begin(); i != ins.end();
        ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
-    //if (!CanonicalizePath(&path, &path_err))  FIXME
-    //  return lexer_.Error(path_err, err);
-    //state_->AddIn(edge, path);
+    path = path->Canonicalize();
+    //state_->AddIn(edge, path);  // FIXME
   }
   for (std::vector<IdentifierInfo*>::iterator i = outs.begin(); i != outs.end();
        ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
-    //if (!CanonicalizePath(&path, &path_err))  FIXME
-    //  return lexer_.Error(path_err, err);
-    //state_->AddOut(edge, path);
+    path = path->Canonicalize();
+    //state_->AddOut(edge, path);  // FIXME
   }
 }
 
@@ -1072,7 +1149,7 @@ void parseDefault(Buffer& B, Token& T) {
   }
   do {
     IdentifierInfo* path = T.info->Evaluate(fileEnvStack.back());
-    // FIXME: CanonicalizePath(path)
+    path = path->Canonicalize();
     // FIXME:add path to state defaults.
     SkipWhitespace(B, B.cur);
     LexEvalString(B, T, B.cur, kPath);
