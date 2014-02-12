@@ -67,6 +67,12 @@ With map<II*, II*> for every edge and rule:
 not needed though.
 
 
+evalstring stats:
+56833 clean (just strings)
+13064 cleaned (contain $$, etc), 7510 of those are unique
+1521 vars (contain var refs)
+
+
 Plan for lexing:
 - LexIdentifier() slurps everything non-whitespace non-$
 - On $, goes down special path, writes 'needs cleanup', 'has var' flags

@@ -184,11 +184,12 @@ struct Edge {
 };
 std::vector<Edge*> edges;  // XXX bumpptrallocate?
 
+//int clean, cleaned, cleaned_computed, vars;
 class IdentifierInfo {
 public:
   IdentifierInfo()
       : kind(kIdentifier), IsReservedBinding(false), NeedsCleanup(false),
-        HasVariables(false), rule(0) {}
+        HasVariables(false), rule(0), CleanedUpIdent(NULL) {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
   // FIXME: consider bitfielding all these:
@@ -209,6 +210,9 @@ public:
   // cleanups and don't contain variables.
   Rule *rule;
 
+  // Cleaned up text of this node (always NULL if NeedsCleanup is false).
+  IdentifierInfo* CleanedUpIdent;
+
   // Pointer to variable info for this name. Only set if HasVariables is true.
   // - starts and ends of variables in string, IdentifierInfos of variable names
   // (ninja doesn't support repeated variable evaluation such as ${foo$bar}
@@ -220,14 +224,23 @@ public:
   IdentifierInfo* CleanedUp() {
     assert(!HasVariables &&
            "can't clean up string with var refs, Eval instead");
-   if (!NeedsCleanup)
-     return this;
-   //if (!CleanedUpIdent) { 
-     // XXX compute cleaned up version
-   //}
-   //return CleanedUpIdent;
-   return this;
+    if (!NeedsCleanup) {
+      //++clean;
+      return this;
+    }
+    //++cleaned;
+    if (!CleanedUpIdent) {
+      //++cleaned_computed;
+      //CleanedUpIdent = CleanedUpSlow();
+      CleanedUpIdent = this;
+    } /*else {
+      // for example, huge "defines" blocks with $-newline continuations.
+      printf("cached: %s\n", Entry->getKeyData());
+    }*/
+    return CleanedUpIdent;
+    //return this;
   }
+  IdentifierInfo* CleanedUpSlow();  // Out-of-line version of CleanedUp().
 
   IdentifierInfo* Evaluate(Env* s) {
     if (!HasVariables)
@@ -241,6 +254,7 @@ public:
     //  else
     //    result += piece.Eval(s);
     //return Identifiers.get(result);
+    //++vars;
     return this; // XXX
   }
 };
@@ -280,6 +294,42 @@ public:
 
 IdentifierTable Identifiers;
 
+IdentifierInfo* IdentifierInfo::CleanedUpSlow() {
+  int l = Entry->getKeyLength();
+  const char* s = Entry->getKeyData();
+  const char* e = s + l;
+  string buf;
+  buf.reserve(l);
+
+Continue:
+  while (s < e && *s != '$') {
+    buf.push_back(*s);
+    ++s;
+  }
+  if (s < e) {  // Found '$'?
+    ++s;
+    if (s < e) {
+      switch (*s) {
+        case ':':
+        case ' ':
+        case '$':
+          buf.push_back(*s);
+          ++s;
+          goto Continue;
+        case '\n':
+          ++s;
+          while (*s == ' ')
+            ++s;
+          --s;   // Back up over the skipped ' '.
+          goto Continue;
+        default:
+          assert(false);  // was rejected by lexer
+      }
+    }
+  }
+
+  return &Identifiers.get(buf.c_str());
+}
 
 IdentifierInfo* kw_subninja;
 IdentifierInfo* kw_include;
@@ -1044,6 +1094,9 @@ int main(int argc, const char* argv[]) {
 
   //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
   printf("%s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
+
+  //printf("%d clean, %d cleaned (%d computed), %d vars\n", clean, cleaned,
+  //       cleaned_computed, vars);
 
   free(d);
 }
