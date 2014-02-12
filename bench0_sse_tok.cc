@@ -174,7 +174,7 @@ struct BindingEnv : public Env {
 std::vector<BindingEnv*> fileEnvStack;
 //std::vector<Env*> envs;
 
-
+//int edgeswithvars;
 struct Edge {
   BindingEnv* env_;
   Rule* rule_;
@@ -236,7 +236,8 @@ public:
     } /*else {
       // for example, huge "defines" blocks with $-newline continuations.
       printf("cached: %s\n", Entry->getKeyData());
-    }*/
+  //if (Entry->getKeyLength() > 2 * 1024) printf("huge string cached\n");
+    } */
     return CleanedUpIdent;
     //return this;
   }
@@ -303,6 +304,8 @@ IdentifierInfo* IdentifierInfo::CleanedUpSlow() {
 
   char* buf = (char*)malloc(l + 1);
   char* d = &buf[0];
+
+  //if (l > 64 * 1024) printf("huge string %d %s\n", l, s);
 
 Continue:
   while (*s != '\0' && *s != '$') {
@@ -803,8 +806,10 @@ void parseEdge(Buffer& B, Token& T) {
     }
 
     // We found a binding, so need a real env for this edge.
-    if (env == fileEnvStack.back())
+    if (env == fileEnvStack.back()) {
+      //++edgeswithvars;
       env = new BindingEnv;
+    }
 
     IdentifierInfo *Key, *Val;
     parseLet(B, T, Key, Val);
@@ -993,7 +998,6 @@ void process(const char* fname) {
   buf[size] = 0;
   g_total += size;
   g_count += 1;
-//printf("read %ld kB, %ld files\n", g_total / 1024, g_count);
   fclose(f);
 
   //if (g_count > 1) return;
@@ -1098,8 +1102,10 @@ int main(int argc, const char* argv[]) {
   chdir(d);
   process(s);
 
+  //printf("read %ld kB, %ld files\n", g_total / 1000, g_count);
+  //printf("%zu edges, %d with vars\n", edges.size(), edgeswithvars);
   //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
-  printf("%s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
+  //printf("%s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
 
   //printf("%d clean, %d cleaned (%d computed), %d vars\n", clean, cleaned,
   //       cleaned_computed, vars);

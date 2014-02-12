@@ -67,10 +67,34 @@ With map<II*, II*> for every edge and rule:
 not needed though.
 
 
-evalstring stats:
+chrome evalstring stats:
 56833 clean (just strings)
 13064 cleaned (contain $$, etc), 7510 of those are unique
 1521 vars (contain var refs)
+
+#cached @size
+0      16kB
+1       8kB
+1       4kB
+673     2kB
+
+llvm evalstring stats:
+16847 clean, 2 cleaned (1 computed), 0 vars
+  The 1 computed is for an escaped space. long string, around twice.
+
+
+chrome: read 13233 kB, 785 files
+  just reading: 0.015s -> 882 MB/s
+  bench: 0.058s -> 228.15 MB/s
+  bench/clean: 0.074s -> 178.8 MB/s
+  ninja: 0.265s -> 49.93 MB/s
+llvm: read 3543 kB, 2 files
+  bench: 0.015s -> 236.2 MB/s
+  ninja: 0.066s -> 53.68 MB/s
+  clang: 0.077ms -> 46 MB/s
+    time clang -x c -E ~/src/llvm-build/build.ninja   > /dev/null
+      (with s/[#'"]/./g)
+
 
 
 Plan for lexing:
