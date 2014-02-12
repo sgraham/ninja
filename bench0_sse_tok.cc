@@ -379,6 +379,9 @@ IdentifierInfo* kw_default;
 IdentifierInfo* attrib_depth;
 IdentifierInfo* attrib_command;
 
+IdentifierInfo* var_in;
+IdentifierInfo* var_out;
+
 IdentifierInfo* BindingEnv::LookupVariable(IdentifierInfo* var) {
   std::map<IdentifierInfo*, IdentifierInfo*>::iterator i = bindings_.find(var);
   if (i != bindings_.end())
@@ -388,27 +391,88 @@ IdentifierInfo* BindingEnv::LookupVariable(IdentifierInfo* var) {
   return &Identifiers.get("");
 }
 
+IdentifierInfo* BindingEnv::LookupWithFallback(IdentifierInfo* var,
+                                               IdentifierInfo* eval, Env* env) {
+  std::map<IdentifierInfo*, IdentifierInfo*>::iterator i = bindings_.find(var);
+  if (i != bindings_.end())
+    return i->second;
+  if (eval)
+    return eval->Evaluate(env);
+  if (parent_)
+    return parent_->LookupVariable(var);
+  return &Identifiers.get("");
+}
+
+
 IdentifierInfo* Edge::EvaluateCommand() {
   return GetBinding(attrib_command);
 }
 
-IdentifierInfo* Edge::GetBinding(IdentifierInfo* var) {
-  // XXX build edge env for $in / $out handling
+
+/// An Env for an Edge, providing $in and $out.
+struct EdgeEnv : public Env {
+  explicit EdgeEnv(Edge* edge) : edge_(edge) {}
+  virtual IdentifierInfo* LookupVariable(IdentifierInfo*);
+
+  /// Given a span of Nodes, construct a list of paths suitable for a command
+  /// line.
+  //string MakePathList(vector<Node*>::iterator begin,
+  //                    vector<Node*>::iterator end,
+  //                    char sep);
+
+  Edge* edge_;
+};
+
+IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
+  if (var == var_in) { //|| var == "in_newline") {
+    //int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
+    //  edge_->order_only_deps_;
+    //return MakePathList(edge_->inputs_.begin(),
+    //                    edge_->inputs_.begin() + explicit_deps_count,
+    //                    var == "in" ? ' ' : '\n');
+    return var_in; // FIXME
+  } else if (var == var_out) {
+    //return MakePathList(edge_->outputs_.begin(),
+    //                    edge_->outputs_.end(),
+    //                    ' ');
+    return var_out; // FIXME
+  }
+
   // See notes on BindingEnv::LookupWithFallback.
-  std::map<IdentifierInfo*, IdentifierInfo*>::iterator i =
-      env_->bindings_.find(var);
-  if (i != env_->bindings_.end())
-    return i->second;
+  IdentifierInfo* eval;
+  std::map<IdentifierInfo*, IdentifierInfo*>::const_iterator i =
+      edge_->rule_->bindings_.find(var);
+  if (i == edge_->rule_->bindings_.end())
+    eval= NULL;
+  else
+    eval = i->second;
 
-  //const IdentifierInfo* eval = rule_->GetBinding(var);
-  i = rule_->bindings_.find(var);
-  if (i != rule_->bindings_.end())
-    return i->second->Evaluate(env_);  // XXX pass edge env instead
+  return edge_->env_->LookupWithFallback(var, eval, this);
+}
 
-  if (env_->parent_)
-    return env_->parent_->LookupVariable(var);
+//string EdgeEnv::MakePathList(vector<Node*>::iterator begin,
+//                             vector<Node*>::iterator end,
+//                             char sep) {
+//  string result;
+//  for (vector<Node*>::iterator i = begin; i != end; ++i) {
+//    if (!result.empty())
+//      result.push_back(sep);
+//    const string& path = (*i)->path();
+//    if (path.find(" ") != string::npos) {
+//      result.append("\"");
+//      result.append(path);
+//      result.append("\"");
+//    } else {
+//      result.append(path);
+//    }
+//  }
+//  return result;
+//}
 
-  return &Identifiers.get("");
+
+IdentifierInfo* Edge::GetBinding(IdentifierInfo* var) {
+  EdgeEnv env(this);
+  return env.LookupVariable(var);
 }
 
 struct Token {
@@ -1201,6 +1265,9 @@ int main(int argc, const char* argv[]) {
   Identifiers.get("restat").IsReservedBinding = true;
   Identifiers.get("rspfile").IsReservedBinding = true;
   Identifiers.get("rspfile_content").IsReservedBinding = true;
+
+  var_in = &Identifiers.get("in");
+  var_out = &Identifiers.get("out");
 
   Rule phonyRule;
   Identifiers.get("phony").rule = &phonyRule;
