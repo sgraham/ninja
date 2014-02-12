@@ -442,6 +442,7 @@ void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
 
   char* buf = 0;
   int bufc = 0;
+  int skipped = 0;
   const char* start = CurPtr;
 
 Continue:
@@ -466,6 +467,7 @@ Continue:
           bufc += CurPtr - start - 1;
           buf[bufc++] = C;
           ++CurPtr;
+          ++skipped;
           start = CurPtr;
           goto Continue;
 
@@ -474,15 +476,14 @@ Continue:
 
           ++CurPtr;
           HasVariables = true;
-          // FIXME: This is incorrect for strings containing cleanup:
-          varranges->push_back(CurPtr - B.cur);  // Don't include {
+
+          varranges->push_back(CurPtr - B.cur - skipped);  // Don't include {
 
           C = *CurPtr++;
           while (isIdentifierBody(C))  // identifier == varname in ninja lex
             C = *CurPtr++;
 
-          // FIXME: This is incorrect for strings containing cleanup:
-          varranges->push_back(CurPtr - B.cur - 1);  // Don't include }
+          varranges->push_back(CurPtr - B.cur - 1 - skipped); // Don't include }
 
           // Don't back up, want to skip '}'
           if (C != '}') {
@@ -503,8 +504,7 @@ Continue:
         case '-':
         case '_':
           if (!varranges) varranges = new std::vector<int>;
-          // FIXME: This is incorrect for strings containing cleanup:
-          varranges->push_back(CurPtr - B.cur);
+          varranges->push_back(CurPtr - B.cur - skipped);
 
           ++CurPtr;
           HasVariables = true;
@@ -514,8 +514,7 @@ Continue:
             C = *CurPtr++;
           --CurPtr;  // Back up over the skipped non-var char.
 
-          // FIXME: This is incorrect for strings containing cleanup:
-          varranges->push_back(CurPtr - B.cur);
+          varranges->push_back(CurPtr - B.cur - skipped);
 
           goto Continue;
 
@@ -527,9 +526,12 @@ Continue:
           bufc += CurPtr - start - 1;
           ++CurPtr;
           C = *CurPtr++;
-          while (C == ' ')
+          while (C == ' ') {
+            ++skipped;
             C = *CurPtr++;
+          }
           --CurPtr;   // Back up over the skipped ' '.
+          --skipped;
           start = CurPtr;
           goto Continue;
         default:
