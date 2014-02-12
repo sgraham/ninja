@@ -200,20 +200,15 @@ std::vector<Edge*> edges;  // XXX bumpptrallocate?
 // No cleaning: 0.058s
 // eager cleaning: 0.063s
 // lazy cleaning: 0.074s
-#define EAGER_CLEANING
+//#define EAGER_CLEANING  // Now always on
 
 //int clean, cleaned, cleaned_computed;
 //int vars, vars_computed;
 class IdentifierInfo {
 public:
  IdentifierInfo()
-     : kind(kIdentifier), IsReservedBinding(false), NeedsCleanup(false),
-       HasVariables(false), rule(0)
-#ifndef EAGER_CLEANING
-       , CleanedUpIdent(NULL)
-#endif
-       , VarInfo(0)
-         //, HasPieces(false)
+     : kind(kIdentifier), IsReservedBinding(false),
+       HasVariables(false), rule(0), VarInfo(0)
        {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
@@ -223,9 +218,6 @@ public:
 
   // If the token is a variable that can be set on a rule, for example "command"
   bool IsReservedBinding;
-
-  // If this contains $-escaped chars like $$, $:, etc.
-  bool NeedsCleanup;
 
   // If this contains references to variables.
   bool HasVariables;
@@ -238,11 +230,6 @@ public:
   // cleanups and don't contain variables.
   Rule *rule;
 
-#ifndef EAGER_CLEANING
-  // Cleaned up text of this node (always NULL if NeedsCleanup is false).
-  IdentifierInfo* CleanedUpIdent;
-#endif
-
   // Pointer to variable info for this name. Only set if HasVariables is true.
   // - starts and ends of variables in string, IdentifierInfos of variable names
   // (ninja doesn't support repeated variable evaluation such as ${foo$bar}
@@ -254,26 +241,7 @@ public:
   IdentifierInfo* CleanedUp() {
     assert(!HasVariables &&
            "can't clean up string with var refs, Eval instead");
-#ifdef EAGER_CLEANING
     return this;
-#else
-    if (!NeedsCleanup) {
-      //++clean;
-      return this;
-    }
-    //++cleaned;
-    if (!CleanedUpIdent) {
-      //++cleaned_computed;
-      CleanedUpIdent = CleanedUpSlow();
-      //CleanedUpIdent = this;
-    } /*else {
-      // for example, huge "defines" blocks with $-newline continuations.
-      printf("cached: %s\n", Entry->getKeyData());
-  //if (Entry->getKeyLength() > 2 * 1024) printf("huge string cached\n");
-    } */
-    return CleanedUpIdent;
-    //return this;
-#endif
   }
   IdentifierInfo* CleanedUpSlow();  // Out-of-line version of CleanedUp().
 
@@ -467,17 +435,14 @@ enum EvalStringKind { kPath, kLet };
 void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
                    EvalStringKind kind) {
   //METRIC_RECORD("LexEvalString");
-  bool NeedsCleanup = false;
   bool HasVariables = false;
 
   // pointer so that no destrucor is called in the common no-vars case.
   std::vector<int>* varranges = 0;
 
-#ifdef EAGER_CLEANING
   char* buf = 0;
   int bufc = 0;
   const char* start = CurPtr;
-#endif
 
 Continue:
   unsigned char C = *CurPtr++;
@@ -494,19 +459,14 @@ Continue:
         case '$':
         case ' ':
         case ':':
-#ifdef EAGER_CLEANING
           if (!buf) {
             buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
           }
           memcpy(buf + bufc, start, CurPtr - start - 1);
           bufc += CurPtr - start - 1;
           buf[bufc++] = C;
-#endif
           ++CurPtr;
-#ifdef EAGER_CLEANING
           start = CurPtr;
-#endif
-          NeedsCleanup = true;
           goto Continue;
 
         case '{':
@@ -557,26 +517,20 @@ Continue:
           // FIXME: This is incorrect for strings containing cleanup:
           varranges->push_back(CurPtr - B.cur);
 
-          // FIXME: set NeedsCleanup too?
           goto Continue;
 
         case '\n':
-#ifdef EAGER_CLEANING
           if (!buf) {
             buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
           }
           memcpy(buf + bufc, start, CurPtr - start - 1);
           bufc += CurPtr - start - 1;
-#endif
           ++CurPtr;
           C = *CurPtr++;
           while (C == ' ')
             C = *CurPtr++;
           --CurPtr;   // Back up over the skipped ' '.
-#ifdef EAGER_CLEANING
           start = CurPtr;
-#endif
-          NeedsCleanup = true;
           goto Continue;
         default:
           fprintf(stderr, "bad $-escape\n");
@@ -610,7 +564,6 @@ Continue:
   FillToken(B, T, CurPtr, kIdentifier);
 
   IdentifierInfo *II;
-#ifdef EAGER_CLEANING
   if (buf) {
     memcpy(buf + bufc, start, CurPtr - start);
     bufc += CurPtr - start;
@@ -618,12 +571,9 @@ Continue:
     //printf("got '%s'\n", buf);
     II = &Identifiers.get(StringPiece(buf, bufc));
     free(buf);
-    NeedsCleanup = false;
   } else
-#endif
     II = &Identifiers.get(StringPiece(IdStart, T.length));
   T.info = II;
-  II->NeedsCleanup = NeedsCleanup;
   II->HasVariables = HasVariables;
 
   if (HasVariables) {
