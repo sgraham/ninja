@@ -186,12 +186,25 @@ struct Edge {
 };
 std::vector<Edge*> edges;  // XXX bumpptrallocate?
 
+// Wether to clean $$ -> $ (etc) during LevEvalString or lazily. In the lazy
+// regime, it's only done once: If there are two "a$$b" strings, they're cleaned
+// to "a$b" only once and the cleaned form is shared. With eager cleaning, this
+// is just done at lex time.
+// No cleaning: 0.058s
+// eager cleaning: 0.063s
+// lazy cleaning: 0.074s
+#define EAGER_CLEANING
+
 //int clean, cleaned, cleaned_computed, vars;
 class IdentifierInfo {
 public:
-  IdentifierInfo()
-      : kind(kIdentifier), IsReservedBinding(false), NeedsCleanup(false),
-        HasVariables(false), rule(0), CleanedUpIdent(NULL) {}
+ IdentifierInfo()
+     : kind(kIdentifier), IsReservedBinding(false), NeedsCleanup(false),
+       HasVariables(false), rule(0)
+#ifndef EAGER_CLEANING
+       , CleanedUpIdent(NULL)
+#endif
+       {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
   // FIXME: consider bitfielding all these:
@@ -212,8 +225,10 @@ public:
   // cleanups and don't contain variables.
   Rule *rule;
 
+#ifndef EAGER_CLEANING
   // Cleaned up text of this node (always NULL if NeedsCleanup is false).
   IdentifierInfo* CleanedUpIdent;
+#endif
 
   // Pointer to variable info for this name. Only set if HasVariables is true.
   // - starts and ends of variables in string, IdentifierInfos of variable names
@@ -226,6 +241,9 @@ public:
   IdentifierInfo* CleanedUp() {
     assert(!HasVariables &&
            "can't clean up string with var refs, Eval instead");
+#ifdef EAGER_CLEANING
+    return this;
+#else
     if (!NeedsCleanup) {
       //++clean;
       return this;
@@ -242,6 +260,7 @@ public:
     } */
     return CleanedUpIdent;
     //return this;
+#endif
   }
   IdentifierInfo* CleanedUpSlow();  // Out-of-line version of CleanedUp().
 
@@ -412,9 +431,11 @@ void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
   bool NeedsCleanup = false;
   bool HasVariables = false;
 
+#ifdef EAGER_CLEANING
   char* buf = 0;
   int bufc = 0;
   const char* start = CurPtr;
+#endif
 
 Continue:
   unsigned char C = *CurPtr++;
@@ -431,14 +452,18 @@ Continue:
         case '$':
         case ' ':
         case ':':
+#ifdef EAGER_CLEANING
           if (!buf) {
             buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
           }
           memcpy(buf + bufc, start, CurPtr - start - 1);
           bufc += CurPtr - start - 1;
           buf[bufc++] = C;
+#endif
           ++CurPtr;
+#ifdef EAGER_CLEANING
           start = CurPtr;
+#endif
           NeedsCleanup = true;
           goto Continue;
 
@@ -459,17 +484,21 @@ Continue:
           goto Continue;
 
         case '\n':
+#ifdef EAGER_CLEANING
           if (!buf) {
             buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
           }
           memcpy(buf + bufc, start, CurPtr - start - 1);
           bufc += CurPtr - start - 1;
+#endif
           ++CurPtr;
           C = *CurPtr++;
           while (C == ' ')
             C = *CurPtr++;
           --CurPtr;   // Back up over the skipped ' '.
+#ifdef EAGER_CLEANING
           start = CurPtr;
+#endif
           NeedsCleanup = true;
           goto Continue;
         default:
@@ -504,6 +533,7 @@ Continue:
   FillToken(B, T, CurPtr, kIdentifier);
 
   IdentifierInfo *II;
+#ifdef EAGER_CLEANING
   if (buf) {
     memcpy(buf + bufc, start, CurPtr - start);
     bufc += CurPtr - start;
@@ -512,9 +542,9 @@ Continue:
     II = &Identifiers.get(StringPiece(buf, bufc));
     free(buf);
     NeedsCleanup = false;
-  } else {
+  } else
+#endif
     II = &Identifiers.get(StringPiece(IdStart, T.length));
-  }
   T.info = II;
   II->NeedsCleanup = NeedsCleanup;
   II->HasVariables = HasVariables;
