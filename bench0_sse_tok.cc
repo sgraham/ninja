@@ -298,12 +298,30 @@ IdentifierInfo* IdentifierInfo::CleanedUpSlow() {
   int l = Entry->getKeyLength();
   const char* s = Entry->getKeyData();
   const char* e = s + l;
-  string buf;
+  // string buf: 0.089s
+  // vector<char> buf: 0.084s
+  // char array buf: 0.079
+//#define USE_STR
+#ifdef USE_STR
+  std::vector<char> buf;
   buf.reserve(l);
+#else
+  char buf[128 * 1024]; // ought to be enough for anybody
+  if (l >= sizeof(buf)) {
+    fprintf(stderr, "buf too small (%d, %zu)\n", l, sizeof(buf));
+    exit(1);
+  }
+  char* d = &buf[0];
+#endif
 
 Continue:
   while (s < e && *s != '$') {
+#ifdef USE_STR
     buf.push_back(*s);
+#else
+    *d = *s;
+    ++d;
+#endif
     ++s;
   }
   if (s < e) {  // Found '$'?
@@ -313,7 +331,12 @@ Continue:
         case ':':
         case ' ':
         case '$':
+#ifdef USE_STR
           buf.push_back(*s);
+#else
+          *d = *s;
+          ++d;
+#endif
           ++s;
           goto Continue;
         case '\n':
@@ -327,8 +350,17 @@ Continue:
       }
     }
   }
+#ifndef USE_STR
+  *d = '\0';
+#else
+  buf.push_back('\0');
+#endif
 
-  return &Identifiers.get(buf.c_str());
+#ifdef USE_STR
+  return &Identifiers.get(buf.data());
+#else
+  return &Identifiers.get(buf);
+#endif
 }
 
 IdentifierInfo* kw_subninja;
