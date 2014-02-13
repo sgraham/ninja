@@ -227,12 +227,16 @@ struct Rule {
 };
 std::vector<Rule*> rules;  // XXX bumpptrallocate?
 
-struct Env { virtual IdentifierInfo* LookupVariable(IdentifierInfo*) = 0; };
+struct Env {
+  virtual IdentifierInfo* LookupVariable(IdentifierInfo*) = 0;
+  virtual string LookupVariableStr(IdentifierInfo*) = 0;
+};
 struct BindingEnv : public Env {
   //BindingEnv() : parent_(NULL) {}
   explicit BindingEnv(Env* parent) : parent_(parent) {}
 
   virtual IdentifierInfo* LookupVariable(IdentifierInfo* II);
+  virtual string LookupVariableStr(IdentifierInfo*);
 
   void AddBinding(IdentifierInfo* Key, IdentifierInfo* Val) {
     bindings_[Key] = Val;
@@ -257,8 +261,10 @@ struct Edge {
 
   int implicit_deps_, order_only_deps_;
 
-  IdentifierInfo* EvaluateCommand();
-  IdentifierInfo* GetBinding(IdentifierInfo*);
+  //IdentifierInfo* EvaluateCommand();
+  //IdentifierInfo* GetBinding(IdentifierInfo*);
+  string EvaluateCommand();
+  string GetBinding(IdentifierInfo*);
 };
 llvm::BumpPtrAllocator edgeallocator;
 std::vector<Edge*> edges;
@@ -344,6 +350,13 @@ public:
     return EvaluateSlow(e);
   }
   IdentifierInfo* EvaluateSlow(Env* e);  // Out-of-line version of Evaluate.
+
+  string EvaluateAsString(Env* e) {
+    if (!HasVariables)
+      return CleanedUp()->Entry->getKeyData();
+    return EvaluateAsStringSlow(e);
+  }
+  string EvaluateAsStringSlow(Env* e);  // Out-of-line version of EvaluateAsStringSlow.
 
   IdentifierInfo* Canonicalize() {
     //++canon;
@@ -461,6 +474,18 @@ IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
   return &Identifiers.get(result.c_str());
 }
 
+string IdentifierInfo::EvaluateAsStringSlow(Env* e) {
+  string result;
+  for (TokenList::const_iterator i = VarInfoEx->begin(); i != VarInfoEx->end();
+       ++i) {
+    if (i->first == RAW)
+      result.append(i->second->Entry->getKeyData());
+    else
+      result.append(e->LookupVariableStr(i->second));
+  }
+  return result;
+}
+
 IdentifierInfo* IdentifierInfo::CanonicalizeSlow() {
   // FIXME: this copy can be saved by inlining CanonicalizePath here and
   // only copying on write. The most common case is that CanonicalizePath does
@@ -500,7 +525,16 @@ IdentifierInfo* BindingEnv::LookupVariable(IdentifierInfo* var) {
   return &Identifiers.get("");
 }
 
-IdentifierInfo* Edge::EvaluateCommand() {
+string BindingEnv::LookupVariableStr(IdentifierInfo* var) {
+  std::map<IdentifierInfo*, IdentifierInfo*>::iterator i = bindings_.find(var);
+  if (i != bindings_.end())
+    return i->second->Entry->getKeyData();
+  if (parent_)
+    return parent_->LookupVariableStr(var);
+  return "";
+}
+
+string Edge::EvaluateCommand() {
   return GetBinding(attrib_command);
 }
 
@@ -509,16 +543,22 @@ IdentifierInfo* Edge::EvaluateCommand() {
 struct EdgeEnv : public Env {
   explicit EdgeEnv(Edge* edge) : edge_(edge) {}
   virtual IdentifierInfo* LookupVariable(IdentifierInfo*);
+  virtual string LookupVariableStr(IdentifierInfo*);
 
   /// Given a span of Nodes, construct a list of paths suitable for a command
   /// line.
-  IdentifierInfo* MakePathList(std::vector<Node*>::iterator begin,
-                               std::vector<Node*>::iterator end, char sep);
+  string MakePathList(std::vector<Node*>::iterator begin,
+                      std::vector<Node*>::iterator end, char sep);
 
   Edge* edge_;
 };
 
 IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
+  fprintf(stderr, "not reached\n");
+  exit(1);
+}
+
+string EdgeEnv::LookupVariableStr(IdentifierInfo* var) {
   // ~60ms in the "in", "out" handling path. 66ms without the count check.
   // FIXME: measure if returning this if there's just one string helps.
   if (var == var_in) { //|| var == "in_newline") {
@@ -553,20 +593,19 @@ IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
   std::map<IdentifierInfo*, IdentifierInfo*>::iterator i =
       edge_->env_->bindings_.find(var);
   if (i != edge_->env_->bindings_.end())
-    return i->second;
+    return i->second->Entry->getKeyData();
 
   i = edge_->rule_->bindings_.find(var);
   if (i != edge_->rule_->bindings_.end())
-    return i->second->Evaluate(this);
+    return i->second->EvaluateAsString(this);
 
   if (edge_->env_->parent_)
-    return edge_->env_->parent_->LookupVariable(var);
-  return &Identifiers.get("");
+    return edge_->env_->parent_->LookupVariableStr(var);
+  return "";
 }
 
-IdentifierInfo* EdgeEnv::MakePathList(std::vector<Node*>::iterator begin,
-                                      std::vector<Node*>::iterator end,
-                                      char sep) {
+string EdgeEnv::MakePathList(std::vector<Node*>::iterator begin,
+                             std::vector<Node*>::iterator end, char sep) {
   string result;
   for (std::vector<Node*>::iterator i = begin; i != end; ++i) {
     if (!result.empty())
@@ -580,13 +619,13 @@ IdentifierInfo* EdgeEnv::MakePathList(std::vector<Node*>::iterator begin,
       result.append(path);
     }
   }
-  return &Identifiers.get(result.c_str());
+  return result;
 }
 
 
-IdentifierInfo* Edge::GetBinding(IdentifierInfo* var) {
+string Edge::GetBinding(IdentifierInfo* var) {
   EdgeEnv env(this);
-  return env.LookupVariable(var);
+  return env.LookupVariableStr(var);
 }
 
 struct Token {
@@ -1133,8 +1172,8 @@ void parseEdge(Buffer& B, Token& T) {
 
   edge->env_ = env;
 
-  IdentifierInfo* pool_name = edge->GetBinding(kw_pool);
-  if (pool_name->Entry->getKeyLength()) {
+  //IdentifierInfo* pool_name = edge->GetBinding(kw_pool);
+  //if (pool_name->Entry->getKeyLength()) {
     // FIXME: implement pool stuff
     // FIXME: consider returning NULL IdentifierInfos?
     //if (pool_name->pool == NULL) {
@@ -1142,7 +1181,7 @@ void parseEdge(Buffer& B, Token& T) {
     //          pool_name->Entry->getKeyData());
     //  exit(1);
     //}
-  }
+  //}
 
   for (std::vector<IdentifierInfo*>::iterator i = ins.begin(); i != ins.end();
        ++i) {
@@ -1443,6 +1482,7 @@ int main(int argc, const char* argv[]) {
   //printf("%zu edges, %d with vars\n", edges.size(), edgeswithvars);
   //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
   //printf("cmd: %s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
+  //printf("cmd: %s\n", edges[0]->EvaluateCommand().c_str());
 
   //Edge* edge = edges[0];
   //Edge* edge = Identifiers.get("minidump_stackwalk").node->in_edge_;
@@ -1450,7 +1490,8 @@ int main(int argc, const char* argv[]) {
 
   //int l = 0;
   //for (size_t i = 0; i < edges.size(); ++i) {
-  //  l += edges[i]->EvaluateCommand()->Entry->getKeyLength();
+  //  //l += edges[i]->EvaluateCommand()->Entry->getKeyLength();
+  //  l += edges[i]->EvaluateCommand().size();
   //  //printf("%s\n", edges[i]->EvaluateCommand()->Entry->getKeyData());
   //}
   //printf("l: %d\n", l);
