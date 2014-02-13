@@ -229,7 +229,7 @@ std::vector<Rule*> rules;  // XXX bumpptrallocate?
 
 struct Env { virtual IdentifierInfo* LookupVariable(IdentifierInfo*) = 0; };
 struct BindingEnv : public Env {
-  BindingEnv() : parent_(NULL) {}
+  //BindingEnv() : parent_(NULL) {}
   explicit BindingEnv(Env* parent) : parent_(parent) {}
 
   virtual IdentifierInfo* LookupVariable(IdentifierInfo* II);
@@ -467,8 +467,8 @@ IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
     bool isSimple = s[varl - 1] == '$';  // Else, '{'
     int ovarl = varl - (isSimple ? 1 : 2);
     int ovarr = varr + (isSimple ? 0 : 1);
-//printf("var: %s\n", std::string(s + varl, varr - varl).c_str());
-//printf("ovar: %s\n", std::string(s + ovarl, ovarr - ovarl).c_str());
+//printf("var: '%s'\n", std::string(s + varl, varr - varl).c_str());
+//printf("ovar: '%s'\n", std::string(s + ovarl, ovarr - ovarl).c_str());
 
     // String in front of var
 //printf("%lu - %lu (%d %d)\n", left, ovarl - left, varl, ovarl);
@@ -481,7 +481,7 @@ IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
     IdentifierInfo* varII =
         &Identifiers.get(StringPiece(s + varl, varr - varl));
     IdentifierInfo* val = e->LookupVariable(varII);
-//printf("var %s (%p) -> %s (%zu)\n", varII->Entry->getKeyData(), varII, val->Entry->getKeyData(), static_cast<BindingEnv*>(e)->bindings_.size());
+//printf("var %s (%p, context %p) -> %s (%zu)\n", varII->Entry->getKeyData(), varII, e, val->Entry->getKeyData(), static_cast<BindingEnv*>(e)->bindings_.size());
     buf += val->Entry->getKeyData();
   }
 
@@ -1123,7 +1123,7 @@ void parseEdge(Buffer& B, Token& T) {
     // We found a binding, so need a real env for this edge.
     if (env == fileEnvStack.back()) {
       //++edgeswithvars;
-      env = new BindingEnv;
+      env = new BindingEnv(env);
     }
 
     IdentifierInfo *Key, *Val;
@@ -1360,7 +1360,7 @@ void process(const char* fname) {
         IdentifierInfo *Key, *Val;
         parseLet(b, t, Key, Val);
         Val = Val->Evaluate(fileEnvStack.back());
-//printf("adding binding for %s (%p) -> %s\n", Key->Entry->getKeyData(), Key, Val->Entry->getKeyData());
+//printf("adding binding for %s (%p, context %p) -> %s\n", Key->Entry->getKeyData(), Key, fileEnvStack.back(), Val->Entry->getKeyData());
         fileEnvStack.back()->AddBinding(Key, Val);
         break;
       }
