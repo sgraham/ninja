@@ -310,7 +310,6 @@ public:
 
   IdentifierInfo* CanonIdent;
 
-  //bool HasPieces;
   std::vector<int>* VarInfo;
 
   // These could maybe be in a union.
@@ -802,11 +801,6 @@ Continue:
       II->VarInfo = varranges;
     else
       delete varranges;  // 2ms :-( XXX: use something better, like SmallVector
-  //  ++vars;
-  //  if (!II->HasPieces) {
-  //    II->HasPieces = true;
-  //    vars_computed++;
-  //  }
   }
 
   if (kind != kPath && *B.cur == '\n')
