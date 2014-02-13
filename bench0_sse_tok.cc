@@ -295,7 +295,7 @@ class IdentifierInfo {
 public:
  IdentifierInfo()
      : kind(kIdentifier), IsReservedBinding(false), HasVariables(false),
-       CanonIdent(0), rule(0), node(0), VarInfo(0) {}
+       CanonIdent(0), rule(0), node(0), VarInfoEx(0) {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
   // FIXME: consider bitfielding all these:
@@ -310,7 +310,9 @@ public:
 
   IdentifierInfo* CanonIdent;
 
-  std::vector<int>* VarInfo;
+  enum StrKind { RAW, VAR };
+  typedef std::vector<std::pair<StrKind, IdentifierInfo*> > TokenList;
+  TokenList *VarInfoEx;
 
   // These could maybe be in a union.
   // Pointer to rule with this name. Only for kIdentifiers that don't need
@@ -456,41 +458,15 @@ Continue:
 }
 
 IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
-  //return this;
-  string buf;
-  size_t left = 0;
-  const char* s = Entry->getKeyData();
-//printf("eval %s\n", s);
-  for (size_t i = 0; i < VarInfo->size(); i += 2) {
-    int varl = (*VarInfo)[i], varr = (*VarInfo)[i + 1];
-    bool isSimple = s[varl - 1] == '$';  // Else, '{'
-    int ovarl = varl - (isSimple ? 1 : 2);
-    int ovarr = varr + (isSimple ? 0 : 1);
-//printf("var: '%s'\n", std::string(s + varl, varr - varl).c_str());
-//printf("ovar: '%s'\n", std::string(s + ovarl, ovarr - ovarl).c_str());
-
-    // String in front of var
-//printf("%lu - %lu (%d %d)\n", left, ovarl - left, varl, ovarl);
-    if (ovarl - left)
-      buf.append(s + left, ovarl - left);
-    left = ovarr;
-
-    // Var
-//printf("%s %d %d\n", s, varl, varr);
-    IdentifierInfo* varII =
-        &Identifiers.get(StringPiece(s + varl, varr - varl));
-    IdentifierInfo* val = e->LookupVariable(varII);
-//printf("var %s (%p, context %p) -> %s (%zu)\n", varII->Entry->getKeyData(), varII, e, val->Entry->getKeyData(), static_cast<BindingEnv*>(e)->bindings_.size());
-    buf += val->Entry->getKeyData();
+  string result;
+  for (TokenList::const_iterator i = VarInfoEx->begin(); i != VarInfoEx->end();
+       ++i) {
+    if (i->first == RAW)
+      result.append(i->second->Entry->getKeyData());
+    else
+      result.append(e->LookupVariable(i->second)->Entry->getKeyData());
   }
-
-  // Last bit of text
-//printf("%lu - %lu\n", left, Entry->getKeyLength() - left);
-  buf.append(s + left, Entry->getKeyLength() - left);
-
-  return &Identifiers.get(buf.c_str());
-
-  // FIXME: If |e| is where this was last eval'd, return previous eval info?
+  return &Identifiers.get(result.c_str());
 }
 
 IdentifierInfo* IdentifierInfo::CanonicalizeSlow() {
@@ -797,10 +773,44 @@ Continue:
   II->HasVariables = HasVariables;
 
   if (HasVariables) {
-    if (!II->VarInfo)
-      II->VarInfo = varranges;
-    else
-      delete varranges;  // 2ms :-( XXX: use something better, like SmallVector
+    if (!II->VarInfoEx) {
+      //II->VarInfo = varranges;
+
+      II->VarInfoEx = new IdentifierInfo::TokenList;
+      size_t left = 0;
+      const char* s = II->Entry->getKeyData();
+//printf("eval %s\n", s);
+      for (size_t i = 0; i < varranges->size(); i += 2) {
+        int varl = (*varranges)[i], varr = (*varranges)[i + 1];
+        bool isSimple = s[varl - 1] == '$';  // Else, '{'
+        int ovarl = varl - (isSimple ? 1 : 2);
+        int ovarr = varr + (isSimple ? 0 : 1);
+//printf("var: '%s'\n", std::string(s + varl, varr - varl).c_str());
+//printf("ovar: '%s'\n", std::string(s + ovarl, ovarr - ovarl).c_str());
+
+        // String in front of var
+//printf("%lu - %lu (%d %d)\n", left, ovarl - left, varl, ovarl);
+        if (ovarl - left) {
+          II->VarInfoEx->push_back(std::make_pair(IdentifierInfo::RAW, &Identifiers.get(StringPiece(s + left, ovarl - left))));
+        }
+        left = ovarr;
+
+        // Var
+//printf("%s %d %d\n", s, varl, varr);
+        IdentifierInfo* varII =
+            &Identifiers.get(StringPiece(s + varl, varr - varl));
+        II->VarInfoEx->push_back(std::make_pair(IdentifierInfo::VAR, varII));
+//printf("var %s (%p, context %p) -> %s (%zu)\n", varII->Entry->getKeyData(), varII, e, val->Entry->getKeyData(), static_cast<BindingEnv*>(e)->bindings_.size());
+      }
+
+      // Last bit of text
+  //printf("%lu - %lu\n", left, Entry->getKeyLength() - left);
+      if (II->Entry->getKeyLength() - left) {
+        II->VarInfoEx->push_back(std::make_pair(IdentifierInfo::RAW, &Identifiers.get(StringPiece(s + left, II->Entry->getKeyLength() - left))));
+      }
+    }
+
+    delete varranges;  // 2ms :-( XXX: use something better, like SmallVector
   }
 
   if (kind != kPath && *B.cur == '\n')
