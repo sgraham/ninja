@@ -255,14 +255,25 @@ std::vector<BindingEnv*> fileEnvStack;
 //std::vector<Env*> envs;
 
 //int edgeswithvars;
+struct Node;
 struct Edge {
   BindingEnv* env_;
   Rule* rule_;
+
+  std::vector<Node*> inputs_;
+  std::vector<Node*> outputs_;
 
   IdentifierInfo* EvaluateCommand();
   IdentifierInfo* GetBinding(IdentifierInfo*);
 };
 std::vector<Edge*> edges;  // XXX bumpptrallocate?
+
+struct Node {
+  IdentifierInfo* path_;
+  Edge* in_edge_;
+  std::vector<Edge*> out_edges_;
+};
+std::vector<Node*> nodes;  // XXX bumpptrallocate?
 
 // Wether to clean $$ -> $ (etc) during LevEvalString or lazily. In the lazy
 // regime, it's only done once: If there are two "a$$b" strings, they're cleaned
@@ -280,7 +291,7 @@ class IdentifierInfo {
 public:
  IdentifierInfo()
      : kind(kIdentifier), IsReservedBinding(false), HasVariables(false),
-       CanonIdent(0), rule(0), VarInfo(0) {}
+       CanonIdent(0), rule(0), node(0), VarInfo(0) {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
   // FIXME: consider bitfielding all these:
@@ -301,7 +312,16 @@ public:
   // These could maybe be in a union.
   // Pointer to rule with this name. Only for kIdentifiers that don't need
   // cleanups and don't contain variables.
-  Rule *rule;
+  Rule* rule;
+
+  Node* node;
+  Node* GetNode() {
+    if (node)
+      return node;
+    node = new Node;
+    node->path_ = this;
+    return node;
+  }
 
   // Pointer to variable info for this name. Only set if HasVariables is true.
   // - starts and ends of variables in string, IdentifierInfos of variable names
@@ -465,6 +485,9 @@ IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
 }
 
 IdentifierInfo* IdentifierInfo::CanonicalizeSlow() {
+  // FIXME: this copy can be saved by inlining CanonicalizePath here and
+  // only copying on write. The most common case is that CanonicalizePath does
+  // nothing.
   string buf(Entry->getKeyData());
   size_t len = buf.size();
   CanonicalizePath(&buf[0], &len);
@@ -1110,14 +1133,24 @@ void parseEdge(Buffer& B, Token& T) {
     IdentifierInfo* path = (*i)->Evaluate(env);
 //fprintf(stderr, "input: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
-    //state_->AddIn(edge, path);  // FIXME
+    //Node* node = path->GetNode();
+    //edge->inputs_.push_back(node);
+    //node->out_edges_.push_back(edge);
   }
   for (std::vector<IdentifierInfo*>::iterator i = outs.begin(); i != outs.end();
        ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
 //fprintf(stderr, "output: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
-    //state_->AddOut(edge, path);  // FIXME
+    //Node* node = path->GetNode();
+    //edge->outputs_.push_back(node);
+    //if (node->in_edge_) {
+    //  printf("multiple rules generate %s. "
+    //         "builds involving this target will not be correct; "
+    //         "continuing anyway",
+    //         path->Entry->getKeyData());
+    //}
+    //node->in_edge_ = edge;
   }
 }
 
