@@ -333,26 +333,16 @@ public:
   // - starts and ends of variables in string, IdentifierInfos of variable names
   // (ninja doesn't support repeated variable evaluation such as ${foo$bar}
 
-  // Use something like this for de-escaping?
-  // Do this eagerly? -> Turns out doing this in LevEvalString without sharing
-  // is much faster, 0.065s instead of 0.075s (compared to 0.058s without any
-  // cleaning)
-  IdentifierInfo* CleanedUp() {
-    assert(!HasVariables &&
-           "can't clean up string with var refs, Eval instead");
-    return this;
-  }
-
   IdentifierInfo* Evaluate(Env* e) {
     if (!HasVariables)
-      return CleanedUp();
+      return this;
     return EvaluateSlow(e);
   }
   IdentifierInfo* EvaluateSlow(Env* e);  // Out-of-line version of Evaluate.
 
   string EvaluateAsString(Env* e) {
     if (!HasVariables)
-      return CleanedUp()->Entry->getKeyData();
+      return this->Entry->getKeyData();
     return EvaluateAsStringSlow(e);
   }
   string EvaluateAsStringSlow(Env* e);  // Out-of-line version of EvaluateAsStringSlow.
