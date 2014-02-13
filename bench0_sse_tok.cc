@@ -342,7 +342,6 @@ public:
            "can't clean up string with var refs, Eval instead");
     return this;
   }
-  IdentifierInfo* CleanedUpSlow();  // Out-of-line version of CleanedUp().
 
   IdentifierInfo* Evaluate(Env* e) {
     if (!HasVariables)
@@ -415,52 +414,6 @@ public:
 };
 
 IdentifierTable Identifiers;
-
-IdentifierInfo* IdentifierInfo::CleanedUpSlow() {
-  //METRIC_RECORD("CleanedUpSlow");
-  int l = Entry->getKeyLength();
-  const char* s = Entry->getKeyData();
-  // string buf: 0.089s
-  // vector<char> buf: 0.084s
-  // char array buf: 0.079
-
-  char* buf = (char*)malloc(l + 1);
-  char* d = &buf[0];
-
-  //if (l > 64 * 1024) printf("huge string %d %s\n", l, s);
-
-Continue:
-  while (*s != '\0' && *s != '$') {
-    *d = *s;
-    ++d;
-    ++s;
-  }
-  if (*s == '$') {  // Found '$'?
-    ++s;  // lexer rejects strings ending in $\0.
-    switch (*s) {
-      case ':':
-      case ' ':
-      case '$':
-        *d = *s;
-        ++d;
-        ++s;
-        goto Continue;
-      case '\n':
-        ++s;
-        while (*s == ' ')
-          ++s;
-        --s;   // Back up over the skipped ' '.
-        goto Continue;
-      default:
-        assert(false);  // was rejected by lexer
-    }
-  }
-  *d = '\0';
-
-  IdentifierInfo* I = &Identifiers.get(buf);
-  free(buf);
-  return I;
-}
 
 IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
   return &Identifiers.get(EvaluateAsStringSlow(e).c_str());
