@@ -106,9 +106,11 @@ chrome: read 13233 kB, 785 files
   bench: 0.058s -> 228.15 MB/s
   bench/clean: 0.074s -> 178.8 MB/s
   bench/inlineclean: 0.064s -> 206.76 MB/s
+  bench full: 0.093 -> 142.29 MB/s
   ninja: 0.265s -> 49.93 MB/s
 llvm: read 3543 kB, 2 files
   bench: 0.015s -> 236.2 MB/s
+  bench full: 0.020 -> 177.15 MB/s
   ninja: 0.066s -> 53.68 MB/s
   clang: 0.077ms -> 46 MB/s
     time clang -x c -E ~/src/llvm-build/build.ninja   > /dev/null

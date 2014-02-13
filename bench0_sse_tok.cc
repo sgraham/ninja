@@ -494,28 +494,15 @@ IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
 }
 
 string EdgeEnv::LookupVariableStr(IdentifierInfo* var) {
-  // ~60ms in the "in", "out" handling path. 66ms without the count check.
-  // FIXME: measure if returning this if there's just one string helps.
   if (var == var_in) { //|| var == "in_newline") {
-    //return var_in; // FIXME
     int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
       edge_->order_only_deps_;
 
-    // FIXME: This is slightly faster, but wrong with spaces in file name.
-    //if (explicit_deps_count == 1)
-      //return edge_->inputs_[0]->path_;
-
     return MakePathList(edge_->inputs_.begin(),
                         edge_->inputs_.begin() + explicit_deps_count,
-                        //var == "in" ? ' ' : '\n');
+                        //var == "in" ? ' ' : '\n');  FIXME
                         ' ');
   } else if (var == var_out) {
-    //return var_out; // FIXME
-
-    // FIXME: This is slightly faster, but wrong with spaces in file name.
-    //if (edge_->outputs_.size() == 1)
-      //return edge_->outputs_[0]->path_;
-
     return MakePathList(edge_->outputs_.begin(),
                         edge_->outputs_.end(),
                         ' ');
@@ -560,6 +547,8 @@ string EdgeEnv::MakePathList(std::vector<Node*>::iterator begin,
 
 string Edge::GetBinding(IdentifierInfo* var) {
   EdgeEnv env(this);
+  // Edge bindings, in particular "command" are long and unique. Building
+  // atoms for them is slow, so return them as strings (which are RVO'd).
   return env.LookupVariableStr(var);
 }
 
