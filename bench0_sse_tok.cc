@@ -463,15 +463,7 @@ Continue:
 }
 
 IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
-  string result;
-  for (TokenList::const_iterator i = VarInfoEx->begin(); i != VarInfoEx->end();
-       ++i) {
-    if (i->first == RAW)
-      result.append(i->second->Entry->getKeyData());
-    else
-      result.append(e->LookupVariable(i->second)->Entry->getKeyData());
-  }
-  return &Identifiers.get(result.c_str());
+  return &Identifiers.get(EvaluateAsStringSlow(e).c_str());
 }
 
 string IdentifierInfo::EvaluateAsStringSlow(Env* e) {
