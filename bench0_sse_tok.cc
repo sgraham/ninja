@@ -779,7 +779,7 @@ Continue:
   if (buf) {
     memcpy(buf + bufc, start, CurPtr - start);
     bufc += CurPtr - start;
-    buf[bufc++] = '\0';
+    buf[bufc] = '\0';
     //printf("got '%s'\n", buf);
     II = &Identifiers.get(StringPiece(buf, bufc));
     free(buf);
