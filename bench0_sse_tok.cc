@@ -564,18 +564,18 @@ struct EdgeEnv : public Env {
 IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
   // FIXME: measure if returning this if there's just one string helps.
   if (var == var_in) { //|| var == "in_newline") {
-    return var_in; // FIXME
-    //int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
-    //  edge_->order_only_deps_;
-    //return MakePathList(edge_->inputs_.begin(),
-    //                    edge_->inputs_.begin() + explicit_deps_count,
-    //                    //var == "in" ? ' ' : '\n');
-    //                    ' ');
+    //return var_in; // FIXME
+    int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
+      edge_->order_only_deps_;
+    return MakePathList(edge_->inputs_.begin(),
+                        edge_->inputs_.begin() + explicit_deps_count,
+                        //var == "in" ? ' ' : '\n');
+                        ' ');
   } else if (var == var_out) {
-    return var_out; // FIXME
-    //return MakePathList(edge_->outputs_.begin(),
-    //                    edge_->outputs_.end(),
-    //                    ' ');
+    //return var_out; // FIXME
+    return MakePathList(edge_->outputs_.begin(),
+                        edge_->outputs_.end(),
+                        ' ');
   }
 
   // See notes on BindingEnv::LookupWithFallback.
