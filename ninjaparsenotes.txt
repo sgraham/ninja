@@ -114,6 +114,9 @@ llvm: read 3543 kB, 2 files
     time clang -x c -E ~/src/llvm-build/build.ninja   > /dev/null
       (with s/[#'"]/./g)
 
+canon:
+chrome: canon 162758, cached 114820, cheap 24167, cheapish 23770, computed 1
+
 
 
 Plan for lexing:

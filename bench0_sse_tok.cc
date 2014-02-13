@@ -275,13 +275,12 @@ std::vector<Edge*> edges;  // XXX bumpptrallocate?
 
 //int clean, cleaned, cleaned_computed;
 //int vars, vars_computed;
-enum CanonState { kCSUnknown, kCSCanon };
+//int canon, canon_cached, canon_cheap, canon_cheapish, canon_computed;
 class IdentifierInfo {
 public:
  IdentifierInfo()
-     : kind(kIdentifier), IsReservedBinding(false),
-       HasVariables(false), IsCanon(kCSUnknown), rule(0), VarInfo(0)
-       {}
+     : kind(kIdentifier), IsReservedBinding(false), HasVariables(false),
+       CanonIdent(0), rule(0), VarInfo(0) {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
   // FIXME: consider bitfielding all these:
@@ -294,7 +293,7 @@ public:
   // If this contains references to variables.
   bool HasVariables;
 
-  CanonState IsCanon;
+  IdentifierInfo* CanonIdent;
 
   //bool HasPieces;
   std::vector<int>* VarInfo;
@@ -327,13 +326,24 @@ public:
   IdentifierInfo* EvaluateSlow(Env* e);  // Out-of-line version of Evaluate.
 
   IdentifierInfo* Canonicalize() {
-    return this; // FIXME
-    if (IsCanon == kCSCanon)
-      return this;
-    // FIXME: check canon state
-    // if unknown: check for "./" in string, if so set to canonicalized
-    // do real canonicalization.
-    return CanonicalizeSlow();
+    //++canon;
+    // Always unconditionally calling CanonicalizeSlow(): 128ms (from 70ms).
+    // Caching CanonIdent: 88ms.
+    // Also returning this from CanonicalizeSlow if len didn't change: 83ms.
+    // Also strstr for "./": 78ms.
+
+    if (CanonIdent) {
+      //++canon_cached;
+      return CanonIdent;
+    }
+
+    if (strstr(Entry->getKeyData(), "./") == 0) {
+      //++canon_cheap;
+      CanonIdent = this;
+    } else {
+      CanonIdent = CanonicalizeSlow();
+    }
+    return CanonIdent;
   }
   IdentifierInfo* CanonicalizeSlow();
 };
@@ -458,7 +468,13 @@ IdentifierInfo* IdentifierInfo::CanonicalizeSlow() {
   string buf(Entry->getKeyData());
   size_t len = buf.size();
   CanonicalizePath(&buf[0], &len);
+  if (len == Entry->getKeyLength()) {
+    //++canon_cheapish;
+    return this;
+  }
   buf.resize(len);
+  //++canon_computed;
+  //printf("computed %s\n", buf.c_str());
   return &Identifiers.get(buf.c_str());
 }
 
@@ -1368,6 +1384,8 @@ int main(int argc, const char* argv[]) {
   chdir(d);
   process(s);
 
+  //printf("canon %d, cached %d, cheap %d, cheapish %d, computed %d\n", canon,
+  //       canon_cached, canon_cheap, canon_cheapish, canon_computed);
   //printf("read %ld kB, %ld files\n", g_total / 1000, g_count);
   //printf("%zu edges, %d with vars\n", edges.size(), edgeswithvars);
   //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
