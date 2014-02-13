@@ -570,12 +570,22 @@ IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
     //return var_in; // FIXME
     int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
       edge_->order_only_deps_;
+
+    // FIXME: measure if this helps
+    //if (explicit_deps_count == 1)
+      //return edge_->inputs_[0]->path_;
+
     return MakePathList(edge_->inputs_.begin(),
                         edge_->inputs_.begin() + explicit_deps_count,
                         //var == "in" ? ' ' : '\n');
                         ' ');
   } else if (var == var_out) {
     //return var_out; // FIXME
+
+    // FIXME: measure if this helps
+    //if (edge_->outputs_.size() == 1)
+      //return edge_->outputs_[0]->path_;
+
     return MakePathList(edge_->outputs_.begin(),
                         edge_->outputs_.end(),
                         ' ');
@@ -1442,7 +1452,18 @@ int main(int argc, const char* argv[]) {
   //printf("read %ld kB, %ld files\n", g_total / 1000, g_count);
   //printf("%zu edges, %d with vars\n", edges.size(), edgeswithvars);
   //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
-  printf("cmd: %s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
+  //printf("cmd: %s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
+
+  //Edge* edge = edges[0];
+  //Edge* edge = Identifiers.get("minidump_stackwalk").node->in_edge_;
+  //printf("cmd: %s\n", edge->EvaluateCommand()->Entry->getKeyData());
+
+  //int l = 0;
+  //for (size_t i = 0; i < edges.size(); ++i) {
+  //  l += edges[i]->EvaluateCommand()->Entry->getKeyLength();
+  //  //printf("%s\n", edges[i]->EvaluateCommand()->Entry->getKeyData());
+  //}
+  //printf("l: %d\n", l);
 
   //printf("%d clean, %d cleaned (%d computed)\n", clean, cleaned, cleaned_computed);
   //printf("%d vars (%d computed)\n", vars, vars_computed);

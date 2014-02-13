@@ -1049,6 +1049,13 @@ int real_main(int argc, char** argv) {
       return 1;
     }
 
+    //int l = 0;
+    //for (int i = 0; i < ninja.state_.edges_.size(); ++i) {
+      //l += ninja.state_.edges_[i]->EvaluateCommand().size();
+      //printf("%s\n", ninja.state_.edges_[i]->EvaluateCommand().c_str());
+    //}
+    //printf("l: %d\n", l);
+
     if (g_metrics)
       ninja.DumpMetrics();
     return 0;

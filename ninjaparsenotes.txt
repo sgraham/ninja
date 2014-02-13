@@ -118,6 +118,11 @@ canon:
 chrome: canon 162758, cached 114820, cheap 24167, cheapish 23770, computed 1
 
 
+Calling EvaluateCommand for all edges:
+bench: 92 ms -> 266 ms
+ninja: 264 ms -> 320 ms
+urgh. work to do.
+
 
 Plan for lexing:
 - LexIdentifier() slurps everything non-whitespace non-$
