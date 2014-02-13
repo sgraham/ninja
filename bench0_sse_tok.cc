@@ -238,14 +238,6 @@ struct BindingEnv : public Env {
     bindings_[Key] = Val;
   }
 
-  /// This is tricky.  Edges want lookup scope to go in this order:
-  /// 1) value set on edge itself (edge_->env_)
-  /// 2) value set on rule, with expansion in the edge's scope
-  /// 3) value set on enclosing scope of edge (edge_->env_->parent_)
-  /// This function takes as parameters the necessary info to do (2).
-  IdentifierInfo* LookupWithFallback(IdentifierInfo* var, IdentifierInfo* eval,
-                                     Env* env);
-
 //private:
   std::map<IdentifierInfo*, IdentifierInfo*> bindings_;
   Env* parent_;
@@ -508,19 +500,6 @@ IdentifierInfo* BindingEnv::LookupVariable(IdentifierInfo* var) {
   return &Identifiers.get("");
 }
 
-IdentifierInfo* BindingEnv::LookupWithFallback(IdentifierInfo* var,
-                                               IdentifierInfo* eval, Env* env) {
-  std::map<IdentifierInfo*, IdentifierInfo*>::iterator i = bindings_.find(var);
-  if (i != bindings_.end())
-    return i->second;
-  if (eval)
-    return eval->Evaluate(env);
-  if (parent_)
-    return parent_->LookupVariable(var);
-  return &Identifiers.get("");
-}
-
-
 IdentifierInfo* Edge::EvaluateCommand() {
   return GetBinding(attrib_command);
 }
@@ -547,8 +526,9 @@ IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
     int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
       edge_->order_only_deps_;
 
-    if (explicit_deps_count == 1)
-      return edge_->inputs_[0]->path_;
+    // FIXME: This is slightly faster, but wrong with spaces in file name.
+    //if (explicit_deps_count == 1)
+      //return edge_->inputs_[0]->path_;
 
     return MakePathList(edge_->inputs_.begin(),
                         edge_->inputs_.begin() + explicit_deps_count,
@@ -557,24 +537,31 @@ IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
   } else if (var == var_out) {
     //return var_out; // FIXME
 
-    if (edge_->outputs_.size() == 1)
-      return edge_->outputs_[0]->path_;
+    // FIXME: This is slightly faster, but wrong with spaces in file name.
+    //if (edge_->outputs_.size() == 1)
+      //return edge_->outputs_[0]->path_;
 
     return MakePathList(edge_->outputs_.begin(),
                         edge_->outputs_.end(),
                         ' ');
   }
 
-  // See notes on BindingEnv::LookupWithFallback.
-  IdentifierInfo* eval;
-  std::map<IdentifierInfo*, IdentifierInfo*>::const_iterator i =
-      edge_->rule_->bindings_.find(var);
-  if (i == edge_->rule_->bindings_.end())
-    eval= NULL;
-  else
-    eval = i->second;
+  /// This is tricky.  Edges want lookup scope to go in this order:
+  /// 1) value set on edge itself (edge_->env_)
+  /// 2) value set on rule, with expansion in the edge's scope
+  /// 3) value set on enclosing scope of edge (edge_->env_->parent_)
+  std::map<IdentifierInfo*, IdentifierInfo*>::iterator i =
+      edge_->env_->bindings_.find(var);
+  if (i != edge_->env_->bindings_.end())
+    return i->second;
 
-  return edge_->env_->LookupWithFallback(var, eval, this);
+  i = edge_->rule_->bindings_.find(var);
+  if (i != edge_->rule_->bindings_.end())
+    return i->second->Evaluate(this);
+
+  if (edge_->env_->parent_)
+    return edge_->env_->parent_->LookupVariable(var);
+  return &Identifiers.get("");
 }
 
 IdentifierInfo* EdgeEnv::MakePathList(std::vector<Node*>::iterator begin,
