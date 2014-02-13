@@ -565,15 +565,15 @@ struct EdgeEnv : public Env {
 };
 
 IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
+  // ~60ms in the "in", "out" handling path. 66ms without the count check.
   // FIXME: measure if returning this if there's just one string helps.
   if (var == var_in) { //|| var == "in_newline") {
     //return var_in; // FIXME
     int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
       edge_->order_only_deps_;
 
-    // FIXME: measure if this helps
-    //if (explicit_deps_count == 1)
-      //return edge_->inputs_[0]->path_;
+    if (explicit_deps_count == 1)
+      return edge_->inputs_[0]->path_;
 
     return MakePathList(edge_->inputs_.begin(),
                         edge_->inputs_.begin() + explicit_deps_count,
@@ -582,9 +582,8 @@ IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
   } else if (var == var_out) {
     //return var_out; // FIXME
 
-    // FIXME: measure if this helps
-    //if (edge_->outputs_.size() == 1)
-      //return edge_->outputs_[0]->path_;
+    if (edge_->outputs_.size() == 1)
+      return edge_->outputs_[0]->path_;
 
     return MakePathList(edge_->outputs_.begin(),
                         edge_->outputs_.end(),
