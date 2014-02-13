@@ -326,6 +326,7 @@ public:
     node = nodeallocator.Allocate<Node>();  // about 2ms faster
     new (node) Node;
     node->path_ = this;
+    node->in_edge_ = 0;
     return node;
   }
 
@@ -1143,7 +1144,7 @@ void parseEdge(Buffer& B, Token& T) {
 //fprintf(stderr, "input: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
     Node* node = path->GetNode();
-    // FIXME: These two lines cost 10ms (82ms -> 92ms), use a SmallVector
+    // FIXME: These two lines cost 12ms (83ms -> 95ms), use a SmallVector
     edge->inputs_.push_back(node);
     node->out_edges_.push_back(edge);
   }
@@ -1153,12 +1154,11 @@ void parseEdge(Buffer& B, Token& T) {
 //fprintf(stderr, "output: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
     Node* node = path->GetNode();
-    // FIXME: This costs 6ms (92ms -> 98ms), maybe use SmallVector for outputs_?
     edge->outputs_.push_back(node);
     if (node->in_edge_) {
       printf("multiple rules generate %s. "
              "builds involving this target will not be correct; "
-             "continuing anyway",
+             "continuing anyway\n",
              path->Entry->getKeyData());
     }
     node->in_edge_ = edge;
