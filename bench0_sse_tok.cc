@@ -266,14 +266,16 @@ struct Edge {
   IdentifierInfo* EvaluateCommand();
   IdentifierInfo* GetBinding(IdentifierInfo*);
 };
-std::vector<Edge*> edges;  // XXX bumpptrallocate?
+llvm::BumpPtrAllocator edgeallocator;
+std::vector<Edge*> edges;
 
 struct Node {
   IdentifierInfo* path_;
   Edge* in_edge_;
   std::vector<Edge*> out_edges_;
 };
-std::vector<Node*> nodes;  // XXX bumpptrallocate?
+llvm::BumpPtrAllocator nodeallocator;
+std::vector<Node*> nodes;
 
 // Wether to clean $$ -> $ (etc) during LevEvalString or lazily. In the lazy
 // regime, it's only done once: If there are two "a$$b" strings, they're cleaned
@@ -318,7 +320,9 @@ public:
   Node* GetNode() {
     if (node)
       return node;
-    node = new Node;
+    //node = new Node;
+    node = nodeallocator.Allocate<Node>();  // about 2ms faster
+    new (node) Node;
     node->path_ = this;
     return node;
   }
@@ -633,7 +637,7 @@ void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
   //METRIC_RECORD("LexEvalString");
   bool HasVariables = false;
 
-  // pointer so that no destrucor is called in the common no-vars case.
+  // pointer so that no destructor is called in the common no-vars case.
   std::vector<int>* varranges = 0;
 
   char* buf = 0;
@@ -1088,7 +1092,9 @@ void parseEdge(Buffer& B, Token& T) {
     exit(1);
   }
 
-  Edge* edge = new Edge;
+  //Edge* edge = new Edge;
+  Edge* edge = edgeallocator.Allocate<Edge>();
+  new (edge) Edge;
   edges.push_back(edge);
   edge->rule_ = rule;
   BindingEnv* env = fileEnvStack.back();
@@ -1133,7 +1139,7 @@ void parseEdge(Buffer& B, Token& T) {
     IdentifierInfo* path = (*i)->Evaluate(env);
 //fprintf(stderr, "input: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
-    //Node* node = path->GetNode();
+    Node* node = path->GetNode();
     //edge->inputs_.push_back(node);
     //node->out_edges_.push_back(edge);
   }
@@ -1142,7 +1148,7 @@ void parseEdge(Buffer& B, Token& T) {
     IdentifierInfo* path = (*i)->Evaluate(env);
 //fprintf(stderr, "output: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
-    //Node* node = path->GetNode();
+    Node* node = path->GetNode();
     //edge->outputs_.push_back(node);
     //if (node->in_edge_) {
     //  printf("multiple rules generate %s. "
