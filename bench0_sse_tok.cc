@@ -467,6 +467,8 @@ IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
     bool isSimple = s[varl - 1] == '$';  // Else, '{'
     int ovarl = varl - (isSimple ? 1 : 2);
     int ovarr = varr + (isSimple ? 0 : 1);
+//printf("var: %s\n", std::string(s + varl, varr - varl).c_str());
+//printf("ovar: %s\n", std::string(s + ovarl, ovarr - ovarl).c_str());
 
     // String in front of var
 //printf("%lu - %lu (%d %d)\n", left, ovarl - left, varl, ovarl);
@@ -484,6 +486,7 @@ IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
   }
 
   // Last bit of text
+//printf("%lu - %lu\n", left, Entry->getKeyLength() - left);
   buf.append(s + left, Entry->getKeyLength() - left);
 
   return &Identifiers.get(buf.c_str());
@@ -668,10 +671,10 @@ Continue:
             buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
           }
           memcpy(buf + bufc, start, CurPtr - start - 1);
+          ++skipped;  // skipped the '$'
           bufc += CurPtr - start - 1;
           buf[bufc++] = C;
           ++CurPtr;
-          ++skipped;
           start = CurPtr;
           goto Continue;
 
@@ -708,6 +711,7 @@ Continue:
         case '-':
         case '_':
           if (!varranges) varranges = new std::vector<int>;
+//printf("skipped: %d\n", skipped);
           varranges->push_back(CurPtr - B.cur - skipped);
 
           ++CurPtr;
@@ -719,6 +723,8 @@ Continue:
           --CurPtr;  // Back up over the skipped non-var char.
 
           varranges->push_back(CurPtr - B.cur - skipped);
+//if (buf)
+//printf("pushed '%s'\n", std::string(buf + (*varranges)[varranges->size()-2], buf + (*varranges)[varranges->size() - 1]).c_str());
 
           goto Continue;
 
@@ -729,13 +735,13 @@ Continue:
           memcpy(buf + bufc, start, CurPtr - start - 1);
           bufc += CurPtr - start - 1;
           ++CurPtr;
+          skipped += 2;  // $, \n
           C = *CurPtr++;
           while (C == ' ') {
             ++skipped;
             C = *CurPtr++;
           }
           --CurPtr;   // Back up over the skipped ' '.
-          --skipped;
           start = CurPtr;
           goto Continue;
         default:
