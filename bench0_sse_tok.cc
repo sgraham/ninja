@@ -263,6 +263,8 @@ struct Edge {
   std::vector<Node*> inputs_;
   std::vector<Node*> outputs_;
 
+  int implicit_deps_, order_only_deps_;
+
   IdentifierInfo* EvaluateCommand();
   IdentifierInfo* GetBinding(IdentifierInfo*);
 };
@@ -552,26 +554,27 @@ struct EdgeEnv : public Env {
 
   /// Given a span of Nodes, construct a list of paths suitable for a command
   /// line.
-  //string MakePathList(vector<Node*>::iterator begin,
-  //                    vector<Node*>::iterator end,
-  //                    char sep);
+  IdentifierInfo* MakePathList(std::vector<Node*>::iterator begin,
+                               std::vector<Node*>::iterator end, char sep);
 
   Edge* edge_;
 };
 
 IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
+  // FIXME: measure if returning this if there's just one string helps.
   if (var == var_in) { //|| var == "in_newline") {
+    return var_in; // FIXME
     //int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
     //  edge_->order_only_deps_;
     //return MakePathList(edge_->inputs_.begin(),
     //                    edge_->inputs_.begin() + explicit_deps_count,
-    //                    var == "in" ? ' ' : '\n');
-    return var_in; // FIXME
+    //                    //var == "in" ? ' ' : '\n');
+    //                    ' ');
   } else if (var == var_out) {
+    return var_out; // FIXME
     //return MakePathList(edge_->outputs_.begin(),
     //                    edge_->outputs_.end(),
     //                    ' ');
-    return var_out; // FIXME
   }
 
   // See notes on BindingEnv::LookupWithFallback.
@@ -586,24 +589,24 @@ IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
   return edge_->env_->LookupWithFallback(var, eval, this);
 }
 
-//string EdgeEnv::MakePathList(vector<Node*>::iterator begin,
-//                             vector<Node*>::iterator end,
-//                             char sep) {
-//  string result;
-//  for (vector<Node*>::iterator i = begin; i != end; ++i) {
-//    if (!result.empty())
-//      result.push_back(sep);
-//    const string& path = (*i)->path();
-//    if (path.find(" ") != string::npos) {
-//      result.append("\"");
-//      result.append(path);
-//      result.append("\"");
-//    } else {
-//      result.append(path);
-//    }
-//  }
-//  return result;
-//}
+IdentifierInfo* EdgeEnv::MakePathList(std::vector<Node*>::iterator begin,
+                                      std::vector<Node*>::iterator end,
+                                      char sep) {
+  string result;
+  for (std::vector<Node*>::iterator i = begin; i != end; ++i) {
+    if (!result.empty())
+      result.push_back(sep);
+    const char* path = (*i)->path_->Entry->getKeyData();
+    if (strchr(path, ' ')) {
+      result.append("\"");
+      result.append(path);
+      result.append("\"");
+    } else {
+      result.append(path);
+    }
+  }
+  return &Identifiers.get(result.c_str());
+}
 
 
 IdentifierInfo* Edge::GetBinding(IdentifierInfo* var) {
@@ -1160,6 +1163,9 @@ void parseEdge(Buffer& B, Token& T) {
     }
     node->in_edge_ = edge;
   }
+
+  edge->implicit_deps_ = implicit;
+  edge->order_only_deps_ = order_only;
 }
 
 void parseRule(Buffer& B, Token& T) {
