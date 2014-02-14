@@ -22,8 +22,6 @@
 #include <iterator>
 #include <memory>
 
-#include "AlignOf.h"
-
 namespace llvm {
 
 /// SmallVectorBase - This is all the non-templated stuff common to all
@@ -54,21 +52,13 @@ public:
   bool empty() const { return BeginX == EndX; }
 };
 
-template <typename T, unsigned N> struct SmallVectorStorage;
-
 
 /// SmallVectorTemplateCommon - This class consists of common code factored out
 /// of the SmallVector class to reduce code duplication based on the
 /// SmallVector 'N' template parameter.
 template <typename T>
 class SmallVectorTemplateCommon : public SmallVectorBase {
-  template <typename, unsigned> friend struct SmallVectorStorage;
-
-  // Allocate raw space for N elements of type T.  If T has a ctor or dtor, we
-  // don't want it to be automatically run, so we need to represent the space as
-  // something else.  Use an array of char of sufficient alignment.
-  typedef llvm::AlignedCharArrayUnion<T> U;
-  U FirstEl;
+  T FirstEl;
   // Space after 'FirstEl' is clobbered, do not add any instance vars after it.
 
 protected:
@@ -132,17 +122,6 @@ public:
 };
 
 
-/// Storage for the SmallVector elements which aren't contained in
-/// SmallVectorTemplateCommon. There are 'N-1' elements here. The remaining '1'
-/// element is in the base class. This is specialized for the N=1 and N=0 cases
-/// to avoid allocating unnecessary storage.
-template <typename T, unsigned N>
-struct SmallVectorStorage {
-  typename SmallVectorTemplateCommon<T>::U InlineElts[N - 1];
-};
-template <typename T> struct SmallVectorStorage<T, 1> {};
-template <typename T> struct SmallVectorStorage<T, 0> {};
-
 /// SmallVector - This is a 'vector' (really, a variable-sized array), optimized
 /// for the case when the array is small.  It contains some number of elements
 /// in-place, which allows it to avoid heap allocation when the actual number of
@@ -153,7 +132,7 @@ class SmallVector : public SmallVectorTemplateCommon<T> {
   SmallVector(const SmallVector &RHS);
   const SmallVector &operator=(const SmallVector &RHS);
   /// Storage - Inline space for elements which aren't stored in the base class.
-  SmallVectorStorage<T, N> Storage;
+  T Storage[N - 1];
 public:
   SmallVector() : SmallVectorTemplateCommon<T>(N) {}
 };
