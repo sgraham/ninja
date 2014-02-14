@@ -26,18 +26,6 @@
 
 namespace llvm {
 
-/// NextPowerOf2 - Returns the next power of two (in 64-bits)
-/// that is strictly greater than A.  Returns zero on overflow.
-inline uint64_t NextPowerOf2(uint64_t A) {
-  A |= (A >> 1);
-  A |= (A >> 2);
-  A |= (A >> 4);
-  A |= (A >> 8);
-  A |= (A >> 16);
-  A |= (A >> 32);
-  return A + 1;
-}
-
 /// SmallVectorBase - This is all the non-templated stuff common to all
 /// SmallVectors.
 class SmallVectorBase {
@@ -50,7 +38,7 @@ protected:
 
   /// grow_pod - This is an implementation of the grow() method which only works
   /// on POD-like data types and is out of line to reduce code duplication.
-  void grow_pod(void *FirstEl, size_t MinSizeInBytes, size_t TSize);
+  void grow_pod(void *FirstEl, size_t TSize);
 
 public:
   /// size_in_bytes - This returns size()*sizeof(T).
@@ -72,9 +60,8 @@ template <typename T, unsigned N> struct SmallVectorStorage;
 /// SmallVectorTemplateCommon - This class consists of common code factored out
 /// of the SmallVector class to reduce code duplication based on the
 /// SmallVector 'N' template parameter.
-template <typename T, typename = void>
+template <typename T>
 class SmallVectorTemplateCommon : public SmallVectorBase {
-private:
   template <typename, unsigned> friend struct SmallVectorStorage;
 
   // Allocate raw space for N elements of type T.  If T has a ctor or dtor, we
@@ -89,17 +76,12 @@ protected:
   explicit SmallVectorTemplateCommon(unsigned N)
     : SmallVectorBase(&FirstEl, N*sizeof(T)) {}
 
-public:
   ~SmallVectorTemplateCommon() {
     // If this wasn't grown from the inline copy, deallocate the old space.
     if (!this->isSmall())
       free(this->begin());
   }
 protected:
-  void grow_pod(size_t MinSizeInBytes, size_t TSize) {
-    SmallVectorBase::grow_pod(&FirstEl, MinSizeInBytes, TSize);
-  }
-
   /// isSmall - Return true if this is a smallvector which has not had dynamic
   /// memory allocated for it.
   bool isSmall() const {
@@ -108,27 +90,18 @@ protected:
 
   void setEnd(T *P) { this->EndX = P; }
 
-  /// grow - double the size of the allocated memory, guaranteeing space for at
-  /// least one more element or MinSize if specified.
-  void grow(size_t MinSize = 0) {
-    this->grow_pod(MinSize*sizeof(T), sizeof(T));
-  }
 public:
   typedef size_t size_type;
   typedef T *iterator;
   typedef const T *const_iterator;
-
   typedef T &reference;
   typedef const T &const_reference;
-  typedef T *pointer;
-  typedef const T *const_pointer;
 
   // forward iterator creation methods.
   iterator begin() { return (iterator)this->BeginX; }
   const_iterator begin() const { return (const_iterator)this->BeginX; }
   iterator end() { return (iterator)this->EndX; }
   const_iterator end() const { return (const_iterator)this->EndX; }
-public:
 
   size_type size() const { return end()-begin(); }
 
@@ -152,13 +125,10 @@ public:
       this->setEnd(this->end()+1);
       return;
     }
-    this->grow();
+    SmallVectorBase::grow_pod(&FirstEl, sizeof(T));
     goto Retry;
   }
-  
-  void pop_back() {
-    this->setEnd(this->end()-1);
-  }
+  void pop_back() { this->setEnd(this->end()-1); }
 };
 
 
@@ -178,15 +148,12 @@ template <typename T> struct SmallVectorStorage<T, 0> {};
 /// in-place, which allows it to avoid heap allocation when the actual number of
 /// elements is below that threshold.  This allows normal "small" cases to be
 /// fast without losing generality for large inputs.
-///
-/// Note that this does not attempt to be exception safe.
-///
 template <typename T, unsigned N>
 class SmallVector : public SmallVectorTemplateCommon<T> {
-  /// Storage - Inline space for elements which aren't stored in the base class.
-  SmallVectorStorage<T, N> Storage;
   SmallVector(const SmallVector &RHS);
   const SmallVector &operator=(const SmallVector &RHS);
+  /// Storage - Inline space for elements which aren't stored in the base class.
+  SmallVectorStorage<T, N> Storage;
 public:
   SmallVector() : SmallVectorTemplateCommon<T>(N) {}
 };
