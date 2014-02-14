@@ -53,32 +53,35 @@ public:
 };
 
 
-/// SmallVectorTemplateCommon - This class consists of common code factored out
-/// of the SmallVector class to reduce code duplication based on the
-/// SmallVector 'N' template parameter.
-template <typename T>
-class SmallVectorTemplateCommon : public SmallVectorBase {
-  T FirstEl;
-  // Space after 'FirstEl' is clobbered, do not add any instance vars after it.
+/// SmallVector - This is a 'vector' (really, a variable-sized array), optimized
+/// for the case when the array is small.  It contains some number of elements
+/// in-place, which allows it to avoid heap allocation when the actual number of
+/// elements is below that threshold.  This allows normal "small" cases to be
+/// fast without losing generality for large inputs.
+template <typename T, unsigned N>
+class SmallVector : public SmallVectorBase {
+  SmallVector(const SmallVector &RHS);
+  const SmallVector &operator=(const SmallVector &RHS);
+  /// Storage - Inline space for elements which aren't stored in the base class.
+  T Storage[N];
 
-protected:
+  /// isSmall - Return true if this is a smallvector which has not had dynamic
+  /// memory allocated for it.
+  bool isSmall() const {
+    return BeginX == static_cast<const void*>(&Storage);
+  }
+
+public:
   // Default ctor - Initialize to empty.
-  explicit SmallVectorTemplateCommon(unsigned N)
-    : SmallVectorBase(&FirstEl, N*sizeof(T)) {}
+  explicit SmallVector()
+    : SmallVectorBase(&Storage, N*sizeof(T)) {}
 
-  ~SmallVectorTemplateCommon() {
+  ~SmallVector() {
     // If this wasn't grown from the inline copy, deallocate the old space.
     if (!this->isSmall())
       free(this->begin());
   }
-protected:
-  /// isSmall - Return true if this is a smallvector which has not had dynamic
-  /// memory allocated for it.
-  bool isSmall() const {
-    return BeginX == static_cast<const void*>(&FirstEl);
-  }
 
-public:
   typedef T *iterator;
   typedef const T *const_iterator;
 
@@ -112,26 +115,10 @@ public:
       this->EndX = this->end() + 1;
       return;
     }
-    SmallVectorBase::grow_pod(&FirstEl, sizeof(T));
+    SmallVectorBase::grow_pod(&Storage, sizeof(T));
     goto Retry;
   }
   void pop_back() { this->EndX = this->end() - 1; }
-};
-
-
-/// SmallVector - This is a 'vector' (really, a variable-sized array), optimized
-/// for the case when the array is small.  It contains some number of elements
-/// in-place, which allows it to avoid heap allocation when the actual number of
-/// elements is below that threshold.  This allows normal "small" cases to be
-/// fast without losing generality for large inputs.
-template <typename T, unsigned N>
-class SmallVector : public SmallVectorTemplateCommon<T> {
-  SmallVector(const SmallVector &RHS);
-  const SmallVector &operator=(const SmallVector &RHS);
-  /// Storage - Inline space for elements which aren't stored in the base class.
-  T Storage[N - 1];
-public:
-  SmallVector() : SmallVectorTemplateCommon<T>(N) {}
 };
 
 } // End llvm namespace
