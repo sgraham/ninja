@@ -411,7 +411,8 @@ public:
 IdentifierTable Identifiers;
 
 IdentifierInfo* IdentifierInfo::EvaluateSlow(Env* e) {
-  return &Identifiers.get(EvaluateAsStringSlow(e).c_str());
+  string s(EvaluateAsStringSlow(e));
+  return &Identifiers.get(StringPiece(s.c_str(), s.size()));
 }
 
 string IdentifierInfo::EvaluateAsStringSlow(Env* e) {
@@ -437,10 +438,9 @@ IdentifierInfo* IdentifierInfo::CanonicalizeSlow() {
     //++canon_cheapish;
     return this;
   }
-  buf.resize(len);
   //++canon_computed;
   //printf("computed %s\n", buf.c_str());
-  return &Identifiers.get(buf.c_str());
+  return &Identifiers.get(StringPiece(buf.c_str(), len));
 }
 
 IdentifierInfo* kw_subninja;
