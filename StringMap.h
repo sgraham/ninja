@@ -151,25 +151,6 @@ public:
 
   AllocatorTy &getAllocator() { return Allocator; }
 
-  // Insert the specified key/value pair into the map.  If the key already
-  // exists in the map, return false and ignore the request, otherwise insert
-  // it and return true.
-  bool insert(MapEntryTy *KeyValue) {
-    unsigned BucketNo = LookupBucketFor(KeyValue->getKey());
-    StringMapEntryBase *&Bucket = TheTable[BucketNo];
-    if (Bucket && Bucket != getTombstoneVal())
-      return false;  // Already exists in map.
-
-    if (Bucket == getTombstoneVal())
-      --NumTombstones;
-    Bucket = KeyValue;
-    ++NumItems;
-    assert(NumItems + NumTombstones <= NumBuckets);
-
-    RehashTable();
-    return true;
-  }
-
   // Empties out the StringMap
   void clear() {
     if (empty()) return;
