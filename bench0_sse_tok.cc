@@ -1,7 +1,8 @@
 /*
 clang -O2 -c Allocator.cpp  -stdlib=libstdc++
 clang -O2 -c StringMap.cpp  -stdlib=libstdc++
-clang++ -o bench StringMap.o Allocator.o bench0_sse_tok.cc -O2 -stdlib=libstdc++
+clang -O2 -c SmallVector.cpp  -stdlib=libstdc++
+clang++ -o bench StringMap.o Allocator.o SmallVector.o bench0_sse_tok.cc -O2 -stdlib=libstdc++
 
 time ./bench ~/src/chrome/src/out_bench/Release/build.ninja
   vs
