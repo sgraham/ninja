@@ -99,6 +99,12 @@ protected:
   }
 
   void setEnd(T *P) { this->EndX = P; }
+
+  /// grow - double the size of the allocated memory, guaranteeing space for at
+  /// least one more element or MinSize if specified.
+  void grow(size_t MinSize = 0) {
+    this->grow_pod(MinSize*sizeof(T), sizeof(T));
+  }
 public:
   typedef size_t size_type;
   typedef T *iterator;
@@ -130,21 +136,7 @@ public:
     assert(begin() + idx < end());
     return begin()[idx];
   }
-};
 
-/// SmallVectorTemplateBase<isPodLike = true> - This is where we put method
-/// implementations that are designed to work with POD-like T's.
-template <typename T>
-class SmallVectorTemplateBase : public SmallVectorTemplateCommon<T> {
-protected:
-  SmallVectorTemplateBase(size_t Size) : SmallVectorTemplateCommon<T>(Size) {}
-
-  /// grow - double the size of the allocated memory, guaranteeing space for at
-  /// least one more element or MinSize if specified.
-  void grow(size_t MinSize = 0) {
-    this->grow_pod(MinSize*sizeof(T), sizeof(T));
-  }
-public:
   void push_back(const T &Elt) {
     if (this->EndX < this->CapacityX) {
     Retry:
@@ -165,14 +157,14 @@ public:
 /// SmallVector class to reduce code duplication based on the SmallVector 'N'
 /// template parameter.
 template <typename T>
-class SmallVectorImpl : public SmallVectorTemplateBase<T> {
+class SmallVectorImpl : public SmallVectorTemplateCommon<T> {
   SmallVectorImpl(const SmallVectorImpl&);
   SmallVectorImpl &operator=(const SmallVectorImpl &RHS);
 
 protected:
   // Default ctor - Initialize to empty.
   explicit SmallVectorImpl(unsigned N)
-    : SmallVectorTemplateBase<T>(N*sizeof(T)) {}
+    : SmallVectorTemplateCommon<T>(N*sizeof(T)) {}
 
 public:
   ~SmallVectorImpl() {
