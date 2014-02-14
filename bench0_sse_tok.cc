@@ -227,14 +227,13 @@ struct Rule {
 std::vector<Rule*> rules;  // XXX bumpptrallocate?
 
 struct Env {
-  virtual IdentifierInfo* LookupVariable(IdentifierInfo*) = 0;
   virtual string LookupVariableStr(IdentifierInfo*) = 0;
 };
 struct BindingEnv : public Env {
   //BindingEnv() : parent_(NULL) {}
-  explicit BindingEnv(Env* parent) : parent_(parent) {}
+  explicit BindingEnv(BindingEnv* parent) : parent_(parent) {}
 
-  virtual IdentifierInfo* LookupVariable(IdentifierInfo* II);
+  IdentifierInfo* LookupVariable(IdentifierInfo* II);
   virtual string LookupVariableStr(IdentifierInfo*);
 
   void AddBinding(IdentifierInfo* Key, IdentifierInfo* Val) {
@@ -243,7 +242,7 @@ struct BindingEnv : public Env {
 
 //private:
   std::map<IdentifierInfo*, IdentifierInfo*> bindings_;
-  Env* parent_;
+  BindingEnv* parent_;
 };
 
 std::vector<BindingEnv*> fileEnvStack;
@@ -513,7 +512,6 @@ string Edge::EvaluateCommand() {
 /// An Env for an Edge, providing $in and $out.
 struct EdgeEnv : public Env {
   explicit EdgeEnv(Edge* edge) : edge_(edge) {}
-  virtual IdentifierInfo* LookupVariable(IdentifierInfo*);
   virtual string LookupVariableStr(IdentifierInfo*);
 
   /// Given a span of Nodes, construct a list of paths suitable for a command
@@ -523,11 +521,6 @@ struct EdgeEnv : public Env {
 
   Edge* edge_;
 };
-
-IdentifierInfo* EdgeEnv::LookupVariable(IdentifierInfo* var) {
-  fprintf(stderr, "not reached\n");
-  exit(1);
-}
 
 string EdgeEnv::LookupVariableStr(IdentifierInfo* var) {
   if (var == var_in) { //|| var == "in_newline") {
@@ -1295,7 +1288,7 @@ void parsePool(Buffer& B, Token& T) {
 size_t g_total = 0;
 size_t g_count = 0;
 void process(const char* fname) {
-  Env* parent = NULL;
+  BindingEnv* parent = NULL;
   if (!fileEnvStack.empty())
     parent = fileEnvStack.back();
   fileEnvStack.push_back(new BindingEnv(parent));
