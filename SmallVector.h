@@ -79,11 +79,8 @@ protected:
   }
 
 public:
-  typedef size_t size_type;
   typedef T *iterator;
   typedef const T *const_iterator;
-  typedef T &reference;
-  typedef const T &const_reference;
 
   // forward iterator creation methods.
   iterator begin() { return (iterator)this->BeginX; }
@@ -91,7 +88,7 @@ public:
   iterator end() { return (iterator)this->EndX; }
   const_iterator end() const { return (const_iterator)this->EndX; }
 
-  size_type size() const { return end()-begin(); }
+  size_t size() const { return end()-begin(); }
 
   /// capacity - Return the total number of elements in the currently allocated
   /// buffer.
@@ -99,11 +96,11 @@ public:
     return (iterator)this->CapacityX - (iterator)this->BeginX;
   }
 
-  reference operator[](unsigned idx) {
+  T& operator[](unsigned idx) {
     assert(begin() + idx < end());
     return begin()[idx];
   }
-  const_reference operator[](unsigned idx) const {
+  const T& operator[](unsigned idx) const {
     assert(begin() + idx < end());
     return begin()[idx];
   }
