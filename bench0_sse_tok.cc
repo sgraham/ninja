@@ -480,6 +480,7 @@ IdentifierInfo* kw_default;
 
 IdentifierInfo* attrib_depth;
 IdentifierInfo* attrib_command;
+IdentifierInfo* attrib_deps;
 IdentifierInfo* attrib_rspfile_content;
 
 IdentifierInfo* var_in;
@@ -1157,6 +1158,15 @@ void parseEdge(Buffer& B, Token& T) {
 
   edge->implicit_deps_ = implicit;
   edge->order_only_deps_ = order_only;
+
+  // Multiple outputs aren't (yet?) supported with depslog.
+  string deps_type = edge->GetBinding(attrib_deps);
+  if (!deps_type.empty() && edge->outputs_.size() > 1) {
+    fprintf(stderr,
+            "multiple outputs aren't (yet?) supported by depslog; "
+            "bring this up on the mailing list if it affects you\n");
+    exit(1);
+  }
 }
 
 void parseRule(Buffer& B, Token& T) {
@@ -1389,13 +1399,14 @@ int main(int argc, const char* argv[]) {
 
   attrib_depth = &Identifiers.get("depth");
   attrib_command = &Identifiers.get("command");
+  attrib_deps = &Identifiers.get("deps");
   attrib_rspfile_content = &Identifiers.get("rspfile_content");
 
   // Initialize reserved bindings.
   attrib_command->IsReservedBinding = true;
   Identifiers.get("depfile").IsReservedBinding = true;
   Identifiers.get("description").IsReservedBinding = true;
-  Identifiers.get("deps").IsReservedBinding = true;
+  attrib_deps->IsReservedBinding = true;
   Identifiers.get("generator").IsReservedBinding = true;
   Identifiers.get("pool").IsReservedBinding = true;
   Identifiers.get("restat").IsReservedBinding = true;
