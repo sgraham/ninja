@@ -97,7 +97,9 @@ public:
 
   /// capacity - Return the total number of elements in the currently allocated
   /// buffer.
-  size_t capacity() const { return this->CapacityX - this->BeginX; }
+  size_t capacity() const {
+    return (iterator)this->CapacityX - (iterator)this->BeginX;
+  }
 
   reference operator[](unsigned idx) {
     assert(begin() + idx < end());
