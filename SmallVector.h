@@ -69,10 +69,9 @@ public:
 template <typename T, unsigned N> struct SmallVectorStorage;
 
 
-/// SmallVectorTemplateCommon - This is the part of SmallVectorTemplateBase
-/// which does not depend on whether the type T is a POD. The extra dummy
-/// template argument is used by ArrayRef to avoid unnecessarily requiring T
-/// to be complete.
+/// SmallVectorTemplateCommon - This class consists of common code factored out
+/// of the SmallVector class to reduce code duplication based on the
+/// SmallVector 'N' template parameter.
 template <typename T, typename = void>
 class SmallVectorTemplateCommon : public SmallVectorBase {
 private:
@@ -86,8 +85,17 @@ private:
   // Space after 'FirstEl' is clobbered, do not add any instance vars after it.
 
 protected:
-  SmallVectorTemplateCommon(size_t Size) : SmallVectorBase(&FirstEl, Size) {}
+  // Default ctor - Initialize to empty.
+  explicit SmallVectorTemplateCommon(unsigned N)
+    : SmallVectorBase(&FirstEl, N*sizeof(T)) {}
 
+public:
+  ~SmallVectorTemplateCommon() {
+    // If this wasn't grown from the inline copy, deallocate the old space.
+    if (!this->isSmall())
+      free(this->begin());
+  }
+protected:
   void grow_pod(size_t MinSizeInBytes, size_t TSize) {
     SmallVectorBase::grow_pod(&FirstEl, MinSizeInBytes, TSize);
   }
@@ -153,27 +161,6 @@ public:
   }
 };
 
-/// SmallVectorImpl - This class consists of common code factored out of the
-/// SmallVector class to reduce code duplication based on the SmallVector 'N'
-/// template parameter.
-template <typename T>
-class SmallVectorImpl : public SmallVectorTemplateCommon<T> {
-  SmallVectorImpl(const SmallVectorImpl&);
-  SmallVectorImpl &operator=(const SmallVectorImpl &RHS);
-
-protected:
-  // Default ctor - Initialize to empty.
-  explicit SmallVectorImpl(unsigned N)
-    : SmallVectorTemplateCommon<T>(N*sizeof(T)) {}
-
-public:
-  ~SmallVectorImpl() {
-    // If this wasn't grown from the inline copy, deallocate the old space.
-    if (!this->isSmall())
-      free(this->begin());
-  }
-};
-
 
 /// Storage for the SmallVector elements which aren't contained in
 /// SmallVectorTemplateCommon. There are 'N-1' elements here. The remaining '1'
@@ -195,13 +182,13 @@ template <typename T> struct SmallVectorStorage<T, 0> {};
 /// Note that this does not attempt to be exception safe.
 ///
 template <typename T, unsigned N>
-class SmallVector : public SmallVectorImpl<T> {
+class SmallVector : public SmallVectorTemplateCommon<T> {
   /// Storage - Inline space for elements which aren't stored in the base class.
   SmallVectorStorage<T, N> Storage;
   SmallVector(const SmallVector &RHS);
   const SmallVector &operator=(const SmallVector &RHS);
 public:
-  SmallVector() : SmallVectorImpl<T>(N) {}
+  SmallVector() : SmallVectorTemplateCommon<T>(N) {}
 };
 
 } // End llvm namespace
