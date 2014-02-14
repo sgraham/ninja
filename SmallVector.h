@@ -162,13 +162,6 @@ protected:
     }
   }
 
-  /// uninitialized_move - Move the range [I, E) into the uninitialized
-  /// memory starting with "Dest", constructing elements as needed.
-  template<typename It1, typename It2>
-  static void uninitialized_move(It1 I, It1 E, It2 Dest) {
-    ::std::uninitialized_copy(I, E, Dest);
-  }
-
   /// uninitialized_copy - Copy the range [I, E) onto the uninitialized
   /// memory starting with "Dest", constructing elements as needed.
   template<typename It1, typename It2>
@@ -212,7 +205,7 @@ void SmallVectorTemplateBase<T, isPodLike>::grow(size_t MinSize) {
   T *NewElts = static_cast<T*>(malloc(NewCapacity*sizeof(T)));
 
   // Move the elements over.
-  this->uninitialized_move(this->begin(), this->end(), NewElts);
+  this->uninitialized_copy(this->begin(), this->end(), NewElts);
 
   // Destroy the original elements.
   destroy_range(this->begin(), this->end());
@@ -236,14 +229,6 @@ protected:
 
   // No need to do a destroy loop for POD's.
   static void destroy_range(T *, T *) {}
-
-  /// uninitialized_move - Move the range [I, E) onto the uninitialized memory
-  /// starting with "Dest", constructing elements into it as needed.
-  template<typename It1, typename It2>
-  static void uninitialized_move(It1 I, It1 E, It2 Dest) {
-    // Just do a copy.
-    uninitialized_copy(I, E, Dest);
-  }
 
   /// uninitialized_copy - Copy the range [I, E) onto the uninitialized memory
   /// starting with "Dest", constructing elements into it as needed.
