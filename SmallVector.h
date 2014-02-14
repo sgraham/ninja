@@ -111,7 +111,7 @@ public:
   void push_back(const T &Elt) {
     if (this->EndX < this->CapacityX) {
     Retry:
-      memcpy(this->end(), &Elt, sizeof(T));
+      *this->end() = Elt;
       this->EndX = this->end() + 1;
       return;
     }
