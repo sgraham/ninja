@@ -18,8 +18,6 @@ time ./ninja -C ~/src/chrome/src/out_bench/Release chrome
 #include <vector>
 using std::string;
 
-//#include "src/metrics.h"
-
 enum {
   CHAR_HORZ_WS  = 0x01,  // ' '
   CHAR_LETTER   = 0x02,  // a-z,A-Z
@@ -147,7 +145,6 @@ enum TokenKind {
 bool CanonicalizePath(char* path, size_t* len) {
   // WARNING: this function is performance-critical; please benchmark
   // any changes you make to it.
-  //METRIC_RECORD("canonicalize path");
   if (*len == 0) {
     fprintf(stderr, "empty path");
     exit(1);
@@ -575,7 +572,6 @@ void FillToken(Buffer& B, Token& T, const char* TokEnd, TokenKind kind) {
 enum EvalStringKind { kPath, kLet };
 void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
                    EvalStringKind kind) {
-  //METRIC_RECORD("LexEvalString");
   bool HasVariables = false;
 
   // pointer so that no destructor is called in the common no-vars case.
@@ -724,39 +720,35 @@ Continue:
 
   if (HasVariables) {
     if (!II->VarInfoEx) {
-      //II->VarInfo = varranges;
-
       II->VarInfoEx = new IdentifierInfo::TokenList;
       size_t left = 0;
       const char* s = II->Entry->getKeyData();
-//printf("eval %s\n", s);
       for (size_t i = 0; i < varranges->size(); i += 2) {
         int varl = (*varranges)[i], varr = (*varranges)[i + 1];
         bool isSimple = s[varl - 1] == '$';  // Else, '{'
         int ovarl = varl - (isSimple ? 1 : 2);
         int ovarr = varr + (isSimple ? 0 : 1);
-//printf("var: '%s'\n", std::string(s + varl, varr - varl).c_str());
-//printf("ovar: '%s'\n", std::string(s + ovarl, ovarr - ovarl).c_str());
 
         // String in front of var
-//printf("%lu - %lu (%d %d)\n", left, ovarl - left, varl, ovarl);
         if (ovarl - left) {
-          II->VarInfoEx->push_back(std::make_pair(IdentifierInfo::RAW, &Identifiers.get(StringPiece(s + left, ovarl - left))));
+          II->VarInfoEx->push_back(std::make_pair(
+              IdentifierInfo::RAW,
+              &Identifiers.get(StringPiece(s + left, ovarl - left))));
         }
         left = ovarr;
 
         // Var
-//printf("%s %d %d\n", s, varl, varr);
         IdentifierInfo* varII =
             &Identifiers.get(StringPiece(s + varl, varr - varl));
         II->VarInfoEx->push_back(std::make_pair(IdentifierInfo::VAR, varII));
-//printf("var %s (%p, context %p) -> %s (%zu)\n", varII->Entry->getKeyData(), varII, e, val->Entry->getKeyData(), static_cast<BindingEnv*>(e)->bindings_.size());
       }
 
       // Last bit of text
-  //printf("%lu - %lu\n", left, Entry->getKeyLength() - left);
-      if (II->Entry->getKeyLength() - left) {
-        II->VarInfoEx->push_back(std::make_pair(IdentifierInfo::RAW, &Identifiers.get(StringPiece(s + left, II->Entry->getKeyLength() - left))));
+      int ovarl = II->Entry->getKeyLength();
+      if (ovarl - left) {
+        II->VarInfoEx->push_back(std::make_pair(
+            IdentifierInfo::RAW,
+            &Identifiers.get(StringPiece(s + left, ovarl - left))));
       }
     }
 
@@ -780,7 +772,6 @@ void LexIdentifier(Buffer& B, Token& T, const char* CurPtr) {
 
   const char *IdStart = B.cur;
 
-  //FormTokenWithChars(Result, CurPtr, tok::identifier);
   FillToken(B, T, CurPtr, kIdentifier);
 
   // Update the token info (identifier info and appropriate token kind).
@@ -810,8 +801,6 @@ void SkipLineComment(Buffer &B, Token &T, const char *CurPtr) {
   /// comment above in that mode.
   ++CurPtr;
 
-  //Result.setFlag(Token::StartOfLine);
-  //Result.clearFlag(Token::LeadingSpace);
   B.cur = CurPtr;
 }
 
@@ -901,7 +890,6 @@ LexNextToken:
 
     case ' ':
     SkipHorizontalWhitespace:
-      //Result.setFlag(Token::LeadingSpace);
       SkipWhitespace(B, CurPtr);
 
     SkipIgnoredUnits:
@@ -961,7 +949,6 @@ void parseLet(Buffer& B, Token& T, IdentifierInfo*& Key, IdentifierInfo*& Val) {
   SkipWhitespace(B, B.cur);
   LexEvalString(B, T, B.cur, kLet);
   Val = T.info;
-//fprintf(stderr, "let '%s' = '%s'\n", Key->Entry->getKeyData(), Val->Entry->getKeyData());
 }
 
 // keeping these global and reusing them makes the push_back()s in parseEdge()
@@ -981,7 +968,6 @@ void parseEdge(Buffer& B, Token& T) {
       fprintf(stderr, "expected filename\n");
       exit(1);
     }
-//fprintf(stderr, "got input '%s'\n", T.info->Entry->getKeyData());
 
     do {
       outs.push_back(T.info);
@@ -1029,7 +1015,6 @@ void parseEdge(Buffer& B, Token& T) {
       LexEvalString(B, T, B.cur, kPath);
       if (!T.length)
         break;
-//fprintf(stderr, "got implicit '%s'\n", T.info->Entry->getKeyData());
       ins.push_back(T.info);
       ++implicit;
     }
@@ -1073,7 +1058,6 @@ void parseEdge(Buffer& B, Token& T) {
   BindingEnv* env = fileEnvStack.back();
 
   // While idents, parse let statements, add bindings for those.
-  // While idents, parse let statements. Reject non-IsReservedBinding ones.
   while (*B.cur == ' ') {
     Lex(B, T);
     if (!T.info) {
@@ -1110,7 +1094,6 @@ void parseEdge(Buffer& B, Token& T) {
   for (std::vector<IdentifierInfo*>::iterator i = ins.begin(); i != ins.end();
        ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
-//fprintf(stderr, "input: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
     Node* node = path->GetNode();
     // FIXME: These two lines cost 12ms (83ms -> 95ms), use a SmallVector
@@ -1120,7 +1103,6 @@ void parseEdge(Buffer& B, Token& T) {
   for (std::vector<IdentifierInfo*>::iterator i = outs.begin(); i != outs.end();
        ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
-//fprintf(stderr, "output: %s\n", path->Entry->getKeyData());
     path = path->Canonicalize();
     Node* node = path->GetNode();
     edge->outputs_.push_back(node);
@@ -1177,7 +1159,6 @@ void parseRule(Buffer& B, Token& T) {
     parseLet(B, T, Key, Val);
 
     if (Key->IsReservedBinding) {
-  //fprintf(stderr, "binding %s -> %s\n", Key->Entry->getKeyData(), Val->Entry->getKeyData());
       // Note: For rules, |Val| is intentionally not Evaluat()ed at parse time.
       rules.back()->AddBinding(Key, Val);
     } else {
@@ -1276,7 +1257,6 @@ void process(const char* fname) {
   if (!fileEnvStack.empty())
     parent = fileEnvStack.back();
   fileEnvStack.push_back(new BindingEnv(parent));
-//fprintf(stderr, "%s\n", fname);
 
   FILE* f = fopen(fname, "rb");
   setvbuf(f, NULL, _IONBF, 0);
@@ -1299,12 +1279,8 @@ void process(const char* fname) {
   Token t = { kUnknown };
 
   while (1) {
-//fprintf(stderr, "loop\n");
     Lex(b, t);
     ++count;
-    //printf("kind %d\n", t.kind);
-
-//if (g_count > 1) printf("%d\n", t.kind);
 
     switch (t.kind) {
       case kPool:
@@ -1323,7 +1299,6 @@ void process(const char* fname) {
         IdentifierInfo *Key, *Val;
         parseLet(b, t, Key, Val);
         Val = Val->Evaluate(fileEnvStack.back());
-//printf("adding binding for %s (%p, context %p) -> %s\n", Key->Entry->getKeyData(), Key, fileEnvStack.back(), Val->Entry->getKeyData());
         fileEnvStack.back()->AddBinding(Key, Val);
         break;
       }
@@ -1359,12 +1334,9 @@ done:
               // (but only if allocated via calloc)
               // (for malloc, free for 3MB, adds 0.18s for 15 MB bufs)
   fileEnvStack.pop_back();
-//fprintf(stderr, "%s: %d tokens\n", fname, count);
 }
 
 int main(int argc, const char* argv[]) {
-  //g_metrics = new Metrics;
-
   char* d = strdup(argv[1]);
   char* s = strrchr(d, '/');
   *s++ = '\0';
@@ -1422,8 +1394,6 @@ int main(int argc, const char* argv[]) {
 
   //printf("%d clean, %d cleaned (%d computed)\n", clean, cleaned, cleaned_computed);
   //printf("%d vars (%d computed)\n", vars, vars_computed);
-
-  //g_metrics->Report();
 
   free(d);
 }
