@@ -358,13 +358,50 @@ public:
     // Caching CanonIdent: 88ms.
     // Also returning this from CanonicalizeSlow if len didn't change: 83ms.
     // Also strstr for "./": 78ms.
+    // Only calling CanonicalizeSlow if length will change: another 6ms faster.
 
     if (CanonIdent) {
       //++canon_cached;
       return CanonIdent;
     }
 
-    if (strstr(Entry->getKeyData(), "./") == 0) {
+    int component_count = 0;
+
+    const char* src = Entry->getKeyData();
+    const char* end = src + Entry->getKeyLength();
+
+    bool needs_canon = false;
+    while (src < end) {
+      if (*src == '.') {
+        if (src + 1 == end || src[1] == '/') {
+          // '.' component; eliminate.
+          needs_canon = true;
+          break;
+        }
+        if (src[1] == '.' && (src + 2 == end || src[2] == '/')) {
+          // '..' component.  Back up if possible.
+          if (component_count > 0) {
+            needs_canon = true;
+            break;
+          }
+          src += 3;
+          continue;
+        }
+      }
+
+      if (*src == '/') {
+        src++;
+        continue;
+      }
+
+      ++component_count;
+
+      while (*src != '/' && src != end)
+        src++;
+      src++;  // Skip over '/' or final \0.
+    }
+
+    if (!needs_canon) {
       //++canon_cheap;
       CanonIdent = this;
     } else {
@@ -428,16 +465,10 @@ string IdentifierInfo::EvaluateAsStringSlow(Env* e) {
 }
 
 IdentifierInfo* IdentifierInfo::CanonicalizeSlow() {
-  // FIXME: this copy can be saved by inlining CanonicalizePath here and
-  // only copying on write. The most common case is that CanonicalizePath does
-  // nothing.
   string buf(Entry->getKeyData());
   size_t len = buf.size();
   CanonicalizePath(&buf[0], &len);
-  if (len == Entry->getKeyLength()) {
-    //++canon_cheapish;
-    return this;
-  }
+  assert(len < Entry->getKeyLength());
   //++canon_computed;
   //printf("computed %s\n", buf.c_str());
   return &Identifiers.get(StringPiece(buf.c_str(), len));
