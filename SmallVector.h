@@ -7,7 +7,7 @@
 //
 //===----------------------------------------------------------------------===//
 //
-// This file defines the SmallVector class.
+// This file defines the SmallVector class, ONLY FOR PODs.
 //
 //===----------------------------------------------------------------------===//
 
@@ -37,22 +37,6 @@ inline uint64_t NextPowerOf2(uint64_t A) {
   A |= (A >> 32);
   return A + 1;
 }
-
-/// isPodLike - This is a type trait that is used to determine whether a given
-/// type can be copied around with memcpy instead of running ctors etc.
-template <typename T>
-struct isPodLike {
-  // If the compiler supports the is_trivially_copyable trait use it, as it
-  // matches the definition of isPodLike closely.
-  static const bool value = __is_trivially_copyable(T);
-};
-
-// std::pair's are pod-like if their elements are.
-template<typename T, typename U>
-struct isPodLike<std::pair<T, U> > {
-  static const bool value = isPodLike<T>::value && isPodLike<U>::value;
-};
-  
 
 /// SmallVectorBase - This is all the non-templated stuff common to all
 /// SmallVectors.
@@ -148,105 +132,12 @@ public:
   }
 };
 
-/// SmallVectorTemplateBase<isPodLike = false> - This is where we put method
-/// implementations that are designed to work with non-POD-like T's.
-template <typename T, bool isPodLike>
-class SmallVectorTemplateBase : public SmallVectorTemplateCommon<T> {
-protected:
-  SmallVectorTemplateBase(size_t Size) : SmallVectorTemplateCommon<T>(Size) {}
-
-  static void destroy_range(T *S, T *E) {
-    while (S != E) {
-      --E;
-      E->~T();
-    }
-  }
-
-  /// uninitialized_copy - Copy the range [I, E) onto the uninitialized
-  /// memory starting with "Dest", constructing elements as needed.
-  template<typename It1, typename It2>
-  static void uninitialized_copy(It1 I, It1 E, It2 Dest) {
-    std::uninitialized_copy(I, E, Dest);
-  }
-
-  /// grow - Grow the allocated memory (without initializing new
-  /// elements), doubling the size of the allocated memory.
-  /// Guarantees space for at least one more element, or MinSize more
-  /// elements if specified.
-  void grow(size_t MinSize = 0);
-  
-public:
-  void push_back(const T &Elt) {
-    if (this->EndX < this->CapacityX) {
-    Retry:
-      ::new ((void*) this->end()) T(Elt);
-      this->setEnd(this->end()+1);
-      return;
-    }
-    this->grow();
-    goto Retry;
-  }
-
-  void pop_back() {
-    this->setEnd(this->end()-1);
-    this->end()->~T();
-  }
-};
-
-// Define this out-of-line to dissuade the C++ compiler from inlining it.
-template <typename T, bool isPodLike>
-void SmallVectorTemplateBase<T, isPodLike>::grow(size_t MinSize) {
-  size_t CurCapacity = this->capacity();
-  size_t CurSize = this->size();
-  // Always grow, even from zero.  
-  size_t NewCapacity = size_t(NextPowerOf2(CurCapacity+2));
-  if (NewCapacity < MinSize)
-    NewCapacity = MinSize;
-  T *NewElts = static_cast<T*>(malloc(NewCapacity*sizeof(T)));
-
-  // Move the elements over.
-  this->uninitialized_copy(this->begin(), this->end(), NewElts);
-
-  // Destroy the original elements.
-  destroy_range(this->begin(), this->end());
-
-  // If this wasn't grown from the inline copy, deallocate the old space.
-  if (!this->isSmall())
-    free(this->begin());
-
-  this->setEnd(NewElts+CurSize);
-  this->BeginX = NewElts;
-  this->CapacityX = this->begin()+NewCapacity;
-}
-
-
 /// SmallVectorTemplateBase<isPodLike = true> - This is where we put method
 /// implementations that are designed to work with POD-like T's.
 template <typename T>
-class SmallVectorTemplateBase<T, true> : public SmallVectorTemplateCommon<T> {
+class SmallVectorTemplateBase : public SmallVectorTemplateCommon<T> {
 protected:
   SmallVectorTemplateBase(size_t Size) : SmallVectorTemplateCommon<T>(Size) {}
-
-  // No need to do a destroy loop for POD's.
-  static void destroy_range(T *, T *) {}
-
-  /// uninitialized_copy - Copy the range [I, E) onto the uninitialized memory
-  /// starting with "Dest", constructing elements into it as needed.
-  template<typename It1, typename It2>
-  static void uninitialized_copy(It1 I, It1 E, It2 Dest) {
-    // Arbitrary iterator types; just use the basic implementation.
-    std::uninitialized_copy(I, E, Dest);
-  }
-
-  /// uninitialized_copy - Copy the range [I, E) onto the uninitialized memory
-  /// starting with "Dest", constructing elements into it as needed.
-  template<typename T1, typename T2>
-  static void uninitialized_copy(T1 *I, T1 *E, T2 *Dest) {
-    // Use memcpy for PODs iterated by pointers (which includes SmallVector
-    // iterators): std::uninitialized_copy optimizes to memmove, but we can
-    // use memcpy here.
-    memcpy(Dest, I, (E-I)*sizeof(T));
-  }
 
   /// grow - double the size of the allocated memory, guaranteeing space for at
   /// least one more element or MinSize if specified.
@@ -270,25 +161,21 @@ public:
   }
 };
 
-
 /// SmallVectorImpl - This class consists of common code factored out of the
 /// SmallVector class to reduce code duplication based on the SmallVector 'N'
 /// template parameter.
 template <typename T>
-class SmallVectorImpl : public SmallVectorTemplateBase<T, isPodLike<T>::value> {
+class SmallVectorImpl : public SmallVectorTemplateBase<T> {
   SmallVectorImpl(const SmallVectorImpl&);
   SmallVectorImpl &operator=(const SmallVectorImpl &RHS);
 
 protected:
   // Default ctor - Initialize to empty.
   explicit SmallVectorImpl(unsigned N)
-    : SmallVectorTemplateBase<T, isPodLike<T>::value>(N*sizeof(T)) {}
+    : SmallVectorTemplateBase<T>(N*sizeof(T)) {}
 
 public:
   ~SmallVectorImpl() {
-    // Destroy the constructed elements in the vector.
-    this->destroy_range(this->begin(), this->end());
-
     // If this wasn't grown from the inline copy, deallocate the old space.
     if (!this->isSmall())
       free(this->begin());
