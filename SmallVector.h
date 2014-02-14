@@ -78,8 +78,6 @@ protected:
     return BeginX == static_cast<const void*>(&FirstEl);
   }
 
-  void setEnd(T *P) { this->EndX = P; }
-
 public:
   typedef size_t size_type;
   typedef T *iterator;
@@ -114,13 +112,13 @@ public:
     if (this->EndX < this->CapacityX) {
     Retry:
       memcpy(this->end(), &Elt, sizeof(T));
-      this->setEnd(this->end()+1);
+      this->EndX = this->end() + 1;
       return;
     }
     SmallVectorBase::grow_pod(&FirstEl, sizeof(T));
     goto Retry;
   }
-  void pop_back() { this->setEnd(this->end()-1); }
+  void pop_back() { this->EndX = this->end() - 1; }
 };
 
 
