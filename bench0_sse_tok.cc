@@ -1120,8 +1120,8 @@ void parseEdge(Buffer& B, Token& T) {
 
   edge->env_ = env;
 
-  //IdentifierInfo* pool_name = edge->GetBinding(kw_pool);
-  //if (pool_name->Entry->getKeyLength()) {
+  string pool_name = edge->GetBinding(kw_pool);
+  if (!pool_name.empty()) {
     // FIXME: implement pool stuff
     // FIXME: consider returning NULL IdentifierInfos?
     //if (pool_name->pool == NULL) {
@@ -1129,7 +1129,7 @@ void parseEdge(Buffer& B, Token& T) {
     //          pool_name->Entry->getKeyData());
     //  exit(1);
     //}
-  //}
+  }
 
   for (std::vector<IdentifierInfo*>::iterator i = ins.begin(); i != ins.end();
        ++i) {
@@ -1311,8 +1311,6 @@ void process(const char* fname) {
   g_total += size;
   g_count += 1;
   fclose(f);
-
-  //if (g_count > 1) return;
 
   int count = 0;
   Buffer b = { buf, buf, buf + size };
