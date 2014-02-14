@@ -214,6 +214,7 @@ bool CanonicalizePath(char* path, size_t* len) {
 
 
 #include "StringMap.h"
+#include "SmallVector.h"
 
 class IdentifierInfo;
 
@@ -254,8 +255,10 @@ struct Edge {
   BindingEnv* env_;
   Rule* rule_;
 
-  std::vector<Node*> inputs_;
-  std::vector<Node*> outputs_;
+  //typedef std::vector<Node*> NodeList;
+  typedef llvm::SmallVector<Node*, 4> NodeList;  // 89ms -> 86ms
+  NodeList inputs_;
+  NodeList outputs_;
 
   int implicit_deps_, order_only_deps_;
 
@@ -270,7 +273,9 @@ std::vector<Edge*> edges;
 struct Node {
   IdentifierInfo* path_;
   Edge* in_edge_;
-  std::vector<Edge*> out_edges_;
+  //typedef std::vector<Edge*> EdgeList;
+  typedef llvm::SmallVector<Edge*, 4> EdgeList;  // 91ms -> 88ms
+  EdgeList out_edges_;
 };
 llvm::BumpPtrAllocator nodeallocator;
 std::vector<Node*> nodes;
@@ -308,6 +313,8 @@ public:
 
   enum StrKind { RAW, VAR };
   typedef std::vector<std::pair<StrKind, IdentifierInfo*> > TokenList;
+  // Makes no difference:
+  //typedef llvm::SmallVector<std::pair<StrKind, IdentifierInfo*>, 12> TokenList;
   TokenList *VarInfoEx;
 
   // These could maybe be in a union.
@@ -480,8 +487,8 @@ struct EdgeEnv : public Env {
 
   /// Given a span of Nodes, construct a list of paths suitable for a command
   /// line.
-  string MakePathList(std::vector<Node*>::iterator begin,
-                      std::vector<Node*>::iterator end, char sep);
+  string MakePathList(Edge::NodeList::iterator begin,
+                      Edge::NodeList::iterator end, char sep);
 
   Edge* edge_;
 };
@@ -524,10 +531,10 @@ string EdgeEnv::LookupVariableStr(IdentifierInfo* var) {
   return "";
 }
 
-string EdgeEnv::MakePathList(std::vector<Node*>::iterator begin,
-                             std::vector<Node*>::iterator end, char sep) {
+string EdgeEnv::MakePathList(Edge::NodeList::iterator begin,
+                             Edge::NodeList::iterator end, char sep) {
   string result;
-  for (std::vector<Node*>::iterator i = begin; i != end; ++i) {
+  for (Edge::NodeList::iterator i = begin; i != end; ++i) {
     if (!result.empty())
       result.push_back(sep);
     const char* path = (*i)->path_->Entry->getKeyData();
@@ -576,7 +583,10 @@ void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
   bool HasVariables = false;
 
   // pointer so that no destructor is called in the common no-vars case.
-  std::vector<int>* varranges = 0;
+  typedef std::vector<int> RangeType;
+  //typedef llvm::SmallVector<int, 2 * 12> RangeType;  // Not any faster.
+  //std::vector<int>* varranges = 0;
+  RangeType* varranges = 0;
 
   char* buf = 0;
   int bufc = 0;
@@ -610,7 +620,7 @@ Continue:
           goto Continue;
 
         case '{':
-          if (!varranges) varranges = new std::vector<int>;
+          if (!varranges) varranges = new RangeType;
 
           ++CurPtr;
           HasVariables = true;
@@ -641,7 +651,7 @@ Continue:
         case 'v': case 'w': case 'x': case 'y': case 'z':
         case '-':
         case '_':
-          if (!varranges) varranges = new std::vector<int>;
+          if (!varranges) varranges = new RangeType;
 //printf("skipped: %d\n", skipped);
           varranges->push_back(CurPtr - B.cur - skipped);
 
