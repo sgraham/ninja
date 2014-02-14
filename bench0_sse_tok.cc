@@ -261,9 +261,7 @@ struct Edge {
 
   int implicit_deps_, order_only_deps_;
 
-  //IdentifierInfo* EvaluateCommand();
-  //IdentifierInfo* GetBinding(IdentifierInfo*);
-  string EvaluateCommand();
+  string EvaluateCommand(bool incl_rsp_file = false);
   string GetBinding(IdentifierInfo*);
 };
 llvm::BumpPtrAllocator edgeallocator;
@@ -482,8 +480,10 @@ IdentifierInfo* kw_default;
 
 IdentifierInfo* attrib_depth;
 IdentifierInfo* attrib_command;
+IdentifierInfo* attrib_rspfile_content;
 
 IdentifierInfo* var_in;
+IdentifierInfo* var_in_newline;
 IdentifierInfo* var_out;
 
 IdentifierInfo* BindingEnv::LookupVariable(IdentifierInfo* var) {
@@ -504,8 +504,14 @@ string BindingEnv::LookupVariableStr(IdentifierInfo* var) {
   return "";
 }
 
-string Edge::EvaluateCommand() {
-  return GetBinding(attrib_command);
+string Edge::EvaluateCommand(bool incl_rsp_file) {
+  string command = GetBinding(attrib_command);
+  if (incl_rsp_file) {
+    string rspfile_content = GetBinding(attrib_rspfile_content);
+    if (!rspfile_content.empty())
+      command += ";rspfile=" + rspfile_content;
+  }
+  return command;
 }
 
 
@@ -523,14 +529,13 @@ struct EdgeEnv : public Env {
 };
 
 string EdgeEnv::LookupVariableStr(IdentifierInfo* var) {
-  if (var == var_in) { //|| var == "in_newline") {
+  if (var == var_in || var == var_in_newline) {
     int explicit_deps_count = edge_->inputs_.size() - edge_->implicit_deps_ -
       edge_->order_only_deps_;
 
     return MakePathList(edge_->inputs_.begin(),
                         edge_->inputs_.begin() + explicit_deps_count,
-                        //var == "in" ? ' ' : '\n');  FIXME
-                        ' ');
+                        var == var_in? ' ' : '\n');
   } else if (var == var_out) {
     return MakePathList(edge_->outputs_.begin(),
                         edge_->outputs_.end(),
@@ -1386,6 +1391,7 @@ int main(int argc, const char* argv[]) {
 
   attrib_depth = &Identifiers.get("depth");
   attrib_command = &Identifiers.get("command");
+  attrib_rspfile_content = &Identifiers.get("rspfile_content");
 
   // Initialize reserved bindings.
   attrib_command->IsReservedBinding = true;
@@ -1396,9 +1402,10 @@ int main(int argc, const char* argv[]) {
   Identifiers.get("pool").IsReservedBinding = true;
   Identifiers.get("restat").IsReservedBinding = true;
   Identifiers.get("rspfile").IsReservedBinding = true;
-  Identifiers.get("rspfile_content").IsReservedBinding = true;
+  attrib_rspfile_content->IsReservedBinding = true;
 
   var_in = &Identifiers.get("in");
+  var_in_newline = &Identifiers.get("in_newline");
   var_out = &Identifiers.get("out");
 
   Rule phonyRule;
