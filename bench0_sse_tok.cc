@@ -1417,5 +1417,9 @@ int main(int argc, const char* argv[]) {
   //printf("%d clean, %d cleaned (%d computed)\n", clean, cleaned, cleaned_computed);
   //printf("%d vars (%d computed)\n", vars, vars_computed);
 
+  //using llvm::g_short;
+  //using llvm::g_long;
+  //printf("%d short, %d long, %d total\n", g_short, g_long, g_short + g_long);
+
   free(d);
 }

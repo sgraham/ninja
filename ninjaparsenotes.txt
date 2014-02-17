@@ -99,6 +99,9 @@ llvm evalstring stats:
 LexEvalString for counting vars:
 42 vars (28 computed)
 
+hash table key length:
+110076 short (37.5%), 183002 long, 293078 total
+
 
 
 chrome: read 13233 kB, 785 files

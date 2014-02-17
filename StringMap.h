@@ -133,6 +133,7 @@ public:
   }
 };
 
+//int g_short, g_long;
 
 // This is an unconventional map that is specialized for handling keys that are
 // "strings", which are basically ranges of bytes. This does some funky memory
@@ -173,6 +174,8 @@ public:
   // Otherwise, default construct a value, insert it, and return.
   template <typename InitTy>
   MapEntryTy &GetOrCreateValue(StringPiece Key, InitTy Val) {
+    // 37.5% short keys:
+    //if (Key.len_ < sizeof(char *)) ++g_short; else ++g_long;
     unsigned BucketNo = LookupBucketFor(Key);
     StringMapEntryBase *&Bucket = TheTable[BucketNo];
     if (Bucket && Bucket != getTombstoneVal())
