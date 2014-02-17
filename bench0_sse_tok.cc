@@ -615,7 +615,6 @@ void LexEvalString(Buffer &B, Token &T, EvalStringKind kind) {
 
   char* src = CurPtr;
   char* dst = src;
-  int skipped = 0;
 
 Continue:
   unsigned char C = *CurPtr++;
@@ -636,16 +635,15 @@ Continue:
             memcpy(dst, src, CurPtr - src - 1);
           dst += CurPtr - src;
           dst[-1] = C;
-          ++skipped;  // skipped the '$'
           ++CurPtr;
           src = CurPtr;
-          //assert(CurPtr == dst + skipped);
           goto Continue;
 
-        case '{':
+        case '{': {
           if (!varranges) varranges = new RangeType;
 
           ++CurPtr;
+          int skipped = src - dst;
 
           varranges->push_back(CurPtr - B.cur - skipped);  // Don't include {
 
@@ -662,6 +660,7 @@ Continue:
           }
 
           goto Continue;
+        }
 
         case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
         case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
@@ -672,8 +671,10 @@ Continue:
         case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
         case 'v': case 'w': case 'x': case 'y': case 'z':
         case '-':
-        case '_':
-          if (!varranges) varranges = new RangeType;
+        case '_': {
+          if (!varranges)
+            varranges = new RangeType;
+          int skipped = src - dst;
 //printf("skipped: %d\n", skipped);
           varranges->push_back(CurPtr - B.cur - skipped);
 
@@ -689,21 +690,18 @@ Continue:
 //printf("pushed '%s'\n", std::string(buf + (*varranges)[varranges->size()-2], buf + (*varranges)[varranges->size() - 1]).c_str());
 
           goto Continue;
+        }
 
         case '\n':
           if (src != dst)
             memcpy(dst, src, CurPtr - 1 - src);
           dst += CurPtr - 1 - src;
-          skipped += 2;  // $, \n
           ++CurPtr;
           C = *CurPtr++;
-          while (C == ' ') {
-            ++skipped;
+          while (C == ' ')
             C = *CurPtr++;
-          }
           --CurPtr;   // Back up over the skipped non-' '.
           src = CurPtr;
-          //assert(CurPtr == dst + skipped);
           goto Continue;
         default:
           fprintf(stderr, "bad $-escape\n");
@@ -739,7 +737,7 @@ Continue:
   if (src != dst)
     memcpy(dst, src, CurPtr - src);
   IdentifierInfo* II =
-      &Identifiers.get(StringPiece(IdStart, T.length - skipped));
+      &Identifiers.get(StringPiece(IdStart, T.length - (src - dst)));
   T.info = II;
 
   if (varranges) {
