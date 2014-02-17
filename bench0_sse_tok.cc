@@ -1440,6 +1440,7 @@ int main(int argc, const char* argv[]) {
   //  //l += edges[i]->EvaluateCommand()->Entry->getKeyLength();
   //  l += edges[i]->EvaluateCommand().size();
   //  //printf("%s\n", edges[i]->EvaluateCommand()->Entry->getKeyData());
+  //  //printf("%s\n", edges[i]->EvaluateCommand().c_str());
   //}
   //printf("l: %d\n", l);
 
