@@ -962,11 +962,16 @@ void parseLet(Buffer& B, Token& T, IdentifierInfo*& Key, IdentifierInfo*& Val) {
 
 // keeping these global and reusing them makes the push_back()s in parseEdge()
 // have 0 slowdown instead of 5-6ms / 10%.
-std::vector<IdentifierInfo*> ins, outs;
+// Using a SmallVector makes the hit much smaller when keeping them local but
+// is a bit slower than having them be global (when the globals are SmallVectors
+// too).
+//typedef llvm::SmallVector<IdentifierInfo*, 4> LocalList;
+typedef std::vector<IdentifierInfo*> LocalList;
+LocalList ins, outs;
 void parseEdge(Buffer& B, Token& T) {
   // FIXME: Check if reading ins/outs can be done with fewer copies
   // (by eagerly calling CleanUp or similar).
-  //std::vector<IdentifierInfo*> ins, outs;
+  //LocalList ins, outs;
   ins.clear(); outs.clear();
 
   // Read output paths.
@@ -1100,16 +1105,14 @@ void parseEdge(Buffer& B, Token& T) {
     //}
   }
 
-  for (std::vector<IdentifierInfo*>::iterator i = ins.begin(); i != ins.end();
-       ++i) {
+  for (LocalList::iterator i = ins.begin(); i != ins.end(); ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
     path = path->Canonicalize();
     Node* node = path->GetNode();
     edge->inputs_.push_back(node);
     node->out_edges_.push_back(edge);
   }
-  for (std::vector<IdentifierInfo*>::iterator i = outs.begin(); i != outs.end();
-       ++i) {
+  for (LocalList::iterator i = outs.begin(); i != outs.end(); ++i) {
     IdentifierInfo* path = (*i)->Evaluate(env);
     path = path->Canonicalize();
     Node* node = path->GetNode();

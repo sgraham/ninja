@@ -49,6 +49,10 @@ public:
     return size_t((char*)CapacityX - (char*)BeginX);
   }
 
+  void clear() {
+    this->EndX = this->BeginX;
+  }
+
   bool empty() const { return BeginX == EndX; }
 };
 
