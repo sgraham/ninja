@@ -293,7 +293,7 @@ std::vector<Node*> nodes;
 class IdentifierInfo {
 public:
  IdentifierInfo()
-     : kind(kIdentifier), IsReservedBinding(false), HasVariables(false),
+     : kind(kIdentifier), IsReservedBinding(false),
        CanonIdent(0), rule(0), node(0), VarInfoEx(0) {}
   llvm::StringMapEntry<IdentifierInfo*> *Entry;
 
@@ -304,11 +304,10 @@ public:
   // If the token is a variable that can be set on a rule, for example "command"
   bool IsReservedBinding;
 
-  // If this contains references to variables.
-  bool HasVariables;
-
   IdentifierInfo* CanonIdent;
 
+  // Information about variables contained in the string. If this is NULL,
+  // the string doesn't contain any variables.
   enum StrKind { RAW, VAR };
   typedef std::vector<std::pair<StrKind, IdentifierInfo*> > TokenList;
   // Makes no difference:
@@ -332,19 +331,15 @@ public:
     return node;
   }
 
-  // Pointer to variable info for this name. Only set if HasVariables is true.
-  // - starts and ends of variables in string, IdentifierInfos of variable names
-  // (ninja doesn't support repeated variable evaluation such as ${foo$bar}
-
   IdentifierInfo* Evaluate(Env* e) {
-    if (!HasVariables)
+    if (!VarInfoEx)
       return this;
     return EvaluateSlow(e);
   }
   IdentifierInfo* EvaluateSlow(Env* e);  // Out-of-line version of Evaluate.
 
   string EvaluateAsString(Env* e) {
-    if (!HasVariables)
+    if (!VarInfoEx)
       return this->Entry->getKeyData();
     return EvaluateAsStringSlow(e);
   }
@@ -611,7 +606,6 @@ void FillToken(Buffer& B, Token& T, char* TokEnd, TokenKind kind) {
 enum EvalStringKind { kPath, kLet };
 void LexEvalString(Buffer &B, Token &T, EvalStringKind kind) {
   char *CurPtr = B.cur;
-  bool HasVariables = false;
 
   // pointer so that no destructor is called in the common no-vars case.
   typedef std::vector<int> RangeType;
@@ -652,7 +646,6 @@ Continue:
           if (!varranges) varranges = new RangeType;
 
           ++CurPtr;
-          HasVariables = true;
 
           varranges->push_back(CurPtr - B.cur - skipped);  // Don't include {
 
@@ -685,7 +678,6 @@ Continue:
           varranges->push_back(CurPtr - B.cur - skipped);
 
           ++CurPtr;
-          HasVariables = true;
 
           C = *CurPtr++;
           while (isSimpleVarName(C))
@@ -749,9 +741,8 @@ Continue:
   IdentifierInfo* II =
       &Identifiers.get(StringPiece(IdStart, T.length - skipped));
   T.info = II;
-  II->HasVariables = HasVariables;
 
-  if (HasVariables) {
+  if (varranges) {
     if (!II->VarInfoEx) {
       II->VarInfoEx = new IdentifierInfo::TokenList;
       size_t left = 0;
