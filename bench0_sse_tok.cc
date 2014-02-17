@@ -619,15 +619,8 @@ void LexEvalString(Buffer &B, Token &T, EvalStringKind kind) {
   //std::vector<int>* varranges = 0;
   RangeType* varranges = 0;
 
-#define NOBUF
-#ifdef NOBUF
   char* src = CurPtr;
   char* dst = src;
-#else
-  char* buf = 0;
-  int bufc = 0;
-  const char* start = CurPtr;
-#endif
   int skipped = 0;
 
 Continue:
@@ -645,27 +638,14 @@ Continue:
         case '$':
         case ' ':
         case ':':
-#ifdef NOBUF
           if (src != dst)
             memcpy(dst, src, CurPtr - src - 1);
           dst += CurPtr - src;
           dst[-1] = C;
-#else
-          if (!buf) {
-            buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
-          }
-          memcpy(buf + bufc, start, CurPtr - start - 1);
-          bufc += CurPtr - start - 1;
-          buf[bufc++] = C;
-#endif
           ++skipped;  // skipped the '$'
           ++CurPtr;
-#ifdef NOBUF
           src = CurPtr;
           //assert(CurPtr == dst + skipped);
-#else
-          start = CurPtr;
-#endif
           goto Continue;
 
         case '{':
@@ -719,17 +699,9 @@ Continue:
           goto Continue;
 
         case '\n':
-#ifdef NOBUF
           if (src != dst)
             memcpy(dst, src, CurPtr - 1 - src);
           dst += CurPtr - 1 - src;
-#else
-          if (!buf) {
-            buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
-          }
-          memcpy(buf + bufc, start, CurPtr - start - 1);
-          bufc += CurPtr - start - 1;
-#endif
           skipped += 2;  // $, \n
           ++CurPtr;
           C = *CurPtr++;
@@ -738,12 +710,8 @@ Continue:
             C = *CurPtr++;
           }
           --CurPtr;   // Back up over the skipped non-' '.
-#ifdef NOBUF
           src = CurPtr;
           //assert(CurPtr == dst + skipped);
-#else
-          start = CurPtr;
-#endif
           goto Continue;
         default:
           fprintf(stderr, "bad $-escape\n");
@@ -776,24 +744,10 @@ Continue:
   const char *IdStart = B.cur;
   FillToken(B, T, CurPtr, kIdentifier);
 
-  IdentifierInfo *II;
-#ifdef NOBUF
-  if (src != dst) {
+  if (src != dst)
     memcpy(dst, src, CurPtr - src);
-    T.length -= skipped;
-//printf("s: '%s.\n", string(IdStart, T.length).c_str());
-  }
-#else
-  if (buf) {
-    memcpy(buf + bufc, start, CurPtr - start);
-    bufc += CurPtr - start;
-    buf[bufc] = '\0';
-    //printf("got '%s'\n", buf);
-    II = &Identifiers.get(StringPiece(buf, bufc));
-    free(buf);
-  } else
-#endif
-    II = &Identifiers.get(StringPiece(IdStart, T.length));
+  IdentifierInfo* II =
+      &Identifiers.get(StringPiece(IdStart, T.length - skipped));
   T.info = II;
   II->HasVariables = HasVariables;
 
