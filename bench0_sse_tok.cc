@@ -120,7 +120,8 @@ static inline unsigned char isFilePathSep(unsigned char c) {
 
 struct Buffer {
   const char* start;
-  const char* cur;
+  //const char* cur;
+  char* cur;
   const char* end;
 };
 
@@ -596,7 +597,7 @@ struct Token {
   IdentifierInfo* info;
 };
 
-void FillToken(Buffer& B, Token& T, const char* TokEnd, TokenKind kind) {
+void FillToken(Buffer& B, Token& T, char* TokEnd, TokenKind kind) {
   unsigned TokLen = TokEnd - B.cur;
   //T.setLength(TokLen);
   T.length = TokLen;
@@ -609,7 +610,7 @@ void FillToken(Buffer& B, Token& T, const char* TokEnd, TokenKind kind) {
 
 enum EvalStringKind { kPath, kLet };
 void LexEvalString(Buffer &B, Token &T, EvalStringKind kind) {
-  const char *CurPtr = B.cur;
+  char *CurPtr = B.cur;
   bool HasVariables = false;
 
   // pointer so that no destructor is called in the common no-vars case.
@@ -618,10 +619,16 @@ void LexEvalString(Buffer &B, Token &T, EvalStringKind kind) {
   //std::vector<int>* varranges = 0;
   RangeType* varranges = 0;
 
+#define NOBUF
+#ifdef NOBUF
+  char* src = CurPtr;
+  char* dst = src;
+#else
   char* buf = 0;
   int bufc = 0;
-  int skipped = 0;
   const char* start = CurPtr;
+#endif
+  int skipped = 0;
 
 Continue:
   unsigned char C = *CurPtr++;
@@ -638,15 +645,27 @@ Continue:
         case '$':
         case ' ':
         case ':':
+#ifdef NOBUF
+          if (src != dst)
+            memcpy(dst, src, CurPtr - src - 1);
+          dst += CurPtr - src;
+          dst[-1] = C;
+#else
           if (!buf) {
             buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
           }
           memcpy(buf + bufc, start, CurPtr - start - 1);
-          ++skipped;  // skipped the '$'
           bufc += CurPtr - start - 1;
           buf[bufc++] = C;
+#endif
+          ++skipped;  // skipped the '$'
           ++CurPtr;
+#ifdef NOBUF
+          src = CurPtr;
+          //assert(CurPtr == dst + skipped);
+#else
           start = CurPtr;
+#endif
           goto Continue;
 
         case '{':
@@ -700,20 +719,31 @@ Continue:
           goto Continue;
 
         case '\n':
+#ifdef NOBUF
+          if (src != dst)
+            memcpy(dst, src, CurPtr - 1 - src);
+          dst += CurPtr - 1 - src;
+#else
           if (!buf) {
             buf = (char*) malloc(128 * 1024);  // FIXME: fixed size
           }
           memcpy(buf + bufc, start, CurPtr - start - 1);
           bufc += CurPtr - start - 1;
-          ++CurPtr;
+#endif
           skipped += 2;  // $, \n
+          ++CurPtr;
           C = *CurPtr++;
           while (C == ' ') {
             ++skipped;
             C = *CurPtr++;
           }
-          --CurPtr;   // Back up over the skipped ' '.
+          --CurPtr;   // Back up over the skipped non-' '.
+#ifdef NOBUF
+          src = CurPtr;
+          //assert(CurPtr == dst + skipped);
+#else
           start = CurPtr;
+#endif
           goto Continue;
         default:
           fprintf(stderr, "bad $-escape\n");
@@ -747,6 +777,13 @@ Continue:
   FillToken(B, T, CurPtr, kIdentifier);
 
   IdentifierInfo *II;
+#ifdef NOBUF
+  if (src != dst) {
+    memcpy(dst, src, CurPtr - src);
+    T.length -= skipped;
+//printf("s: '%s.\n", string(IdStart, T.length).c_str());
+  }
+#else
   if (buf) {
     memcpy(buf + bufc, start, CurPtr - start);
     bufc += CurPtr - start;
@@ -755,6 +792,7 @@ Continue:
     II = &Identifiers.get(StringPiece(buf, bufc));
     free(buf);
   } else
+#endif
     II = &Identifiers.get(StringPiece(IdStart, T.length));
   T.info = II;
   II->HasVariables = HasVariables;
@@ -800,7 +838,7 @@ Continue:
     ++B.cur;
 }
 
-void LexIdentifier(Buffer& B, Token& T, const char* CurPtr) {
+void LexIdentifier(Buffer& B, Token& T, char* CurPtr) {
   unsigned char C = *CurPtr++;
   while (isIdentifierBody(C))
     C = *CurPtr++;
@@ -822,7 +860,7 @@ void LexIdentifier(Buffer& B, Token& T, const char* CurPtr) {
   T.kind = II->kind;
 }
 
-void SkipLineComment(Buffer &B, Token &T, const char *CurPtr) {
+void SkipLineComment(Buffer &B, Token &T, char *CurPtr) {
   char C = *CurPtr;
   // Skip over characters in the fast loop.
   while (CurPtr != B.end && C != '\n' && C != '\r')
@@ -845,7 +883,7 @@ void SkipLineComment(Buffer &B, Token &T, const char *CurPtr) {
   B.cur = CurPtr;
 }
 
-void SkipWhitespace(Buffer& B, const char *CurPtr) {
+void SkipWhitespace(Buffer& B, char *CurPtr) {
   unsigned char Char = *CurPtr;
   while (1) {
     // Skip horizontal whitespace very aggressively.
@@ -890,7 +928,7 @@ void Lex(Buffer& B, Token& T) {
     [^]        { token = ERROR;    break; }
 */
 LexNextToken:
-  const char *CurPtr = B.cur;
+  char *CurPtr = B.cur;
 
   // Small amounts of horizontal whitespace is very common between tokens.
   if (*CurPtr == ' ') {
@@ -907,7 +945,7 @@ LexNextToken:
   switch (Char) {
     case 0:  // Null.
       T.kind = kEof;
-      B.cur = B.end;
+      B.cur = (char*)B.end;
       return;
 
     case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
@@ -1062,7 +1100,7 @@ void parseEdge(Buffer& B, Token& T) {
   } else {
     // Simulate peek via backtracking.
     // FIXME could get away without this with threaded code (?)
-    B.cur = T.pos;
+    B.cur = (char*)T.pos;
   }
 
   // Peek for ||, read all order-only deps.
@@ -1081,7 +1119,7 @@ void parseEdge(Buffer& B, Token& T) {
   } else {
     // Simulate peek via backtracking.
     // FIXME could get away without this with threaded code (?)
-    B.cur = T.pos;
+    B.cur = (char*)T.pos;
   }
 
   // Expect newline.
@@ -1104,7 +1142,7 @@ void parseEdge(Buffer& B, Token& T) {
     if (!T.info) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
-      B.cur = T.pos;
+      B.cur = (char*)T.pos;
       break;
     }
 
@@ -1201,7 +1239,7 @@ void parseRule(Buffer& B, Token& T) {
     if (!T.info) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
-      B.cur = T.pos;
+      B.cur = (char*)T.pos;
       break;
     }
 
@@ -1274,7 +1312,7 @@ void parsePool(Buffer& B, Token& T) {
     if (!T.info) {
       // Simulate peek via backtracking.
       // FIXME could get away without this with threaded code.
-      B.cur = T.pos;
+      B.cur = (char*)T.pos;
       break;
     }
 
@@ -1433,14 +1471,14 @@ int main(int argc, const char* argv[]) {
 
   //Edge* edge = edges[0];
   //Edge* edge = Identifiers.get("minidump_stackwalk").node->in_edge_;
-  //printf("cmd: %s\n", edge->EvaluateCommand()->Entry->getKeyData());
+  //printf("cmd: %s\n", edge->EvaluateCommand().c_str());
 
   //int l = 0;
   //for (size_t i = 0; i < edges.size(); ++i) {
   //  //l += edges[i]->EvaluateCommand()->Entry->getKeyLength();
   //  l += edges[i]->EvaluateCommand().size();
   //  //printf("%s\n", edges[i]->EvaluateCommand()->Entry->getKeyData());
-  //  //printf("%s\n", edges[i]->EvaluateCommand().c_str());
+  //  printf("%s\n", edges[i]->EvaluateCommand().c_str());
   //}
   //printf("l: %d\n", l);
 
