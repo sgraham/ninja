@@ -586,19 +586,14 @@ string Edge::GetBinding(IdentifierInfo* var) {
 struct Token {
   TokenKind kind;
   unsigned length;
-
   const char* pos;
-
   IdentifierInfo* info;
 };
 
 void FillToken(Buffer& B, Token& T, char* TokEnd, TokenKind kind) {
   unsigned TokLen = TokEnd - B.cur;
-  //T.setLength(TokLen);
   T.length = TokLen;
-  //T.setLocation(getSourceLocation(BufferPtr));
   T.pos = B.cur;
-  //T.setKind(Kind);
   T.kind = kind;
   B.cur = TokEnd;
 }
@@ -641,24 +636,21 @@ Continue:
 
         case '{': {
           if (!varranges) varranges = new RangeType;
-
-          ++CurPtr;
           int skipped = src - dst;
 
+          ++CurPtr;
           varranges->push_back(CurPtr - B.cur - skipped);  // Don't include {
 
           C = *CurPtr++;
           while (isIdentifierBody(C))  // identifier == varname in ninja lex
             C = *CurPtr++;
-
-          varranges->push_back(CurPtr - B.cur - 1 - skipped); // Don't include }
-
           // Don't back up, want to skip '}'
           if (C != '}') {
             fprintf(stderr, "bad $-escape in var\n");
             exit(1);
           }
 
+          varranges->push_back(CurPtr - B.cur - 1 - skipped); // Don't include }
           goto Continue;
         }
 
@@ -672,12 +664,10 @@ Continue:
         case 'v': case 'w': case 'x': case 'y': case 'z':
         case '-':
         case '_': {
-          if (!varranges)
-            varranges = new RangeType;
+          if (!varranges) varranges = new RangeType;
           int skipped = src - dst;
-//printf("skipped: %d\n", skipped);
-          varranges->push_back(CurPtr - B.cur - skipped);
 
+          varranges->push_back(CurPtr - B.cur - skipped);
           ++CurPtr;
 
           C = *CurPtr++;
@@ -686,9 +676,6 @@ Continue:
           --CurPtr;  // Back up over the skipped non-var char.
 
           varranges->push_back(CurPtr - B.cur - skipped);
-//if (buf)
-//printf("pushed '%s'\n", std::string(buf + (*varranges)[varranges->size()-2], buf + (*varranges)[varranges->size() - 1]).c_str());
-
           goto Continue;
         }
 
@@ -1118,7 +1105,6 @@ void parseEdge(Buffer& B, Token& T) {
     IdentifierInfo* path = (*i)->Evaluate(env);
     path = path->Canonicalize();
     Node* node = path->GetNode();
-    // FIXME: These two lines cost 12ms (83ms -> 95ms), use a SmallVector
     edge->inputs_.push_back(node);
     node->out_edges_.push_back(edge);
   }
