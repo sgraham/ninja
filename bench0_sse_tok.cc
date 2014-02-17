@@ -608,8 +608,8 @@ void FillToken(Buffer& B, Token& T, const char* TokEnd, TokenKind kind) {
 }
 
 enum EvalStringKind { kPath, kLet };
-void LexEvalString(Buffer &B, Token &T, const char *CurPtr,
-                   EvalStringKind kind) {
+void LexEvalString(Buffer &B, Token &T, EvalStringKind kind) {
+  const char *CurPtr = B.cur;
   bool HasVariables = false;
 
   // pointer so that no destructor is called in the common no-vars case.
@@ -988,7 +988,7 @@ void parseLet(Buffer& B, Token& T, IdentifierInfo*& Key, IdentifierInfo*& Val) {
   }
 
   SkipWhitespace(B, B.cur);
-  LexEvalString(B, T, B.cur, kLet);
+  LexEvalString(B, T, kLet);
   Val = T.info;
 }
 
@@ -1004,7 +1004,7 @@ void parseEdge(Buffer& B, Token& T) {
   // Read output paths.
   {
     SkipWhitespace(B, B.cur);
-    LexEvalString(B, T, B.cur, kPath);
+    LexEvalString(B, T, kPath);
     if (!T.length) {
       fprintf(stderr, "expected filename\n");
       exit(1);
@@ -1014,7 +1014,7 @@ void parseEdge(Buffer& B, Token& T) {
       outs.push_back(T.info);
 
       SkipWhitespace(B, B.cur);
-      LexEvalString(B, T, B.cur, kPath);
+      LexEvalString(B, T, kPath);
     } while (T.length);
   }
 
@@ -1041,7 +1041,7 @@ void parseEdge(Buffer& B, Token& T) {
   // Read all regular inputs.
   while (1) {
     SkipWhitespace(B, B.cur);
-    LexEvalString(B, T, B.cur, kPath);
+    LexEvalString(B, T, kPath);
     if (!T.length)
       break;
     ins.push_back(T.info);
@@ -1053,7 +1053,7 @@ void parseEdge(Buffer& B, Token& T) {
   if (T.kind == kPipe) {
     while (1) {
       SkipWhitespace(B, B.cur);
-      LexEvalString(B, T, B.cur, kPath);
+      LexEvalString(B, T, kPath);
       if (!T.length)
         break;
       ins.push_back(T.info);
@@ -1071,7 +1071,7 @@ void parseEdge(Buffer& B, Token& T) {
   if (T.kind == kPipePipe) {
     while (1) {
       SkipWhitespace(B, B.cur);
-      LexEvalString(B, T, B.cur, kPath);
+      LexEvalString(B, T, kPath);
       if (!T.length)
         break;
 //fprintf(stderr, "got orderonly '%s'\n", T.info->Entry->getKeyData());
@@ -1221,7 +1221,7 @@ void parseRule(Buffer& B, Token& T) {
 
 void parseDefault(Buffer& B, Token& T) {
   SkipWhitespace(B, B.cur);
-  LexEvalString(B, T, B.cur, kPath);
+  LexEvalString(B, T, kPath);
   if (!T.length) {
     fprintf(stderr, "expected target name\n");
     exit(1);
@@ -1231,7 +1231,7 @@ void parseDefault(Buffer& B, Token& T) {
     path = path->Canonicalize();
     // FIXME:add path to state defaults.
     SkipWhitespace(B, B.cur);
-    LexEvalString(B, T, B.cur, kPath);
+    LexEvalString(B, T, kPath);
   } while (T.length);
 
   // Expect newline.
@@ -1353,7 +1353,7 @@ void process(const char* fname) {
       case kSubninja:
       case kInclude: {
         SkipWhitespace(b, b.cur);
-        LexEvalString(b, t, b.cur, kPath);
+        LexEvalString(b, t, kPath);
         if (!t.length) {
           fprintf(stderr, "expected filename\n");
           exit(1);
