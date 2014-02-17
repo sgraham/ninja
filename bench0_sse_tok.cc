@@ -231,7 +231,6 @@ struct Env {
   virtual string LookupVariableStr(IdentifierInfo*) = 0;
 };
 struct BindingEnv : public Env {
-  //BindingEnv() : parent_(NULL) {}
   explicit BindingEnv(BindingEnv* parent) : parent_(parent) {}
 
   IdentifierInfo* LookupVariable(IdentifierInfo* II);
@@ -704,14 +703,11 @@ Continue:
     case ' ':
     case ':':
     case '|':
-      if (kind == kPath) {
-        // Just fall through.
-      } else {
-        ++CurPtr;
-//fprintf(stderr, "%c\n", *CurPtr);
-        goto Continue;
-      }
-      break;
+      // These end paths, but are part of lets.
+      if (kind == kPath)
+        break;
+      ++CurPtr;
+      goto Continue;
     case '\r':
       fprintf(stderr, "carriage returns not allowed\n");
       exit(1);
