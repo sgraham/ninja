@@ -633,8 +633,8 @@ Continue:
         case ':':
           if (src != dst)
             memcpy(dst, src, CurPtr - src - 1);
-          dst += CurPtr - src;
-          dst[-1] = C;
+          dst += CurPtr - src - 1;
+          *dst++ = C;
           ++CurPtr;
           src = CurPtr;
           goto Continue;
