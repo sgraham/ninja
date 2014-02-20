@@ -119,6 +119,10 @@ llvm: read 3543 kB, 2 files
     time clang -x c -E ~/src/llvm-build/build.ninja   > /dev/null
       (with s/[#'"]/./g)
 
+With hdd (14149 kB, 862 files):
+  bench full: 0.141s -> 100.34 MB/s
+  ninja: 0.423s -> 33.45 MB/s
+
 canon:
 chrome: canon 162758, cached 114820, cheap 24167, cheapish 23770, computed 1
 
