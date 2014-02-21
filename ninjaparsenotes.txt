@@ -103,7 +103,7 @@ hash table key length:
 110076 short (37.5%), 183002 long, 293078 total
 
 
-
+mac laptop (ssd):
 chrome: read 13233 kB, 785 files
   just reading: 0.015s -> 882 MB/s
   bench: 0.058s -> 228.15 MB/s
@@ -119,9 +119,13 @@ llvm: read 3543 kB, 2 files
     time clang -x c -E ~/src/llvm-build/build.ninja   > /dev/null
       (with s/[#'"]/./g)
 
-With hdd (14149 kB, 862 files):
+With hdd (mac) (14149 kB, 862 files):
   bench full: 0.141s -> 100.34 MB/s
   ninja: 0.423s -> 33.45 MB/s
+
+On linux (17403 kB, 1064 files), probably an SSD.
+  bench full: 0.122s -> 142.65 MB/s
+  ninja: 0.330s -> 52.74 MB/s
 
 canon:
 chrome: canon 162758, cached 114820, cheap 24167, cheapish 23770, computed 1

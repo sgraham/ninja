@@ -13,6 +13,7 @@
 
 #include "Allocator.h"
 #include <cstring>
+#include <stdint.h>
 
 namespace llvm {
 
