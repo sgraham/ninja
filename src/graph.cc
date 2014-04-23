@@ -114,7 +114,8 @@ bool DependencyScan::RecomputeDirty(Edge* edge, string* err) {
   // their dirty state if necessary.
   for (vector<Node*>::iterator i = edge->outputs_.begin();
        i != edge->outputs_.end(); ++i) {
-    (*i)->StatIfNecessary(disk_interface_);
+    if (!edge->is_phony())
+      (*i)->StatIfNecessary(disk_interface_);
     if (dirty)
       (*i)->MarkDirty();
   }
@@ -135,7 +136,8 @@ bool DependencyScan::RecomputeOutputsDirty(Edge* edge,
   string command = edge->EvaluateCommand(true);
   for (vector<Node*>::iterator i = edge->outputs_.begin();
        i != edge->outputs_.end(); ++i) {
-    (*i)->StatIfNecessary(disk_interface_);
+    if (!edge->is_phony())
+      (*i)->StatIfNecessary(disk_interface_);
     if (RecomputeOutputDirty(edge, most_recent_input, command, *i))
       return true;
   }
