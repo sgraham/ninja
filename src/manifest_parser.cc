@@ -50,7 +50,7 @@ bool ManifestParser::Load(const string& filename, string* err, Lexer* parent) {
 
   bool r = Parse(filename, contents, err);
   if (!parent)
-    printf("%d with, %d without; %zu\n", indent, noindent, sizeof(BindingEnv));
+    printf("%d with, %d without; %u\n", indent, noindent, sizeof(BindingEnv));
   return r;
 }
 

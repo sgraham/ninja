@@ -4,15 +4,23 @@ clang -O2 -c StringMap.cpp  -stdlib=libstdc++
 clang -O2 -c SmallVector.cpp  -stdlib=libstdc++
 clang++ -o bench StringMap.o Allocator.o SmallVector.o bench0_sse_tok.cc -O2 -stdlib=libstdc++
 
+C:\DOS\NINJA>cl /W4 /GL /wd4530 /wd4127 /wd4996 /D_CRT_SECURE_NO_WARNINGS /Ox /Zi /nologo Allocator.cpp StringMap.cpp SmallVector.cpp bench0_sse_tok.cc /link /ltcg /out:bench.exe
+
 time ./bench ~/src/chrome/src/out_bench/Release/build.ninja
   vs
 time ./ninja -C ~/src/chrome/src/out_bench/Release chrome
+
+(make sure to use / on Windows)
  */
 #include <emmintrin.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+#include <direct.h>
+#else
 #include <unistd.h>
+#endif
 
 #include <map>
 #include <string>
@@ -786,7 +794,7 @@ void LexIdentifier(Buffer& B, Token& T, char* CurPtr) {
   T.kind = II->kind;
 }
 
-void SkipLineComment(Buffer &B, Token &T, char *CurPtr) {
+void SkipLineComment(Buffer &B, Token &/*T*/, char *CurPtr) {
   char C = *CurPtr;
   // Skip over characters in the fast loop.
   while (CurPtr != B.end && C != '\n' && C != '\r')
@@ -1350,7 +1358,7 @@ done:
   fileEnvStack.pop_back();
 }
 
-int main(int argc, const char* argv[]) {
+int main(int /*argc*/, const char** argv) {
   char* d = strdup(argv[1]);
   char* s = strrchr(d, '/');
   *s++ = '\0';
