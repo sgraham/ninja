@@ -132,7 +132,7 @@ Lexer::Token Lexer::ReadToken() {
     simple_varname = [a-zA-Z0-9_-]+;
     varname = [a-zA-Z0-9_.-]+;
 
-    [ ]*"#"[^\000\r\n]*"\n" { continue; }
+    [ ]*"#"[^\000\r\n]*[\r]?"\n" { continue; }
     [ ]*[\n]   { token = NEWLINE;  break; }
     [ ]+       { token = INDENT;   break; }
     "build"    { token = BUILD;    break; }
@@ -171,10 +171,10 @@ void Lexer::EatWhitespace() {
   for (;;) {
     ofs_ = p;
     /*!re2c
-    [ ]+  { continue; }
-    "$\n" { continue; }
-    nul   { break; }
-    [^]   { break; }
+    [ \r]+  { continue; }
+    "$\n"   { continue; }
+    nul     { break; }
+    [^]     { break; }
     */
   }
 }
