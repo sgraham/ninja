@@ -133,7 +133,7 @@ Lexer::Token Lexer::ReadToken() {
     varname = [a-zA-Z0-9_.-]+;
 
     [ ]*"#"[^\000\r\n]*[\r]?"\n" { continue; }
-    [ ]*[\n]   { token = NEWLINE;  break; }
+    [ ]*[\r]?[\n] { token = NEWLINE;  break; }
     [ ]+       { token = INDENT;   break; }
     "build"    { token = BUILD;    break; }
     "pool"     { token = POOL;     break; }
