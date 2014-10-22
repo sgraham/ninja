@@ -1399,7 +1399,7 @@ int main(int /*argc*/, const char** argv) {
 
   //printf("canon %d, cached %d, cheap %d, cheapish %d, computed %d\n", canon,
   //       canon_cached, canon_cheap, canon_cheapish, canon_computed);
-  //printf("read %ld kB, %ld files\n", g_total / 1000, g_count);
+  printf("read %ld kB, %ld files\n", g_total / 1000, g_count);
   //printf("%zu edges, %d with vars\n", edges.size(), edgeswithvars);
   //printf("%zu edges, %zu rules\n", edges.size(), rules.size());
   //printf("cmd: %s\n", edges[0]->EvaluateCommand()->Entry->getKeyData());
