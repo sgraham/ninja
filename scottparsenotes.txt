@@ -11,6 +11,10 @@ bench0 with MapViewOfFile instead of fopen/fread:
   1.232s
 
 bench0 with ::CreateFile/ReadFile instead of fopen/fread. Maybe FILE_FLAG_SEQUENTIAL_SCAN, hard to tell
+  225902us
+  226459us
+  232930us
+  233530us
 
 bench:
   0.359s
