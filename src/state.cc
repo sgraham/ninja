@@ -24,13 +24,20 @@
 
 
 void Pool::EdgeScheduled(const Edge& edge) {
-  if (depth_ != 0)
+  if (depth_ != 0) {
     current_use_ += edge.weight();
+    printf("%p scheduled, use now %d\n", this, current_use_);
+    assert(current_use_ >= 0);
+  }
 }
 
 void Pool::EdgeFinished(const Edge& edge) {
-  if (depth_ != 0)
+  if (depth_ != 0) {
     current_use_ -= edge.weight();
+    edge.Dump();
+    printf("%p finished, use now %d\n", this, current_use_);
+    assert(current_use_ >= 0);
+  }
 }
 
 void Pool::DelayEdge(Edge* edge) {
@@ -52,12 +59,12 @@ void Pool::RetrieveReadyEdges(set<Edge*>* ready_queue) {
 }
 
 void Pool::Dump() const {
-  printf("%s (%d/%d) ->\n", name_.c_str(), current_use_, depth_);
+  printf("%p %s (%d/%d) ->\n", this, name_.c_str(), current_use_, depth_);
   for (DelayedEdges::const_iterator it = delayed_.begin();
        it != delayed_.end(); ++it)
   {
-    printf("\t");
-    (*it)->Dump();
+    //printf("\t");
+    //(*it)->Dump();
   }
 }
 

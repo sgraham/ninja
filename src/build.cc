@@ -359,6 +359,7 @@ Edge* Plan::FindWork() {
 
 void Plan::ScheduleWork(Edge* edge) {
   Pool* pool = edge->pool();
+  pool->Dump();
   if (pool->ShouldDelayEdge()) {
     // The graph is not completely clean. Some Nodes have duplicate Out edges.
     // We need to explicitly ignore these here, otherwise their work will get
@@ -366,9 +367,11 @@ void Plan::ScheduleWork(Edge* edge) {
     if (ready_.count(edge)) {
       return;
     }
+    printf("delayed\n");
     pool->DelayEdge(edge);
     pool->RetrieveReadyEdges(&ready_);
   } else {
+    printf("scheduled\n");
     pool->EdgeScheduled(*edge);
     ready_.insert(edge);
   }
