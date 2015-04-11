@@ -27,6 +27,8 @@ void Pool::EdgeScheduled(const Edge& edge) {
   if (depth_ != 0) {
     current_use_ += edge.weight();
     printf("%p scheduled, use now %d\n", this, current_use_);
+    edge.Dump();
+    debug_edges_.insert(&edge);
     assert(current_use_ >= 0);
   }
 }
@@ -34,8 +36,14 @@ void Pool::EdgeScheduled(const Edge& edge) {
 void Pool::EdgeFinished(const Edge& edge) {
   if (depth_ != 0) {
     current_use_ -= edge.weight();
-    edge.Dump();
+    if (debug_edges_.find(&edge) == debug_edges_.end()) {
+      printf("edge was finished but never scheduled!\n");
+      edge.Dump();
+      abort();
+    }
+    debug_edges_.erase(&edge);
     printf("%p finished, use now %d\n", this, current_use_);
+    edge.Dump();
     assert(current_use_ >= 0);
   }
 }

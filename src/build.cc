@@ -358,6 +358,7 @@ Edge* Plan::FindWork() {
 }
 
 void Plan::ScheduleWork(Edge* edge) {
+  //printf("ScheduleWork\n");
   Pool* pool = edge->pool();
   if (pool->ShouldDelayEdge()) {
     // The graph is not completely clean. Some Nodes have duplicate Out edges.
@@ -368,15 +369,22 @@ void Plan::ScheduleWork(Edge* edge) {
     }
     pool->DelayEdge(edge);
     pool->RetrieveReadyEdges(&ready_);
+    printf("ShouldDelayEdge ready_ now %d\n", (int)ready_.size());
+    for (const auto& x : ready_)
+      x->Dump();
   } else {
     pool->EdgeScheduled(*edge);
     ready_.insert(edge);
+    printf("else ready_ now %d\n", (int)ready_.size());
+    for (const auto& x : ready_)
+      x->Dump();
   }
 }
 
 void Plan::ResumeDelayedJobs(Edge* edge) {
   edge->pool()->EdgeFinished(*edge);
   edge->pool()->RetrieveReadyEdges(&ready_);
+  //printf("ResumeDelayedJobs, ready_ now %d\n", (int)ready_.size());
 }
 
 void Plan::EdgeFinished(Edge* edge) {

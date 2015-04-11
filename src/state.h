@@ -77,6 +77,8 @@ struct Pool {
 
   typedef set<Edge*,bool(*)(const Edge*, const Edge*)> DelayedEdges;
   DelayedEdges delayed_;
+
+  set<const Edge*> debug_edges_;
 };
 
 /// Global state (file status) for a single run.
