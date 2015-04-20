@@ -24,13 +24,27 @@
 
 
 void Pool::EdgeScheduled(const Edge& edge) {
-  if (depth_ != 0)
+  if (depth_ != 0) {
     current_use_ += edge.weight();
+    debug_edges_.insert(&edge);
+  }
 }
 
 void Pool::EdgeFinished(const Edge& edge) {
-  if (depth_ != 0)
+  if (depth_ != 0) {
     current_use_ -= edge.weight();
+    if (current_use_ < 0) {
+      *(volatile int*)24 = 42;
+      abort();
+    }
+    if (debug_edges_.find(&edge) == debug_edges_.end()) {
+      printf("edge was finished but never scheduled!\n");
+      edge.Dump();
+      *(volatile int*)24 = 42;
+      abort();
+    }
+    debug_edges_.erase(&edge);
+  }
 }
 
 void Pool::DelayEdge(Edge* edge) {
