@@ -114,9 +114,10 @@ bool ManifestParser::Parse(const string& filename, const string& input,
 
 
 bool ManifestParser::ParsePool(string* err) {
-  string name;
-  if (!lexer_.ReadIdent(&name))
+  EvalString name_eval;
+  if (!lexer_.ReadPath(&name_eval, err))
     return lexer_.Error("expected pool name", err);
+  std::string name = name_eval.Evaluate(env_);
 
   if (!ExpectToken(Lexer::NEWLINE, err))
     return false;
