@@ -31,7 +31,13 @@
 using namespace std;
 
 bool Node::Stat(DiskInterface* disk_interface, string* err) {
-  return (mtime_ = disk_interface->Stat(path_, err)) != -1;
+  mtime_ = disk_interface->Stat(path_, err);
+  if (path_ == "../../../../../../usr/bin/env") {
+    fprintf(stderr, "checked ...env, got %lld\n", mtime_);
+    if (mtime_ == 0)
+      abort();
+  }
+  return mtime_ != -1;
 }
 
 bool DependencyScan::RecomputeDirty(Node* node, string* err) {

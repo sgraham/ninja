@@ -196,8 +196,13 @@ TimeStamp RealDiskInterface::Stat(const string& path, string* err) const {
 #else
   struct stat st;
   if (stat(path.c_str(), &st) < 0) {
-    if (errno == ENOENT || errno == ENOTDIR)
+    if (errno == ENOENT || errno == ENOTDIR) {
+      if (path == "../../../../../../usr/bin/env") {
+        fprintf(stderr, "got errno: %d (ENOENT=%d, ENOTDIR=%d)\n", errno,
+                ENOENT, ENOTDIR);
+      }
       return 0;
+    }
     *err = "stat(" + path + "): " + strerror(errno);
     return -1;
   }
